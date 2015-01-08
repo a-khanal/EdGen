@@ -300,20 +300,19 @@ int EdPhysics::Gen_Phasespace(){
       }
     }
   }
- 
   return valid_event;
 
 
 }
 
-// double EdPhysics::t_reaction(TLorentzVector *Vrecoil_tg_4 ) {
-//   TLorentzVector tg_v4;
-//   tg_v4.SetPxPyPzE(Vrecoil_tg_4->Px(),Vrecoil_tg_4->Py(),Vrecoil_tg_4->Pz(),Vrecoil_tg_4->E());
-//   TLorentzVector t_v4;
-//   t_v4 = target - tg_v4; // Operation allowed just between TLorentzVector and not TLorentzVector*
-//   return t_v4.M2();
+double EdPhysics::t_reaction(TLorentzVector *Vrecoil_tg_4 ) {
+  TLorentzVector tg_v4;
+  tg_v4.SetPxPyPzE(Vrecoil_tg_4->Px(),Vrecoil_tg_4->Py(),Vrecoil_tg_4->Pz(),Vrecoil_tg_4->E());
+  TLorentzVector t_v4;
+  t_v4 = target - tg_v4; // Operation allowed just between TLorentzVector and not TLorentzVector*
+  return t_v4.M2();
 
-// }
+}
 
 
 // Double_t TPart_ident_ct::theta_pip_mc() {
