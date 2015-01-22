@@ -81,7 +81,7 @@ double EdModel::GetEnergy(){
   return e_out;
 }
 
-char * EdModel::GetMassModelString(){
+const char * EdModel::GetMassModelString(){
   if (m_model == 1) return "Breit-Wigner";
   else if (m_model == 2) return "Flat";
   else if (m_model == 3) return "m=mass";

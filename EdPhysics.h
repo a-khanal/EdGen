@@ -77,6 +77,8 @@ class EdPhysics: public TGenPhaseSpace{
 	int Gen_Phasespace();
 	int Gen_Mass(int i);
 
+	double t_reaction(TLorentzVector *Vrecoil_tg_4 );
+
 	 
 };
 #endif//__EdPhysics_h

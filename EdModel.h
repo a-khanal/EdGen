@@ -24,7 +24,7 @@ class EdModel{
 	int    Get_tgN() {return tg_N; }
 	double Get_tgMass() {return tg_mass; }
 	double GetEnergy();
-	char * GetMassModelString();
+	const char * GetMassModelString();
 	double GetBeamPID() {return beam_pid;}
 	double GetTheta_min() {return theta_min;}
 	double GetTheta_max() {return theta_max;}
