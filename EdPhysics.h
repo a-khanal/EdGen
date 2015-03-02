@@ -71,6 +71,10 @@ class EdPhysics: public TGenPhaseSpace{
 	TLorentzVector W4vector;
 	TLorentzVector Q4vector;
 	TVector3 vertex;
+	double theta_min;
+	double theta_max;
+	int count_phase;
+	
 
 	TVector3 Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert);
 	double GetBeamProfile( double sigma = 1.);

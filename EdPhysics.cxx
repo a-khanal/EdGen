@@ -21,6 +21,9 @@ EdPhysics::EdPhysics(EdModel *model){
     n_part = model->GetNpart();
     nvertex = model->GetNvertex();
     part_pdg[n_part] = pdg->GetParticle(model->GetBeamPID()); // Beam particle stored in part_pdg[n_part]
+    theta_min = model->GetTheta_min();
+    theta_max = model->GetTheta_max();
+
     double masses2[n_part];
     double width2[n_part];
     for (int i=0; i<n_part; i++) {
@@ -86,8 +89,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     TVector3 tgtoff = model->GetTgtOffset();
 
 
-    double theta_min = model->GetTheta_min();
-    double theta_max = model->GetTheta_max();
+
   
 
     nucl n;
@@ -111,8 +113,13 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     vertex.SetXYZ(pos_x,pos_y,pos_z);
     vertex = vertex + tgtoff;
     int test_gen = 0;
-    while (test_gen < nvertex ) test_gen = Gen_Phasespace();
+    count_phase = 0;
+    // theta_v_min = theta_min -1.;
+    // theta_v_max = theta_max +1.;
+    //    while (test_gen < nvertex && theta_v_min<=theta_min && theta_v_max >= theta_max) test_gen = Gen_Phasespace();
+    while (test_gen < nvertex) test_gen = Gen_Phasespace();
 
+    //    printf("Theta_min= %.2e min allowed=%.2e, Theta_max= %.2e max allowed=%.2e\n",theta_v_min,theta_min, theta_v_max,theta_max);
     out->SetTheta(theta,n_part);
     out->SetPhi(phi,n_part);
     out->SetEf(Ef,n_part);
@@ -300,6 +307,18 @@ int EdPhysics::Gen_Phasespace(){
       }
     }
   }
+  count_phase++;
+  if ( (count_phase%100000) == 0) printf("Generated %d events without passing your angle cuts. Could be you want to check your limits\n",count_phase);
+  // theta_v_min = TMath::Pi();
+  // theta_v_max = 0.;
+
+  // For selecting which particle is going to be created first I will need to use creation time if the space of creation time corresponds to the size where there will still be interaction between the two packets 
+
+  for (int i=0; i<n_part; i++) {
+    if (theta[i] < theta_min) valid_event--;
+    if (theta[i] > theta_max) valid_event--;
+  }
+  
   return valid_event;
 
 

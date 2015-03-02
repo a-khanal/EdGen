@@ -1,7 +1,7 @@
 nevt:    100000;
 nprint:  10000;
 model:   1;
-M_mode:  3;
+M_mode:  1;
 ifile:	 energy.txt; 
 beam:    11;
 en:	 5.5    GeV;
@@ -12,7 +12,7 @@ length:	 40	cm;
 ras_x:	 0.2	cm;
 ras_y:	 0.2	cm;	
 offset:  0.12,0.14,1.1 cm;
-theta:   0.0,3.14 rad;
+theta:   0.6,1.5 rad;
 npart:   5;
 pid:     22,2212,113,211,-211;
 nvertex: 2;
