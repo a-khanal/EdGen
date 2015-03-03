@@ -24,6 +24,9 @@ EdPhysics::EdPhysics(EdModel *model){
     theta_min = model->GetTheta_min();
     theta_max = model->GetTheta_max();
 
+    // For the phi cut, I need to put three different cuts, one will be in the output phi angle in the lab frame, one will be in the helicity frame of the vector meson, one will be in the helicity frame of the decay products, that could be caused by two or three particles.
+    // The angles will need to be defined for both gamma and electron beam 
+
     double masses2[n_part];
     double width2[n_part];
     for (int i=0; i<n_part; i++) {
@@ -103,7 +106,6 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     }    
 
     
-    //    for (int i=0; i<(n_part+1) ; i++) p4vector[i]->SetPxPyPzE(0.,0.,0.,0.);
     W4vector.SetXYZT(0.,0.,0.,0.);
     Q4vector.SetXYZT(0.,0.,0.,0.);
 
@@ -114,12 +116,8 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     vertex = vertex + tgtoff;
     int test_gen = 0;
     count_phase = 0;
-    // theta_v_min = theta_min -1.;
-    // theta_v_max = theta_max +1.;
-    //    while (test_gen < nvertex && theta_v_min<=theta_min && theta_v_max >= theta_max) test_gen = Gen_Phasespace();
     while (test_gen < nvertex) test_gen = Gen_Phasespace();
 
-    //    printf("Theta_min= %.2e min allowed=%.2e, Theta_max= %.2e max allowed=%.2e\n",theta_v_min,theta_min, theta_v_max,theta_max);
     out->SetTheta(theta,n_part);
     out->SetPhi(phi,n_part);
     out->SetEf(Ef,n_part);
