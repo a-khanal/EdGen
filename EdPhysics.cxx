@@ -313,8 +313,10 @@ int EdPhysics::Gen_Phasespace(){
   // For selecting which particle is going to be created first I will need to use creation time if the space of creation time corresponds to the size where there will still be interaction between the two packets 
 
   for (int i=0; i<n_part; i++) {
-    if (theta[i] < theta_min) valid_event--;
-    if (theta[i] > theta_max) valid_event--;
+    if (towrite[i] == 1) {  // do the angle cut only for particles in the output tht will hit the detector
+      if (theta[i] < theta_min) valid_event--; 
+      if (theta[i] > theta_max) valid_event--;
+    }
   }
   
   return valid_event;
