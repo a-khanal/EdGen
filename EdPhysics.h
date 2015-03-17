@@ -82,7 +82,12 @@ class EdPhysics: public TGenPhaseSpace{
 	int Gen_Mass(int i);
 
 	double t_reaction(TLorentzVector *Vrecoil_tg_4 );
-
+	double phi_meson();
+	double theta_meson();
+	double phi_3decay();
+	double theta_3decay();
+	double phi_2decay();
+	double theta_2decay();
 	 
 };
 #endif//__EdPhysics_h
