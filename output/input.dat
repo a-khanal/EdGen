@@ -12,7 +12,7 @@ length:	 40	cm;
 ras_x:	 0.2	cm;
 ras_y:	 0.2	cm;	
 offset:  0.12,0.14,1.1 cm;
-theta:   0.0,3.14 rad;
+theta:   0.5,1.54 rad;
 npart:   5;
 pid:     11,2212,113,211,-211;
 nvertex: 2;
