@@ -29,7 +29,7 @@ public :
   TH1F           *h1_costheta;
   TH1F           *h1_mass;
   TH1F           *h1_costheta2;
-
+  TH1F           *h1_theta_pim;
 
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
 
