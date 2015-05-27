@@ -115,8 +115,30 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     vertex.SetXYZ(pos_x,pos_y,pos_z);
     vertex = vertex + tgtoff;
     int test_gen = 0;
-    count_phase = 0;
-    while (test_gen < nvertex) test_gen = Gen_Phasespace();
+    Ef[0] = e_lab;
+    theta[0] = fRandom->Uniform(0.0174,0.174);
+    phi[0] = fRandom->Uniform(0.0,TMath::Pi()/2);
+    pf[0] = e_lab;
+    px[0] = pf[0] *TMath::Sin(theta[0])*TMath::Cos(phi[0]);
+    py[0] = pf[0] *TMath::Sin(theta[0])*TMath::Sin(phi[0]);
+    pz[0] = pf[0] *TMath::Cos(theta[0]);
+    particle_id[0] = 11;
+    charge[0] = -1;
+    weight[0] = 1.;
+    towrite[0] = 1.;
+
+    Ef[1] = 0.;
+    theta[1] = fRandom->Uniform(0.0174,0.174);
+    phi[1] = fRandom->Uniform(0.0,TMath::Pi()/2);
+    pf[1] = 0.;
+    px[1] = pf[1] *TMath::Sin(theta[1])*TMath::Cos(phi[1]);
+    py[1] = pf[1] *TMath::Sin(theta[1])*TMath::Sin(phi[1]);
+    pz[1] = pf[1] *TMath::Cos(theta[1]);
+    particle_id[1] = 2212;
+    charge[1] = 1;
+    weight[1] = 1.;
+    towrite[1] = 0.;
+      
 
     out->SetTheta(theta,n_part);
     out->SetPhi(phi,n_part);
@@ -135,11 +157,11 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
   
     Z_ion = model->Get_tgZ(); 
     N_ion = model->Get_tgN();
-    W = W4vector.M();
-    Q2= -Q4vector.M2(); 
-    nu= Q4vector.Dot(target)/target.M(); 
-    x = Q2/(2*target.M()*nu);
-    y = Q4vector.Dot(target)/beam.Dot(target);
+    W = 0.;
+    Q2= 0.; 
+    nu= 0.; 
+    x = 0.;
+    y = 0.;
 
     out->SetZ_ion(Z_ion);
     out->SetN_ion(N_ion);
