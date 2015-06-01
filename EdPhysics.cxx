@@ -116,7 +116,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     vertex = vertex + tgtoff;
     int test_gen = 0;
     Ef[0] = e_lab;
-    double costheta = Random->Uniform(TMath::Cos(0.100),1.);
+    double costheta = fRandom->Uniform(TMath::Cos(0.100),1.);
     theta[0] = TMath::ACos(costheta);
     phi[0] = fRandom->Uniform(0.0,TMath::Pi()/2);
     pf[0] = e_lab;
@@ -127,6 +127,10 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     charge[0] = -1;
     weight[0] = 1.;
     towrite[0] = 1.;
+    vx[0] = vertex.X();
+    vy[0] = vertex.Y();
+    vz[0] = vertex.Z();
+
 
     Ef[1] = 0.;
     theta[1] = fRandom->Uniform(0.0174,0.174);
