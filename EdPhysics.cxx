@@ -116,7 +116,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     vertex = vertex + tgtoff;
     int test_gen = 0;
     Ef[0] = e_lab;
-    double costheta = fRandom->Uniform(TMath::Cos(0.100),1.);
+    double costheta = fRandom->Uniform(TMath::Cos(0.100),TMath::Cos(2.5/180*TMath::Pi()));
     theta[0] = TMath::ACos(costheta);
     phi[0] = fRandom->Uniform(0.0,TMath::Pi()/2);
     pf[0] = e_lab;
