@@ -116,14 +116,13 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     vertex = vertex + tgtoff;
     int test_gen = 0;
     Ef[0] = e_lab;
-    double costheta = fRandom->Uniform(TMath::Cos(0.100),TMath::Cos(2.5/180*TMath::Pi()));
+    double costheta = fRandom->Uniform(TMath::Cos(theta_max),TMath::Cos(theta_min));
     theta[0] = TMath::ACos(costheta);
     phi[0] = fRandom->Uniform(0.0,TMath::Pi()/2);
     pf[0] = e_lab;
     px[0] = pf[0] *TMath::Sin(theta[0])*TMath::Cos(phi[0]);
     py[0] = pf[0] *TMath::Sin(theta[0])*TMath::Sin(phi[0]);
     pz[0] = pf[0] *TMath::Cos(theta[0]);
-    particle_id[0] = 11;
     charge[0] = -1;
     weight[0] = 1.;
     towrite[0] = 1.;
@@ -139,7 +138,6 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     px[1] = pf[1] *TMath::Sin(theta[1])*TMath::Cos(phi[1]);
     py[1] = pf[1] *TMath::Sin(theta[1])*TMath::Sin(phi[1]);
     pz[1] = pf[1] *TMath::Cos(theta[1]);
-    particle_id[1] = 2212;
     charge[1] = 1;
     weight[1] = 1.;
     towrite[1] = 0.;
