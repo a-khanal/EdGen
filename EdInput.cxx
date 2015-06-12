@@ -150,8 +150,8 @@ EdInput::EdInput(const char *file){
 	  fData.leny = factor*valcommand.Atof();
 	  printf("Raster Y: %.4f cm\n",fData.leny);	  
 	}
-	if (valcommand.Contains("theta:")) {
-	  valcommand.ReplaceAll("theta:","");
+	if (valcommand.Contains("theta_min:")) {
+	  valcommand.ReplaceAll("theta_min:","");
 	  valcommand.ReplaceAll(";","");
 	  if (valcommand.Contains(" deg")) factor = 3.14/180;
 	  else factor = 1; //rad
@@ -159,11 +159,36 @@ EdInput::EdInput(const char *file){
 	  valcommand.ReplaceAll("deg","");
 	  valcommand.ReplaceAll(" ","");
 	  valcommand.ReplaceAll("rad","");
-	  valc2 = valcommand(0,valcommand.First(","));
-	  fData.theta_min = factor*valc2.Atof();
-	  valc2 = valcommand(valcommand.First(",")+1,valcommand.Length());
-	  fData.theta_max = factor*valc2.Atof();
-	  printf("Theta_min=%.2f ;  Theta_max=%.2f\n",fData.theta_min,fData.theta_max);	  
+	  printf("Theta min for particles: ");
+	  for (int i=0; i<fData.npart -1; i++) {
+	    poscomma = valcommand.First(",");
+	    valc2 = valcommand(0,poscomma);
+	    fData.theta_min[i] = factor*valc2.Atof();
+	    valcommand.Replace(0,poscomma+1,"");
+	    printf(" %f",fData.theta_min[i]);
+	  }
+	  fData.theta_min[fData.npart -1] = factor*valcommand.Atof();
+	  printf(" %f \n",fData.theta_min[fData.npart -1]);
+	}
+	if (valcommand.Contains("theta_max:")) {
+	  valcommand.ReplaceAll("theta_max:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains(" deg")) factor = 3.14/180;
+	  else factor = 1; //rad
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll("deg","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("rad","");
+	  printf("Theta min for particles: ");
+	  for (int i=0; i<fData.npart -1; i++) {
+	    poscomma = valcommand.First(",");
+	    valc2 = valcommand(0,poscomma);
+	    fData.theta_max[i] = factor*valc2.Atof();
+	    valcommand.Replace(0,poscomma+1,"");
+	    printf(" %f",fData.theta_max[i]);
+	  }
+	  fData.theta_max[fData.npart -1] = factor*valcommand.Atof();
+	  printf(" %f \n",fData.theta_max[fData.npart -1]);
 	}
 	if (valcommand.Contains("offset:")) {
 	  valcommand.ReplaceAll("offset:","");

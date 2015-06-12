@@ -36,11 +36,13 @@ EdModel::EdModel(EdInput *inp){
 	tg_N = inp->Get_tg_N();
 	tg_mass = inp->Get_tg_mass();
 	energy = inp->Get_eEnergy();
-	theta_min = inp->Get_thetaMin();
-	theta_max = inp->Get_thetaMax();
 	npart = inp->GetNpart();
 	tot_part = npart;
-	for (int i=0; i<tot_part; i++) pid[i] = inp->GetPid(i);
+	for (int i=0; i<tot_part; i++) {
+	  pid[i] = inp->GetPid(i);
+	  theta_min[i] = inp->Get_thetaMin(i);
+	  theta_max[i] = inp->Get_thetaMax(i);
+	}
 	nvertex = inp->GetNvertex();
 	tot_part = nvertex;
 	for (int i=0; i<tot_part; i++) {

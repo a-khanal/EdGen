@@ -26,8 +26,6 @@ class EdModel{
 	double GetEnergy();
 	const char * GetMassModelString();
 	double GetBeamPID() {return beam_pid;}
-	double GetTheta_min() {return theta_min;}
-	double GetTheta_max() {return theta_max;}
 	//	char* GetInFileName() {return ifile.data()};
 	int    GetNpart() {return npart;}
 	int    GetPhModel() {return ph_model;}
@@ -40,6 +38,8 @@ class EdModel{
 	int    GetDvert(int i, int j){ return dvert[i][j]; }
 	int    GetV_type(int i){ return v_type[i]; }
 	int    GetV_ratio(int i){ return v_ratio[i]; }
+	double GetTheta_min(int i) {return theta_min[i];}
+	double GetTheta_max(int i) {return theta_max[i];}
 
     private:
 	double length;
@@ -53,8 +53,8 @@ class EdModel{
 	TString ifile;
 	double energy;
 	int    beam_pid;
-	double theta_min;
-	double theta_max;
+	double theta_min[100];
+	double theta_max[100];
 	int    pid[100];
 	int    npart;
 	int    nvertex; // total number of vertexes

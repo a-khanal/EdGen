@@ -25,8 +25,8 @@ struct inputdata {
     double lenx;
     double leny;
  
-    double theta_min;
-    double theta_max;
+    double theta_min[100];
+    double theta_max[100];
 
     int    tg_Z;
     int    tg_N;
@@ -66,8 +66,8 @@ class EdInput{
 	double Get_lenx(){ return fData.lenx; }
 	double Get_leny(){ return fData.leny; }
 	int    Get_fmt(){ return fData.out_fmt; }
-	double Get_thetaMin(){ return fData.theta_min; }
-	double Get_thetaMax(){ return fData.theta_max; }
+	double Get_thetaMin(int i){ return fData.theta_min[i]; }
+	double Get_thetaMax(int i){ return fData.theta_max[i]; }
 
 	double GetTgtXoff(){ return fData.off_x; }
 	double GetTgtYoff(){ return fData.off_y; }

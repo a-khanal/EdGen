@@ -71,8 +71,8 @@ class EdPhysics: public TGenPhaseSpace{
 	TLorentzVector W4vector;
 	TLorentzVector Q4vector;
 	TVector3 vertex;
-	double theta_min;
-	double theta_max;
+	double theta_min[MAX_PART];
+	double theta_max[MAX_PART];
 	int count_phase;
 	
 

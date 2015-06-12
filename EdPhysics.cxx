@@ -21,8 +21,6 @@ EdPhysics::EdPhysics(EdModel *model){
     n_part = model->GetNpart();
     nvertex = model->GetNvertex();
     part_pdg[n_part] = pdg->GetParticle(model->GetBeamPID()); // Beam particle stored in part_pdg[n_part]
-    theta_min = model->GetTheta_min();
-    theta_max = model->GetTheta_max();
 
     // For the phi cut, I need to put three different cuts, one will be in the output phi angle in the lab frame, one will be in the helicity frame of the vector meson, one will be in the helicity frame of the decay products, that could be caused by two or three particles.
     // The angles will need to be defined for both gamma and electron beam 
@@ -32,12 +30,14 @@ EdPhysics::EdPhysics(EdModel *model){
     for (int i=0; i<n_part; i++) {
       towrite[i] = 1;
       particle_id[i] = model->GetPid(i);
+      theta_min[i] = model->GetTheta_min(i);
+      theta_max[i] = model->GetTheta_max(i);
       part_pdg[i] = pdg->GetParticle(particle_id[i]); 
       charge[i] = part_pdg[i]->Charge()/3; // Charge is in unit of |e|/3
       masses2[i] = part_pdg[i]->Mass();
       width2[i] = part_pdg[i]->Width();
-      if (width2[i] > 0.001) printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e : Mass will be generated as %s\n",i+1,particle_id[i],masses2[i],width2[i],model->GetMassModelString());
-      else printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e \n",i+1,particle_id[i],masses2[i],width2[i]);
+      if (width2[i] > 0.001) printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e : Mass will be generated as %s ; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],model->GetMassModelString(),theta_min[i],theta_max[i]);
+      else printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e ; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],theta_min[i],theta_max[i]);
       
     }
     nvertex = model->GetNvertex();
@@ -313,10 +313,10 @@ int EdPhysics::Gen_Phasespace(){
   // For selecting which particle is going to be created first I will need to use creation time if the space of creation time corresponds to the size where there will still be interaction between the two packets 
 
   for (int i=0; i<n_part; i++) {
-    if (towrite[i] == 1) {  // do the angle cut only for particles in the output tht will hit the detector
-      if (theta[i] < theta_min) valid_event--; 
-      if (theta[i] > theta_max) valid_event--;
-    }
+    //    if (towrite[i] == 1) {  // do the angle cut only for particles in the output tht will hit the detector
+    if (theta[i] < theta_min[i]) valid_event--; 
+    if (theta[i] > theta_max[i]) valid_event--;
+      //    }
   }
   
   return valid_event;
