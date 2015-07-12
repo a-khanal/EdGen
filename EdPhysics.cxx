@@ -21,10 +21,6 @@ EdPhysics::EdPhysics(EdModel *model){
     n_part = model->GetNpart();
     nvertex = model->GetNvertex();
     part_pdg[n_part] = pdg->GetParticle(model->GetBeamPID()); // Beam particle stored in part_pdg[n_part]
-
-    // For the phi cut, I need to put three different cuts, one will be in the output phi angle in the lab frame, one will be in the helicity frame of the vector meson, one will be in the helicity frame of the decay products, that could be caused by two or three particles.
-    // The angles will need to be defined for both gamma and electron beam 
-
     double masses2[n_part];
     double width2[n_part];
     for (int i=0; i<n_part; i++) {
@@ -36,7 +32,7 @@ EdPhysics::EdPhysics(EdModel *model){
       charge[i] = part_pdg[i]->Charge()/3; // Charge is in unit of |e|/3
       masses2[i] = part_pdg[i]->Mass();
       width2[i] = part_pdg[i]->Width();
-      if (width2[i] > 0.001) printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e : Mass will be generated as %s ; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],model->GetMassModelString(),theta_min[i],theta_max[i]);
+     if (width2[i] > 0.001) printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e : Mass will be generated as %s ; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],model->GetMassModelString(),theta_min[i],theta_max[i]);
       else printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e ; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],theta_min[i],theta_max[i]);
       
     }
@@ -82,15 +78,16 @@ EdPhysics::~EdPhysics(){
 void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
   // target info
 
-    double  e_lab = model->GetEnergy();
-    out->SetEin(e_lab);
-    beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
+  // Energy of the PHOTON BEAM is sometimes below the threshold of the pi0 mass. The random generator is constant in generation, so the 26-th event is the one with energy below the threshold. This could be also the problem with the multiple particle vertex one, since with multiple particle I require more energy in the final state. I should try to put a single beam with really high energy and check if ken hicks simulation works.
+
+    // double  e_lab = model->GetEnergy();
+    // out->SetEin(e_lab);
+    // beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
     double tglx = model->GetLx();
     double tgly = model->GetLy();
     double tglength = model->GetLength();
 
     TVector3 tgtoff = model->GetTgtOffset();
-
 
 
   
@@ -106,6 +103,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     }    
 
     
+    //    for (int i=0; i<(n_part+1) ; i++) p4vector[i]->SetPxPyPzE(0.,0.,0.,0.);
     W4vector.SetXYZT(0.,0.,0.,0.);
     Q4vector.SetXYZT(0.,0.,0.,0.);
 
@@ -116,8 +114,8 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     vertex = vertex + tgtoff;
     int test_gen = 0;
     count_phase = 0;
-    while (test_gen < nvertex) test_gen = Gen_Phasespace();
-
+    while (test_gen < nvertex ) test_gen = Gen_Phasespace(model);
+    out->SetEin(e_lab);
     out->SetTheta(theta,n_part);
     out->SetPhi(phi,n_part);
     out->SetEf(Ef,n_part);
@@ -198,13 +196,23 @@ TVector3 EdPhysics::Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert) {
 
 }
 
-int EdPhysics::Gen_Mass(int i) {
+int EdPhysics::Gen_Mass(int i,EdModel *model) {
   // need to put all values of val_mass[i][j]with this function. The return integer is in case the generation is correct (could be a loop with while ( output < npvert[i] ) In this way I can generate all masses according to the value here generated. Also the order of generation, considering the limit should be random.
   double prob[10];
   fRandom->RndmArray(npvert[i],prob);
   int good_gen = 1;
   int k;
   double total_gen = 0.;
+  e_lab = model->GetEnergy();
+  beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
+  //  printf("Energy = %f \n",e_lab);
+  if (overt[i] == 0) { // (Origin Beam + Tg)
+    Wtg = beam + target;
+  }
+  else {
+    Wtg = *p4vector[overt[i]-1];
+  }
+
   for (int j=0; j<npvert[i] ; j++) {
     k = (int)TMath::LocMin(npvert[i],prob);
     if (width[i][k] > 0.001) {
@@ -225,14 +233,15 @@ int EdPhysics::Gen_Mass(int i) {
       total_gen = total_gen + val_mass[i][k] ; 
     }
   }  // Take away from the mass the stable particle
+  //  printf("good_gen = %d \n",good_gen);
   return good_gen; 
 }
 
 
-int EdPhysics::Gen_Phasespace(){
+int EdPhysics::Gen_Phasespace(EdModel *model){
 
       //    if (valid_event>0) printf("valid events =%i but nvertex=%i",valid_event,nvertex);
-  TLorentzVector *p4vector[n_part+1];
+  // TLorentzVector *p4vector[n_part+1];
   double weight2;
   double total_mass;
   int atpart = 0;
@@ -240,15 +249,11 @@ int EdPhysics::Gen_Phasespace(){
   int good_mass = 0; 
   int failed_event = 0;
   valid_event = 0;
+
+
   for (int i=0; i<nvertex; i++) {
-    if (overt[i] == 0) { // (Origin Beam + Tg)
-      Wtg = beam + target;
-    }
-    else {
-      Wtg = *p4vector[overt[i]-1];
-    }
     good_mass=0;
-    while (good_mass == 0) good_mass = Gen_Mass(i); 
+    while (good_mass == 0) good_mass = Gen_Mass(i,model); 
     total_mass = 0.;
     for (int j=0; j<npvert[i]; j++) {
       // val_mass[i][j] = -1.;
@@ -257,9 +262,9 @@ int EdPhysics::Gen_Phasespace(){
       // }
       // else val_mass[i][j] = masses[i][j];
       total_mass = total_mass + val_mass[i][j];
-      //     printf("mass vertex %i particle %i total=%.3e mass=%.3e max_mass%.3e \n",i,j,total_mass,val_mass[i][j],max_mass[i][j]);
+      //      printf("mass vertex %i particle %i total=%.3e mass=%.3e max_mass%.3e \n",i,j,total_mass,val_mass[i][j],max_mass[i][j]);
     }
-    if (Wtg.M() < total_mass) good_mass = Gen_Mass(i);
+    // if (Wtg.M() < total_mass) good_mass = Gen_Mass(i);
     //    printf("mass generated Wtg=%.3e total=%.3e good_mass=%i \n",Wtg.M(),total_mass,good_mass);      
     if (Wtg.M() > total_mass) { // mass check at each vertex
       //   printf("mass generated\n");
@@ -288,7 +293,7 @@ int EdPhysics::Gen_Phasespace(){
 	}
 	else {
 	  if (part_pdg[overt[i]-1]->Stable() == 1) {
-	    printf("Origin particle %i at vertex %i is stable??? vertexes of daughters particles as mother \n", particle_id[overt[i]-1],i); 
+	    //	    printf("Origin particle %i at vertex %i is stable??? vertexes of daughters particles as mother \n", particle_id[overt[i]-1],i); 
 	    vx[atpart] = vx[overt[i]-1];
 	    vy[atpart] = vy[overt[i]-1];
 	    vz[atpart] = vz[overt[i]-1];
@@ -305,6 +310,7 @@ int EdPhysics::Gen_Phasespace(){
       }
     }
   }
+ 
   count_phase++;
   if ( (count_phase%100000) == 0) printf("Generated %d events without passing your angle cuts. Could be you want to check your limits\n",count_phase);
   // theta_v_min = TMath::Pi();
@@ -318,20 +324,20 @@ int EdPhysics::Gen_Phasespace(){
     if (theta[i] > theta_max[i]) valid_event--;
       //    }
   }
-  
+
   return valid_event;
 
 
 }
 
-double EdPhysics::t_reaction(TLorentzVector *Vrecoil_tg_4 ) {
-  TLorentzVector tg_v4;
-  tg_v4.SetPxPyPzE(Vrecoil_tg_4->Px(),Vrecoil_tg_4->Py(),Vrecoil_tg_4->Pz(),Vrecoil_tg_4->E());
-  TLorentzVector t_v4;
-  t_v4 = target - tg_v4; // Operation allowed just between TLorentzVector and not TLorentzVector*
-  return t_v4.M2();
+// double EdPhysics::t_reaction(TLorentzVector *Vrecoil_tg_4 ) {
+//   TLorentzVector tg_v4;
+//   tg_v4.SetPxPyPzE(Vrecoil_tg_4->Px(),Vrecoil_tg_4->Py(),Vrecoil_tg_4->Pz(),Vrecoil_tg_4->E());
+//   TLorentzVector t_v4;
+//   t_v4 = target - tg_v4; // Operation allowed just between TLorentzVector and not TLorentzVector*
+//   return t_v4.M2();
 
-}
+// }
 
 
 // Double_t TPart_ident_ct::theta_pip_mc() {

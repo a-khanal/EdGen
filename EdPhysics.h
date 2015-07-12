@@ -36,6 +36,8 @@ class EdPhysics: public TGenPhaseSpace{
 	double v_ratio[10]; // ration to be applied to vertex
 	TDatabasePDG *pdg;
 	TParticlePDG *part_pdg[MAX_PART];
+	TLorentzVector *p4vector[MAX_PART];
+
 	double theta[MAX_PART];
 	double phi[MAX_PART];
 	double Ef[MAX_PART];
@@ -48,6 +50,7 @@ class EdPhysics: public TGenPhaseSpace{
 	double y;
 	double Q2;
 	double nu;
+	double e_lab;
 	double weight[MAX_PART];
 
 	int particle_id[MAX_PART];
@@ -74,12 +77,11 @@ class EdPhysics: public TGenPhaseSpace{
 	double theta_min[MAX_PART];
 	double theta_max[MAX_PART];
 	int count_phase;
-	
 
 	TVector3 Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert);
 	double GetBeamProfile( double sigma = 1.);
-	int Gen_Phasespace();
-	int Gen_Mass(int i);
+	int Gen_Phasespace(EdModel *model);
+	int Gen_Mass(int i,EdModel *model);
 
 	double t_reaction(TLorentzVector *Vrecoil_tg_4 );
 	double phi_meson();
