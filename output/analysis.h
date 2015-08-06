@@ -28,6 +28,7 @@ public :
   TH1F           *h1_phi;
   TH1F           *h1_costheta;
   TH1F           *h1_mass;
+  TH1F           *h1_mass2;
   TH1F           *h1_costheta2;
   TH1F           *h1_theta_pim;
 
