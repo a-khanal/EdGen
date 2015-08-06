@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Tue Jun  9 18:43:48 2015 by ROOT version 5.34/18
+// Thu Aug  6 15:01:50 2015 by ROOT version 5.34/21
 // from TChain T/
 //////////////////////////////////////////////////////////
 
@@ -14,6 +14,7 @@
 #include <TLorentzVector.h>
 #include <TVector3.h>
 #include <TMath.h>
+
 
 class   TH1F;
 class   TH2F;
@@ -29,32 +30,37 @@ public :
   TH1F           *h1_costheta;
   TH1F           *h1_mass;
   TH1F           *h1_mass2;
+  TH1F           *h1_costheta2;
+  TH1F           *h1_theta_pim;
+  TH1F           *h1_mass_eta;
+  TH1F           *h1_mass2_eta;
+  
 
 
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
 
    // Declaration of leaf types
    Int_t           n_part;
-   Double_t        theta[6];   //[n_part]
-   Double_t        phi[6];   //[n_part]
+   Double_t        theta[7];   //[n_part]
+   Double_t        phi[7];   //[n_part]
    Double_t        x;
    Double_t        Ein_beam;
-   Double_t        Ef[6];   //[n_part]
+   Double_t        Ef[7];   //[n_part]
    Double_t        Q2;
    Double_t        nu;
    Double_t        W;
    Double_t        y;
    Int_t           Z_ion;
    Int_t           N_ion;
-   Int_t           particle_id[6];   //[n_part]
-   Int_t           charge[6];   //[n_part]
-   Double_t        pf[6];   //[n_part]
-   Double_t        px[6];   //[n_part]
-   Double_t        py[6];   //[n_part]
-   Double_t        pz[6];   //[n_part]
-   Double_t        vx[6];   //[n_part]
-   Double_t        vy[6];   //[n_part]
-   Double_t        vz[6];   //[n_part]
+   Int_t           particle_id[7];   //[n_part]
+   Int_t           charge[7];   //[n_part]
+   Double_t        pf[7];   //[n_part]
+   Double_t        px[7];   //[n_part]
+   Double_t        py[7];   //[n_part]
+   Double_t        pz[7];   //[n_part]
+   Double_t        vx[7];   //[n_part]
+   Double_t        vy[7];   //[n_part]
+   Double_t        vz[7];   //[n_part]
    Double_t        weight;
 
    // List of branches

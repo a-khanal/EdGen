@@ -45,16 +45,27 @@ void newAnalysis::SlaveBegin(TTree * /*tree*/)
    // The tree argument is deprecated (on PROOF 0 is passed).
 
    TString option = GetOption();
+
    h1_phi = new TH1F("h1_phi","#phi #pi^{+} distribution",150,-180,360);
-   h1_costheta = new TH1F("h1_costheta","cos(#theta) #pi^{+} distribution (#rho^{0} rest frame)",100,-1.,1.);
-   h1_mass = new TH1F("h1_mass","Mass directly from a2; GeV",100,0.,1.9);
-   h1_mass2 = new TH1F("h1_mass2","Mass from sum of pions momentum; GeV",100,0.,1.9);
+   h1_costheta = new TH1F("h1_costheta","cos(#theta) #pi^{+} distribution (f^{1} rest frame)",100,-1.,1.);
+   h1_mass = new TH1F("h1_mass_f1","Mass f1; GeV",100,0.,1.5);
+   h1_costheta2 = new TH1F("h1_costheta2","cos(#theta) f^{1} distribution",100,-1.,1.);
+   h1_theta_pim = new TH1F("h1_theta_pim","#theta #pi^{-} distribution",100,0.0,TMath::Pi());
+   h1_mass2 = new TH1F("h1_mass2_f1","Mass f1 as of #pi^{+}+#pi^{-}+#eta; GeV",100,0.,1.5);
+   h1_mass_eta = new TH1F("h1_mass_eta","Mass #eta; GeV",100,0.,1.5);
+   h1_mass2_eta = new TH1F("h1_mass2_eta","Mass #eta as of #pi^{+}+#pi^{-}; GeV",100,0.,1.5);
 
 
    fOutput->Add(h1_phi);
    fOutput->Add(h1_costheta);
    fOutput->Add(h1_mass);
    fOutput->Add(h1_mass2);
+   fOutput->Add(h1_costheta2);
+   fOutput->Add(h1_theta_pim);
+   fOutput->Add(h1_mass_eta);
+   fOutput->Add(h1_mass2_eta);
+
+
 
 }
 
@@ -83,21 +94,31 @@ Bool_t newAnalysis::Process(Long64_t entry)
   b_py->GetEntry(entry);
   b_pz->GetEntry(entry);
 
-  TLorentzVector p_a2(px[2],py[2],pz[2],Ef[2]);
-  TLorentzVector p_pip1(px[3],py[3],pz[3],Ef[3]);
-  TLorentzVector p_pip2(px[4],py[4],pz[4],Ef[4]);
-  TLorentzVector p_pim(px[5],py[5],pz[5],Ef[5]);
-  TLorentzVector p_a2_sum = p_pip1 + p_pip2 + p_pim;
+  TLorentzVector p_f1(px[1],py[1],pz[1],Ef[1]);
+  TLorentzVector p_pip(px[2],py[2],pz[2],Ef[2]);
+  TLorentzVector p_pim(px[3],py[3],pz[3],Ef[3]);
+  TLorentzVector p_eta(px[4],py[4],pz[4],Ef[4]);
+  TLorentzVector p_pip2(px[5],py[5],pz[5],Ef[5]);
+  TLorentzVector p_pim2(px[6],py[6],pz[6],Ef[6]);
+
 
   TVector3 b_3 ;
-  b_3 =  p_a2.BoostVector();
+  b_3 =  p_f1.BoostVector();
   b_3 = -b_3;
-  p_pip1.Boost(b_3);
+  TLorentzVector p_f1_2 = p_pip+p_pim+p_eta;
+  TLorentzVector p_eta_2 = p_pip2+p_pim2;
+
+  p_pip.Boost(b_3);
   
-  h1_phi->Fill(p_pip1.Phi()/TMath::Pi()*180.);
-  h1_costheta->Fill(p_pip1.CosTheta());
-  h1_mass->Fill(p_a2.M());
-  h1_mass2->Fill(p_a2_sum.M());
+  h1_phi->Fill(p_pip.Phi()/TMath::Pi()*180.);
+  h1_costheta->Fill(p_pip.CosTheta());
+  h1_mass->Fill(p_f1.M());
+  h1_mass2->Fill(p_f1_2.M());
+  h1_costheta2->Fill(p_f1.CosTheta());
+  h1_theta_pim->Fill(p_pim.Theta());
+  h1_mass_eta->Fill(p_eta.M());
+  h1_mass2_eta->Fill(p_eta_2.M());
+
 
    return kTRUE;
 }
@@ -116,12 +137,11 @@ void newAnalysis::Terminate()
    // a query. It always runs on the client, it can be used to present
    // the results graphically or save the results to file.
 
-  TFile file_out("newAnalysis_output.root","recreate");
+  TFile file_out("analysis_output.root","recreate");
   TList *outlist = GetOutputList();
   
   outlist->Write();
   file_out.Write();
   file_out.Close();
-
 
 }
