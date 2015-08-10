@@ -15,8 +15,11 @@ Prerequisites
 * Environment variables on ifarm.jlab.org
 
 setenv CERNLIB /apps/cernlib/x86_64_rhel4/2005/lib
+
 setenv CVSROOT /group/clas/clas_cvs
+
 setup cernlib tcl
+
 source /group/clas/builds/environment.csh
 
 Install
