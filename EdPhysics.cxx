@@ -49,7 +49,8 @@ EdPhysics::EdPhysics(EdModel *model){
       for(int j=0; j<npvert[i] ; j++) {
 	masses[i][j] = part_pdg[atpart]->Mass();
 	width[i][j] = part_pdg[atpart]->Width();
-	if (width[i][j] <= 0.001) val_mass[i][j] = masses[i][j];
+	//	if (width[i][j] <= 0.001) val_mass[i][j] = masses[i][j];
+	val_mass[i][j] = masses[i][j];
 	max_mass[i][j] = 0.;
 	printf("(pid=%i %.3e GeV) ", particle_id[atpart], part_pdg[atpart]->Mass());
 	atpart++;
@@ -203,15 +204,18 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   int good_gen = 1;
   int k;
   double total_gen = 0.;
-  e_lab = model->GetEnergy();
-  beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
+  
   //  printf("Energy = %f \n",e_lab);
   if (overt[i] == 0) { // (Origin Beam + Tg)
+    e_lab = model->GetEnergy();
+    beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
     Wtg = beam + target;
+
   }
   else {
     Wtg = *p4vector[overt[i]-1];
   }
+  //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[i]-1,Wtg.M());
 
   for (int j=0; j<npvert[i] ; j++) {
     k = (int)TMath::LocMin(npvert[i],prob);
@@ -272,6 +276,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       SetDecay(Wtg, npvert[i], val_mass[i]);
       valid_event++;
       weight2 = Generate();
+      //      printf("weight= %.3e\n",weight2);
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
 	p4vector[atpart] = GetDecay(j);

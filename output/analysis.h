@@ -31,6 +31,8 @@ public :
   TH1F           *h1_mass2;
   TH1F           *h1_costheta2;
   TH1F           *h1_theta_pim;
+  TH2F           *h2_pimeta_pipeta;
+
 
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
 
@@ -56,7 +58,7 @@ public :
    Double_t        vx[5];   //[n_part]
    Double_t        vy[5];   //[n_part]
    Double_t        vz[5];   //[n_part]
-   Double_t        weight;
+   Double_t        weight[5]; //[n_part]
 
    // List of branches
    TBranch        *b_n_part;   //!
@@ -140,7 +142,7 @@ void analysis::Init(TTree *tree)
    fChain->SetBranchAddress("vx", vx, &b_vx);
    fChain->SetBranchAddress("vy", vy, &b_vy);
    fChain->SetBranchAddress("vz", vz, &b_vz);
-   fChain->SetBranchAddress("weight", &weight, &b_weight);
+   fChain->SetBranchAddress("weight", weight, &b_weight);
 }
 
 Bool_t analysis::Notify()
