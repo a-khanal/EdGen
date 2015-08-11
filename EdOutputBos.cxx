@@ -56,7 +56,7 @@ void EdOutput::InitTree(){
     fTree->Branch("vy", &vy, "vy[n_part]/D");
     fTree->Branch("vz", &vz, "vz[n_part]/D");
 
-    fTree->Branch("weight", &weight, "weight/D");
+    fTree->Branch("weight", &weight, "weight[n_part]/D");
 
 
     return;
