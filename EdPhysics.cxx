@@ -219,6 +219,7 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
 
   for (int j=0; j<npvert[i] ; j++) {
     k = (int)TMath::LocMin(npvert[i],prob);
+    val_mass[i][k] = masses[i][k];
     if (width[i][k] > 0.001) {
       val_mass[i][k] = 0.;
       prob[k] = prob[k] +1;
