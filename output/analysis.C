@@ -128,17 +128,17 @@ Bool_t analysis::Process(Long64_t entry)
 
   p_d1.Boost(b_3);
   p_d2.Boost(b_3);
-if (p_d1.M()< (1.6 - p_d2.M()) ) {
+  if (p_d1.M()< (1.6 - p_d2.M()) ) {
     h1_beam_sel->Fill(Ein_beam); 
     h1_mom_sel->Fill(p_d1.Rho());
   }
   else {
-h1_beam_sel2->Fill(Ein_beam); 
-h1_mom_sel2->Fill(p_d1.Rho());
+    h1_beam_sel2->Fill(Ein_beam); 
+    h1_mom_sel2->Fill(p_d1.Rho());
   }
-if (p_d1.Rho()>0.1 && p_d2.Rho()>0.1) {
-h2_pimeta_pipeta2->Fill(p_d1.M(),p_d2.M(),weight[4]);
-}
+  if (p_d1.Rho()>0.05 && p_d2.Rho()>0.05 && Ein_beam > 2.0) {
+    h2_pimeta_pipeta2->Fill(p_d1.M(),p_d2.M(),weight[4]);
+  }
 
    return kTRUE;
 }
