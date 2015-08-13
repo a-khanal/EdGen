@@ -52,14 +52,14 @@ void analysis::SlaveBegin(TTree * /*tree*/)
    h1_costheta2 = new TH1F("h1_costheta2","cos(#theta) f^{1} distribution",100,-1.,1.);
    h1_theta_pim = new TH1F("h1_theta_pim","#theta #pi^{-} distribution",100,0.0,TMath::Pi());
    h1_mass2 = new TH1F("h1_mass_f1_2"," f1 as mass of #pi^{+}+#pi^{-}+#eta; GeV",100,0.,1.5);
-   h1_beam_sel = new TH1F("h1_beam_sel","E_beam for M_{#pi^{-} #eta} < 1.6 - M_{#pi^{+} #eta} ; GeV",100,0.,4.5);
-   h1_beam_sel2 = new TH1F("h1_beam_sel2","E_beam for M_{#pi^{-} #eta} >= 1.6 - M_{#pi^{+} #eta} ; GeV",100,0.,4.5);
-   h1_mom_sel = new TH1F("h1_mom_sel","|p|_{#pi^{-} #eta} for M_{#pi^{-} #eta} < 1.6 - M_{#pi^{+} #eta} ; GeV",100,0.,1.0);
-   h1_mom_sel2 = new TH1F("h1_mom_sel2","|p|_{#pi^{-} #eta} for M_{#pi^{-} #eta} >= 1.6 - M_{#pi^{+} #eta} ; GeV",100,0.,1.0);
+   h1_beam_sel = new TH1F("h1_beam_sel","E_beam for M_{f1} > 1.2GeV  ; GeV",100,0.,4.5);
+   h1_beam_sel2 = new TH1F("h1_beam_sel2","E_beam for M_{f1} > 1.2GeV  ; GeV",100,0.,4.5);
+   h1_mom_sel = new TH1F("h1_mom_sel","p|_{#pi^{-} #eta} for M_{f1} > 1.2GeV  ; GeV",100,0.,1.0);
+   h1_mom_sel2 = new TH1F("h1_mom_sel2","|p|_{#pi^{-} #eta} for M_{f1} > 1.2GeV  ; GeV",100,0.,1.0);
 
 
    h2_pimeta_pipeta = new TH2F("h2_pimeta_pipeta","Dalitz ;#pi^{-}#eta;#pi^{+}#eta",100,0.,1.5,100,0.,1.5);
-   h2_pimeta_pipeta2 = new TH2F("h2_pimeta_pipeta2","Dalitz |p|_{#pi^{-} #eta} > 0.1 and|p|_{#pi^{+} #eta} > 0.1  ;#pi^{-}#eta;#pi^{+}#eta",100,0.,1.5,100,0.,1.5);
+   h2_pimeta_pipeta2 = new TH2F("h2_pimeta_pipeta2","Dalitz M_{f1} > 1.2GeV  ;#pi^{-}#eta;#pi^{+}#eta",100,0.,1.5,100,0.,1.5);
 
    fOutput->Add(h1_phi);
    fOutput->Add(h1_costheta);
@@ -128,7 +128,7 @@ Bool_t analysis::Process(Long64_t entry)
 
   p_d1.Boost(b_3);
   p_d2.Boost(b_3);
-  if (p_d1.M()< (1.6 - p_d2.M()) ) {
+  if (p_f1.M()>1.2) {
     h1_beam_sel->Fill(Ein_beam); 
     h1_mom_sel->Fill(p_d1.Rho());
   }
@@ -136,7 +136,7 @@ Bool_t analysis::Process(Long64_t entry)
     h1_beam_sel2->Fill(Ein_beam); 
     h1_mom_sel2->Fill(p_d1.Rho());
   }
-  if (p_d1.Rho()>0.05 && p_d2.Rho()>0.05 && Ein_beam > 2.0) {
+  if ( p_f1.M()>1.2) {
     h2_pimeta_pipeta2->Fill(p_d1.M(),p_d2.M(),weight[4]);
   }
 
