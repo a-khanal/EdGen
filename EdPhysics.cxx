@@ -224,8 +224,9 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
       val_mass[i][k] = 0.;
       prob[k] = prob[k] +1;
       if (mass_model==1 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
-	while (val_mass[i][k] <= 0.001 || val_mass[i][k] > (Wtg.M()+max_mass[i][k] - total_gen)) val_mass[i][k] = fRandom->BreitWigner(masses[i][k],width[i][k]); // Sometimes the random value is outside the limits 
-	       }
+	while (val_mass[i][k] <= 0.001) val_mass[i][k] = fRandom->BreitWigner(masses[i][k],width[i][k]); // Sometimes the random value is outside the limits 
+	if ( val_mass[i][k] > (Wtg.M()+max_mass[i][k] - total_gen))  good_gen = 0;
+      }
       else if (mass_model==1 && (Wtg.M()+max_mass[i][k] - total_gen) < 0.001 ) good_gen = 0;
       else if (mass_model==2 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
 	val_mass[i][k] = fRandom->Uniform(0.001,Wtg.M()+max_mass[i][k] - total_gen); // Sometimes the random val_massm is outside the limits ?!??!?!
@@ -233,6 +234,10 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
       else if (mass_model==2 && (Wtg.M()+max_mass[i][k] - total_gen) < 0.001 ) good_gen = 0; 
       else if (mass_model==3 && (Wtg.M()+max_mass[i][k] - total_gen) > masses[i][k] ) val_mass[i][k] = masses[i][k] ;
       else if (mass_model==3 && (Wtg.M()+max_mass[i][k] - total_gen) > masses[i][k] ) good_gen = 0;
+      else if (mass_model==4 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
+	while (val_mass[i][k] <= 0.001 || val_mass[i][k] > (Wtg.M()+max_mass[i][k] - total_gen)) val_mass[i][k] = fRandom->BreitWigner(masses[i][k],width[i][k]); // Sometimes the random value is outside the limits 
+	       }
+
       else if (mass_model < 1 || mass_model > 3 ) printf("Mass model %i not allowed: Please check your input file \n",mass_model);
       else good_gen = 0;
       total_gen = total_gen + val_mass[i][k] ; 

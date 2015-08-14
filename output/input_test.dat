@@ -40,7 +40,9 @@ END
 #   output/eg_pdg_table.txt)
 # 2 Flat (Generated flat in mass in the allowed range)
 # 3 Just the mass at the center of the distribution
-# 4 Gaussian and more to come
+# 4 Breit-Wigner2 (Mass and Width are automatically read from
+#   output/eg_pdg_table.txt) mass will still be	 generated fast also if outside the energy peak.
+# 5 Gaussian and more to come
 #
 # output
 # 1  ROOT only
