@@ -204,7 +204,8 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   int good_gen = 1;
   int k;
   double total_gen = 0.;
-  
+  //  for (int j=0; j<MAX_PART; j++) {
+    //  }
   //  printf("Energy = %f \n",e_lab);
   if (overt[i] == 0) { // (Origin Beam + Tg)
     e_lab = model->GetEnergy();
@@ -213,7 +214,10 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
 
   }
   else {
-    Wtg = *p4vector[overt[i]-1];
+    p4vector_c = new TLorentzVector(*p4vector[overt[i]-1]); 
+    
+    Wtg = *p4vector_c;
+    printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
   }
   //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[i]-1,Wtg.M());
 

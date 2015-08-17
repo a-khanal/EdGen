@@ -37,6 +37,8 @@ class EdPhysics: public TGenPhaseSpace{
 	TDatabasePDG *pdg;
 	TParticlePDG *part_pdg[MAX_PART];
 	TLorentzVector *p4vector[MAX_PART];
+	TLorentzVector *p4vector_c;
+
 
 	double theta[MAX_PART];
 	double phi[MAX_PART];
