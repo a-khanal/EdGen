@@ -214,7 +214,7 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
 
   }
   else {
-    p4vector_c = new TLorentzVector(*p4vector[overt[i]-1]); 
+    p4vector_c = new TLorentzVector(*p4vector[i][0]); 
     
     Wtg = *p4vector_c;
     printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
@@ -289,17 +289,23 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //      printf("weight= %.3e\n",weight2);
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
-	p4vector[atpart] = GetDecay(j);
+	p4vector[i][j+1] = GetDecay(j);
 	//	cout << "Particle n." << atpart << " Mass=" << p4vector[atpart]->M() << endl; 
-	theta[atpart] = p4vector[atpart]->Theta();
-	phi[atpart] = p4vector[atpart]->Phi();
-	Ef[atpart] = p4vector[atpart]->E();
-	pf[atpart] = p4vector[atpart]->Rho();
-	px[atpart] = p4vector[atpart]->Px();
-	py[atpart] = p4vector[atpart]->Py();
-	pz[atpart] = p4vector[atpart]->Pz();
-	if (atpart<npvert[0] && atpart>0) W4vector += *p4vector[atpart]; // I am assuming that the first particle is the scattered beam
-	if (atpart == 0)      Q4vector= beam - *p4vector[0];
+	for (int k=i+1; k<nvertex; k++) {
+	  printf ("i=%i k=%i \n",i,k);
+	  // if (overt[k] == atpart) p4vector[k][0] = new TLorentzVector(p4vector[i][j+1]->Px(),p4vector[i][j+1]->Py(),p4vector[i][j+1]->Pz(),p4vector[i][j+1]->E());
+	  if (overt[k] == atpart) p4vector[k][0] = new TLorentzVector(*p4vector[i][j+1]);
+
+	}
+	theta[atpart] = p4vector[i][j+1]->Theta();
+	phi[atpart] = p4vector[i][j+1]->Phi();
+	Ef[atpart] = p4vector[i][j+1]->E();
+	pf[atpart] = p4vector[i][j+1]->Rho();
+	px[atpart] = p4vector[i][j+1]->Px();
+	py[atpart] = p4vector[i][j+1]->Py();
+	pz[atpart] = p4vector[i][j+1]->Pz();
+	if (atpart<npvert[0] && atpart>0) W4vector += *p4vector[i][j+1]; // I am assuming that the first particle is the scattered beam
+	if (atpart == 0)      Q4vector= beam - *p4vector[0][j+1];
 	weight[atpart] = weight2;
 	if (overt[i] ==0) {
 	  vx[atpart] = vertex.X();
@@ -315,7 +321,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	  }
 	  else {
 	    vertex.SetXYZ(vx[overt[i]-1],vy[overt[i]-1],vz[overt[i]-1]);
-	    vertex = Decay_vertex(p4vector[overt[i]-1],(overt[i]-1),vertex);
+	    vertex = Decay_vertex(p4vector[i][0],(overt[i]-1),vertex);
 	    vx[atpart] = vertex.X() ;
 	    vy[atpart] = vertex.Y();
 	    vz[atpart] = vertex.Z();

@@ -36,7 +36,7 @@ class EdPhysics: public TGenPhaseSpace{
 	double v_ratio[10]; // ration to be applied to vertex
 	TDatabasePDG *pdg;
 	TParticlePDG *part_pdg[MAX_PART];
-	TLorentzVector *p4vector[MAX_PART];
+	TLorentzVector *p4vector[MAX_PART][MAX_PART];
 	TLorentzVector *p4vector_c;
 
 
