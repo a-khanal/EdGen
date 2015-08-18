@@ -95,10 +95,10 @@ output
 
 Examples
 -------
-* 3 particles in a vertex, Dalitz plots are generate using the weight (for flat distrivution with more than 2 particles in a vertex)
-** Create generated output file: ./EdGen -i input_test2.dat
-** Analyze the output (with TProof) of the generated file (files analysis.C , analysis.h, run_analysis.C): root run_analysis.C
-* 2 particles per vertex, but 3 vertex
-** Create generated output file: ./EdGen -i input_test.dat
-** Analyze the output (with TProof) of the generated file (files newAnalysis.C , newAnalysis.h, run_newAnalysis.C): root run_newAnalysis.C
+* 3 particles in a vertex, Dalitz plots are generate using the weight (for flat distrivution with more than 2 particles in a vertex) <br />
+** Create generated output file: ./EdGen -i input_test2.dat <br />
+** Analyze the output (with TProof) of the generated file (files analysis.C , analysis.h, run_analysis.C): root run_analysis.C <br />
+* 2 particles per vertex, but 3 vertex <br />
+** Create generated output file: ./EdGen -i input_test.dat <br />
+** Analyze the output (with TProof) of the generated file (files newAnalysis.C , newAnalysis.h, run_newAnalysis.C): root run_newAnalysis.C <br />
 * See other examples of input file with input.dat (default), etc.
