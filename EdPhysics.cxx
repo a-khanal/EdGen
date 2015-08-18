@@ -306,7 +306,8 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	pz[atpart] = p4vector[i][j+1]->Pz();
 	if (atpart<npvert[0] && atpart>0) W4vector += *p4vector[i][j+1]; // I am assuming that the first particle is the scattered beam
 	if (atpart == 0)      Q4vector= beam - *p4vector[0][j+1];
-	weight[atpart] = weight2;
+	if (i==0) weight[atpart] = weight2;
+	else weight[atpart] =  weight[overt[i]-1] * weight2;
 	if (overt[i] ==0) {
 	  vx[atpart] = vertex.X();
 	  vy[atpart] = vertex.Y();
