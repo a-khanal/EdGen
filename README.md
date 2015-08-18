@@ -95,7 +95,7 @@ output
 
 Examples
 -------
-* 3 particles in a vertex, Dalitz plots are generate using the weight (for flat distrivution with more than 2 particles in a vertex) <br />
+* 3 particles in a vertex, Dalitz plots are generate using the weight (for particles that decay with more than 2 particles in a vertex). The weight is an array of all the particles and describe the weight at creation (the weight is given to the decayed particles) <br />
 ** Create generated output file: ./EdGen -i input_test2.dat <br />
 ** Analyze the output (with TProof) of the generated file (files analysis.C , analysis.h, run_analysis.C): root run_analysis.C <br />
 * 2 particles per vertex, but 3 vertex <br />
