@@ -47,6 +47,7 @@ Input file
 * nevt:    20000;                  NUMBER OF EVENTS TO GENERATE
 * nprint:  1000;                   NUMBER OF EVENTS TO HAVE A PRINTOUT (FOR DEBUGGING)
 * model:   2;      		 MODELS AVAILABLE (SEE BOTTOM FOR DIFFERENT OPTIONS)
+* M_mode:  1;          MASS MODELS AVAILABLE (SEE BOTTOM FOR DIFFERENT OPTIONS) 
 * ifile:	 energy.txt; 		 INPUT FILE SPECTRUM FOR BEAM (NEEDED FOR OPTION MODEL = 2) 
 * beam:    22;			 BEAM PARTICLE ID
 * en:	 11.0    GeV;		 BEAM ENERGY (NEEDED FOR OPTION MODEL = 1)
@@ -77,9 +78,27 @@ Models
 * 4 Amplitudes (sorry, not yet) 
 * 5 Data Points (sorry, not yet)
 
+Mass Models
+-------
+(Mass model: if width of particle>1MeV, one can generate the mass according to different distributions)
+* 1 Breit-Wigner (Mass and Width are automatically read from output/eg_pdg_table.txt)
+* 2 Flat (Generated flat in mass in the allowed range)
+* 3 Just the mass at the center of the distribution
+* 4 Gaussian and more to come
+
 
 output
 -------
 * 1  ROOT only
 * 2  ROOT + LUND
 * 3  ROOT + BOS
+
+Examples
+-------
+* 3 particles in a vertex, Dalitz plots are generate using the weight (for flat distrivution with more than 2 particles in a vertex)
+** Create generated output file: ./EdGen -i input_test2.dat
+** Analyze the output (with TProof) of the generated file (files analysis.C , analysis.h, run_analysis.C): root run_analysis.C
+* 2 particles per vertex, but 3 vertex
+** Create generated output file: ./EdGen -i input_test.dat
+** Analyze the output (with TProof) of the generated file (files newAnalysis.C , newAnalysis.h, run_newAnalysis.C): root run_newAnalysis.C
+* See other examples of input file with input.dat (default), etc.
