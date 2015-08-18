@@ -217,7 +217,7 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
     p4vector_c = new TLorentzVector(*p4vector[i][0]); 
     
     Wtg = *p4vector_c;
-    printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
+    //   printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
   }
   //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[i]-1,Wtg.M());
 
@@ -292,9 +292,9 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	p4vector[i][j+1] = GetDecay(j);
 	//	cout << "Particle n." << atpart << " Mass=" << p4vector[atpart]->M() << endl; 
 	for (int k=i+1; k<nvertex; k++) {
-	  printf ("i=%i k=%i \n",i,k);
+	  //	  printf ("i=%i k=%i \n",i,k);
 	  // if (overt[k] == atpart) p4vector[k][0] = new TLorentzVector(p4vector[i][j+1]->Px(),p4vector[i][j+1]->Py(),p4vector[i][j+1]->Pz(),p4vector[i][j+1]->E());
-	  if (overt[k] == atpart) p4vector[k][0] = new TLorentzVector(*p4vector[i][j+1]);
+	  if ( (overt[k]-1) == atpart) p4vector[k][0] = new TLorentzVector(*p4vector[i][j+1]);
 
 	}
 	theta[atpart] = p4vector[i][j+1]->Theta();

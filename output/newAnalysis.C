@@ -46,26 +46,29 @@ void newAnalysis::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
-   h1_phi = new TH1F("h1_phi","#phi #pi^{+} distribution",150,-180,360);
-   h1_costheta = new TH1F("h1_costheta","cos(#theta) #pi^{+} distribution (f^{1} rest frame)",100,-1.,1.);
-   h1_mass = new TH1F("h1_mass_f1","Mass f1; GeV",100,0.,1.5);
-   h1_costheta2 = new TH1F("h1_costheta2","cos(#theta) f^{1} distribution",100,-1.,1.);
+   h1_phi = new TH1F("h1_phi","#phi #pi^{+} distribution (K^{0}_{S}(1) rest frame)",150,-180,360);
+   h1_costheta = new TH1F("h1_costheta","cos(#theta) #pi^{+} distribution (K^{0}_{S}(1) rest frame)",100,-1.,1.);
+   h1_mass = new TH1F("h1_mass_f","Mass f'_{2}; GeV",100,0.,2.0);
+   h1_mass_K0_1 = new TH1F("h1_mass_K0_1","Mass K^{0}_{S}(1); GeV",100,0.,1.5);
+   h1_mass_K0_2 = new TH1F("h1_mass_K0_2","Mass K^{0}_{S}(2); GeV",100,0.,1.5);
+   h1_mass2_K0_1 = new TH1F("h1_mass2_K0_1","Mass K^{0}_{S}(1) from #pi^{+} + #pi^{-}; GeV",100,0.,1.5);
+   h1_mass2_K0_2 = new TH1F("h1_mass2_K0_2","Mass K^{0}_{S}(2) from #pi^{+} + #pi^{-}; GeV",100,0.,1.5);
+   h1_costheta2 = new TH1F("h1_costheta2","cos(#theta) f'_{2} distribution",100,-1.,1.);
    h1_theta_pim = new TH1F("h1_theta_pim","#theta #pi^{-} distribution",100,0.0,TMath::Pi());
-   h1_mass2 = new TH1F("h1_mass2_f1","Mass f1 as of #pi^{+}+#pi^{-}+#eta; GeV",100,0.,1.5);
-   h1_mass_eta = new TH1F("h1_mass_eta","Mass #eta; GeV",100,0.,1.5);
-   h1_mass2_eta = new TH1F("h1_mass2_eta","Mass #eta as of #pi^{+}+#pi^{-}; GeV",100,0.,1.5);
-
+   h1_mass2 = new TH1F("h1_mass_f"," f'_{2} as mass of K^{0}_{S}(1)+K^{0}_{S}(2); GeV",100,0.,2.0);
+   h2_mass_ebeam = new TH2F("h2_mass_ebeam","mass f'_{2} vs Energy beam; Energy beam (GeV); mass f'_{2} (GeV)",100,0.0,4.0,100,0.0,2.0);
 
    fOutput->Add(h1_phi);
    fOutput->Add(h1_costheta);
    fOutput->Add(h1_mass);
+   fOutput->Add(h1_mass_K0_1);
+   fOutput->Add(h1_mass_K0_2);
+   fOutput->Add(h1_mass2_K0_1);
+   fOutput->Add(h1_mass2_K0_2);
    fOutput->Add(h1_mass2);
    fOutput->Add(h1_costheta2);
    fOutput->Add(h1_theta_pim);
-   fOutput->Add(h1_mass_eta);
-   fOutput->Add(h1_mass2_eta);
-
-
+   fOutput->Add(h2_mass_ebeam);
 
 }
 
@@ -89,36 +92,41 @@ Bool_t newAnalysis::Process(Long64_t entry)
    //
    // The return value is currently not used.
 
-  b_Ef->GetEntry(entry);
   b_px->GetEntry(entry);
   b_py->GetEntry(entry);
   b_pz->GetEntry(entry);
+  b_Ef->GetEntry(entry);
+  b_Ein_beam->GetEntry(entry);
 
-  TLorentzVector p_f1(px[1],py[1],pz[1],Ef[1]);
-  TLorentzVector p_pip(px[2],py[2],pz[2],Ef[2]);
-  TLorentzVector p_pim(px[3],py[3],pz[3],Ef[3]);
-  TLorentzVector p_eta(px[4],py[4],pz[4],Ef[4]);
-  TLorentzVector p_pip2(px[5],py[5],pz[5],Ef[5]);
-  TLorentzVector p_pim2(px[6],py[6],pz[6],Ef[6]);
+  TLorentzVector p_fp2(px[1],py[1],pz[1],Ef[1]);
+  TLorentzVector p_K0_1(px[2],py[2],pz[2],Ef[2]);
+  TLorentzVector p_K0_2(px[3],py[3],pz[3],Ef[3]);
+  TLorentzVector p_pip_1(px[4],py[4],pz[4],Ef[4]);
+  TLorentzVector p_pim_1(px[5],py[5],pz[5],Ef[5]);
+  TLorentzVector p_pip_2(px[6],py[6],pz[6],Ef[6]);
+  TLorentzVector p_pim_2(px[7],py[7],pz[7],Ef[7]);
 
+
+  TLorentzVector p_fp2_2 = p_K0_1+p_K0_2;
+  TLorentzVector p_K0_1_2 = p_pip_1+p_pim_1;
+  TLorentzVector p_K0_2_2 = p_pip_2+p_pim_2;
 
   TVector3 b_3 ;
-  b_3 =  p_f1.BoostVector();
+  b_3 =  p_K0_1.BoostVector();
   b_3 = -b_3;
-  TLorentzVector p_f1_2 = p_pip+p_pim+p_eta;
-  TLorentzVector p_eta_2 = p_pip2+p_pim2;
+  p_pip_1.Boost(b_3);
 
-  p_pip.Boost(b_3);
-  
-  h1_phi->Fill(p_pip.Phi()/TMath::Pi()*180.);
-  h1_costheta->Fill(p_pip.CosTheta());
-  h1_mass->Fill(p_f1.M());
-  h1_mass2->Fill(p_f1_2.M());
-  h1_costheta2->Fill(p_f1.CosTheta());
-  h1_theta_pim->Fill(p_pim.Theta());
-  h1_mass_eta->Fill(p_eta.M());
-  h1_mass2_eta->Fill(p_eta_2.M());
-
+  h1_phi->Fill(p_pip_1.Phi()/TMath::Pi()*180.);
+  h1_costheta->Fill(p_pip_1.CosTheta());
+  h1_mass->Fill(p_fp2.M());
+  h1_mass2->Fill(p_fp2_2.M());
+  h1_mass_K0_1->Fill(p_K0_1.M());
+  h1_mass_K0_2->Fill(p_K0_2.M());
+  h1_mass2_K0_1->Fill(p_K0_1_2.M());
+  h1_mass2_K0_2->Fill(p_K0_2_2.M());
+  h1_costheta2->Fill(p_fp2.CosTheta());
+  h1_theta_pim->Fill(p_pim_1.Theta());
+  h2_mass_ebeam->Fill(Ein_beam,p_fp2.M());
 
    return kTRUE;
 }
@@ -136,6 +144,7 @@ void newAnalysis::Terminate()
    // The Terminate() function is the last function to be called during
    // a query. It always runs on the client, it can be used to present
    // the results graphically or save the results to file.
+
 
   TFile file_out("analysis_output.root","recreate");
   TList *outlist = GetOutputList();

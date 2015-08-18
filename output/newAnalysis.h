@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Aug  6 15:01:50 2015 by ROOT version 5.34/21
+// Tue Aug 18 15:59:11 2015 by ROOT version 5.34/21
 // from TChain T/
 //////////////////////////////////////////////////////////
 
@@ -29,39 +29,41 @@ public :
   TH1F           *h1_phi;
   TH1F           *h1_costheta;
   TH1F           *h1_mass;
+  TH1F           *h1_mass_K0_1;
+  TH1F           *h1_mass_K0_2;
+  TH1F           *h1_mass2_K0_1;
+  TH1F           *h1_mass2_K0_2;
   TH1F           *h1_mass2;
   TH1F           *h1_costheta2;
   TH1F           *h1_theta_pim;
-  TH1F           *h1_mass_eta;
-  TH1F           *h1_mass2_eta;
-  
+  TH2F           *h2_mass_ebeam;
 
 
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
 
    // Declaration of leaf types
    Int_t           n_part;
-   Double_t        theta[7];   //[n_part]
-   Double_t        phi[7];   //[n_part]
+   Double_t        theta[8];   //[n_part]
+   Double_t        phi[8];   //[n_part]
    Double_t        x;
    Double_t        Ein_beam;
-   Double_t        Ef[7];   //[n_part]
+   Double_t        Ef[8];   //[n_part]
    Double_t        Q2;
    Double_t        nu;
    Double_t        W;
    Double_t        y;
    Int_t           Z_ion;
    Int_t           N_ion;
-   Int_t           particle_id[7];   //[n_part]
-   Int_t           charge[7];   //[n_part]
-   Double_t        pf[7];   //[n_part]
-   Double_t        px[7];   //[n_part]
-   Double_t        py[7];   //[n_part]
-   Double_t        pz[7];   //[n_part]
-   Double_t        vx[7];   //[n_part]
-   Double_t        vy[7];   //[n_part]
-   Double_t        vz[7];   //[n_part]
-   Double_t        weight;
+   Int_t           particle_id[8];   //[n_part]
+   Int_t           charge[8];   //[n_part]
+   Double_t        pf[8];   //[n_part]
+   Double_t        px[8];   //[n_part]
+   Double_t        py[8];   //[n_part]
+   Double_t        pz[8];   //[n_part]
+   Double_t        vx[8];   //[n_part]
+   Double_t        vy[8];   //[n_part]
+   Double_t        vz[8];   //[n_part]
+   Double_t        weight[8];   //[n_part]
 
    // List of branches
    TBranch        *b_n_part;   //!
@@ -145,7 +147,7 @@ void newAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("vx", vx, &b_vx);
    fChain->SetBranchAddress("vy", vy, &b_vy);
    fChain->SetBranchAddress("vz", vz, &b_vz);
-   fChain->SetBranchAddress("weight", &weight, &b_weight);
+   fChain->SetBranchAddress("weight", weight, &b_weight);
 }
 
 Bool_t newAnalysis::Notify()
