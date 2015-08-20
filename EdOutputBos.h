@@ -79,6 +79,8 @@ class EdOutput {
 	TTree *fTree;
 
 	double fNevt;
+	int    fnvertex;
+	int    f1part[MAX_PART];
 
 	int towrite[MAX_PART];
 

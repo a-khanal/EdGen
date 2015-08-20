@@ -21,7 +21,7 @@ vertex:  0,2;
 v_type:  1,1.0;
 vertex:  2,3;
 v_type:  1,1.0;
-output:  1;
+output:  2;
 END
 # Models
 # 1 Phase Space Single Energy (for example e-)

@@ -13,6 +13,17 @@ EdOutput::EdOutput(EdInput *inp, const char *fileout){
     fTree = new TTree("T", "HG Monte Carlo");
     fNevt    = ((double) inp->GetNevt());
     n_part = inp->GetNpart();
+    fnvertex = inp->GetNvertex();
+    printf("Total weight of event will be = "); 
+    for (int i=0; i< fnvertex; i++) {
+      if (i==0) f1part[i] = 0;
+      else {
+	f1part[i] = f1part[i-1] + inp->GetNpvert(i-1);
+	printf(" x ");
+      }
+      printf("w[%i]",f1part[i]);
+    }
+    printf("\n");
 
     InitTree();
 
@@ -191,6 +202,7 @@ void  EdOutput::MakeFileLUND(){
   }
 
   double vxcm,vycm,vzcm;
+  double fweight;
 
   ofstream OUT (file.Data());
   for (int i=0; i<nentries ; i++) {
@@ -200,13 +212,18 @@ void  EdOutput::MakeFileLUND(){
     }
     sprintf(outstring,"%i %i %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e",tot_part,(Z_ion+N_ion),Z_ion,x,y,W,Q2,nu);
     OUT << outstring << endl;
+    fweight = 1.0;
+    for (int j=0; j<fnvertex; j++) {
+      fweight = weight[f1part[j]] * fweight;
+    }
     //    OUT << tot_part << " " << (Z_ion + N_ion)  << " " << Z_ion  << " " << "0"  << " " << "0" << " "  << x << " " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
     for (int j=0; j<n_part; j++) {
       if (towrite[j] == 1) {
 	vxcm = vx[j]*100.0;
 	vycm = vy[j]*100.0;
 	vzcm = vz[j]*100.0;
-	sprintf(outstring,"  1 %i 1 %i 0 0 %1.4e %1.4e %1.4e %1.4e 0 %1.4e %1.4e %1.4e",charge[j],particle_id[j],px[j],py[j],pz[j],Ef[j],vxcm,vycm,vzcm); 
+
+	sprintf(outstring,"  1 %i 1 %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e",charge[j],particle_id[j],px[j],py[j],pz[j],Ef[j],fweight,vxcm,vycm,vzcm); 
 	OUT << outstring << endl;
 	//	OUT << " \t " << "1" << " \t " << charge[j] << " \t " << "1" << " \t " << particle_id[j] << " \t " << "0" << " \t " << "0" << " \t " << px[j] << " \t " << py[j] << " \t " << pz[j] << " \t " << Ef[j] << " \t " << "0" << " \t " << vxcm  << " \t " << vycm << " \t " << vzcm << endl;
       }
