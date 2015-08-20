@@ -36,6 +36,7 @@ public :
   TH1F           *h1_beam_sel2;
   TH1F           *h1_mom_sel;
   TH1F           *h1_mom_sel2;
+  TH1F           *h1_Ebeam;
 
   TH2F           *h2_pimeta_pipeta;
   TH2F           *h2_pimeta_pipeta2;

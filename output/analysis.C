@@ -57,6 +57,7 @@ void analysis::SlaveBegin(TTree * /*tree*/)
    h1_beam_sel2 = new TH1F("h1_beam_sel2","E_beam for M_{f1} > 1.2GeV  ; GeV",100,0.,4.5);
    h1_mom_sel = new TH1F("h1_mom_sel","p|_{#pi^{-} #eta} for M_{f1} > 1.2GeV  ; GeV",100,0.,1.0);
    h1_mom_sel2 = new TH1F("h1_mom_sel2","|p|_{#pi^{-} #eta} for M_{f1} > 1.2GeV  ; GeV",100,0.,1.0);
+   h1_Ebeam = new TH1F("h1_Ebeam","E_beam weighted  ; GeV",100,0.,4.5);
 
 
    h2_pimeta_pipeta = new TH2F("h2_pimeta_pipeta","Dalitz ;#pi^{-}#eta;#pi^{+}#eta",100,0.,1.5,100,0.,1.5);
@@ -73,6 +74,7 @@ void analysis::SlaveBegin(TTree * /*tree*/)
    fOutput->Add(h1_beam_sel2);
    fOutput->Add(h1_mom_sel);
    fOutput->Add(h1_mom_sel2);
+   fOutput->Add(h1_Ebeam);
    fOutput->Add(h2_pimeta_pipeta);
    fOutput->Add(h2_pimeta_pipeta2);
 
@@ -119,7 +121,7 @@ Bool_t analysis::Process(Long64_t entry)
   TLorentzVector p_f1_2 = p_pip+p_pim+p_eta;
   p_pip.Boost(b_3);
 
-  
+  h1_Ebeam->Fill(Ein_beam,weight[4]);
   h1_phi->Fill(p_pip.Phi()/TMath::Pi()*180.);
   h1_costheta->Fill(p_pip.CosTheta());
   h1_mass->Fill(p_f1.M());
@@ -131,8 +133,8 @@ Bool_t analysis::Process(Long64_t entry)
 
   p_d1.Boost(b_3);
   p_d2.Boost(b_3);
-  if (p_f1.M()>1.2) {
-    h1_beam_sel->Fill(Ein_beam); 
+  if (p_f1.M()>1.22 ) {
+    h1_beam_sel->Fill(Ein_beam,weight[4]); 
     h1_mom_sel->Fill(p_d1.Rho());
   }
   else {
