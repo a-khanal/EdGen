@@ -98,6 +98,7 @@ Examples
 * 3 particles in a vertex, Dalitz plots are generate using the weight (for particles that decay with more than 2 particles in a vertex). The weight is an array of all the particles and describe the weight at creation (the weight is given to the decayed particles) <br />
 ** Create generated output file: ./EdGen -i input_test2.dat <br />
 ** Analyze the output (with TProof) of the generated file (files analysis.C , analysis.h, run_analysis.C): root run_analysis.C <br />
+** NB The weight is given as a single number (the product of the weights at each vertex) in the BOS and LUND File: For the BOS file the weight is included in the MCHD bank (check that you bank is keeped in all the step of your analysis); For the LUND file format, the weight is included where should be the value of the mass in the LUND format (since it is not used by gemc). <br />
 * 2 particles per vertex, but 3 vertex <br />
 ** Create generated output file: ./EdGen -i input_test.dat <br />
 ** Analyze the output (with TProof) of the generated file (files newAnalysis.C , newAnalysis.h, run_newAnalysis.C): root run_newAnalysis.C <br />
