@@ -248,6 +248,7 @@ void  EdOutput::MakeFileBOS(){
   clasMCTK_t *MCTK;
   clasMCVX_t *MCVX;
   clasMCHD_t *MCHD;
+  clasTAGR_t *TAGR;
 
   
   int BosOutputUnitNo = 2; // unit to open for writing (!?!?!?!? FORTRAN)
@@ -257,6 +258,7 @@ void  EdOutput::MakeFileBOS(){
   int mctk_array_n;
   char mess[1024];
   double fweight;
+  double c_speed = 299792458.; // speed of light in meter per second
 
   Int_t nentries = (Int_t)fTree->GetEntries();
   int tot_part;
@@ -267,7 +269,7 @@ void  EdOutput::MakeFileBOS(){
   fparm_c(mess);
   initbos(); // c_bos_io format
 
-  bankList(&bcs_, "C=","HEADMCEVMCTKMCVXMCHD");  // Write HEAD MCTK MCVX banks into the bos file
+  bankList(&bcs_, "C=","HEADMCEVMCTKMCVXMCHDTAGR");  // Write HEAD MCTK MCVX banks into the bos file
 
    for (int i=0; i<nentries ; i++) {
     fTree->GetEntry(i);
@@ -286,8 +288,10 @@ void  EdOutput::MakeFileBOS(){
     MCTK = (clasMCTK_t *) makeBank(&bcs_,"MCTK",0,11,tot_part); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)  
     MCVX = (clasMCVX_t *) makeBank(&bcs_,"MCVX",0,5,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
     MCHD = (clasMCHD_t *) makeBank(&bcs_,"MCHD",0,16,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
+    TAGR = (clasTAGR_t *) makeBank(&bcs_,"TAGR",0,6,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
 
     
+
     h.version = 0;
     h.nrun = 10; // gsim run
     h.nevent = i+1; // number of event
@@ -314,6 +318,11 @@ void  EdOutput::MakeFileBOS(){
     MCHD->mchd[0].w = W;
     MCHD->mchd[0].q2 = Q2;
  
+    TAGR->tagr[0].erg = Ein_beam;
+    TAGR->tagr[0].stat = 7;
+    TAGR->tagr[0].ttag = -vz[0] / c_speed * pow(10,9);  // time at center of CLAS respect to the interaction time (ns) 
+    TAGR->tagr[0].tpho = -vz[0] / c_speed * pow(10,9);
+    
  
 
     for (int j=0; j<n_part; j++) {
