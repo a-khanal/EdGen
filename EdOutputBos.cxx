@@ -318,7 +318,7 @@ void  EdOutput::MakeFileBOS(){
     MCHD->mchd[0].w = W;
     MCHD->mchd[0].q2 = Q2;
  
-    TAGR->tagr[0].erg = Ein_beam;
+    TAGR->tagr[0].erg = Ein;
     TAGR->tagr[0].stat = 7;
     TAGR->tagr[0].ttag = -vz[0] / c_speed * pow(10,9);  // time at center of CLAS respect to the interaction time (ns) 
     TAGR->tagr[0].tpho = -vz[0] / c_speed * pow(10,9);
