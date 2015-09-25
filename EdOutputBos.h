@@ -27,7 +27,7 @@ extern "C" {
 #endif 
 #include <math.h>
 #include <time.h>
-
+#include <stdint.h>
 
 
 #define MAX_PART 10
@@ -107,6 +107,7 @@ class EdOutput {
 	double vz[MAX_PART];
 	double weight[MAX_PART];
 
+	time_t secs;
 
 };
 #endif//__EdOutput_h

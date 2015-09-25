@@ -290,16 +290,28 @@ void  EdOutput::MakeFileBOS(){
     MCHD = (clasMCHD_t *) makeBank(&bcs_,"MCHD",0,16,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
     TAGR = (clasTAGR_t *) makeBank(&bcs_,"TAGR",0,6,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
 
-    
+    //    gettimeofday(&tp, NULL);
+    //    int32_t time_sec = time(NULL) -1400000000;
+    //    printf("Time = %i \n",time_sec);
+    time(&secs);
+    struct tm y2k = {0};
+    int seconds;
 
-    h.version = 0;
+    y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
+    y2k.tm_year = 70;  y2k.tm_mon = 0; y2k.tm_mday = 1;
+
+    seconds = int(difftime(secs,mktime(&y2k)));
+
+    h.version = 1;
     h.nrun = 10; // gsim run
     h.nevent = i+1; // number of event
-    h.time = time(NULL); // time in seconds since Jan 1, 1970
+    h.time = seconds; // time in seconds since Jan 1, 1970
     h.type = -2;
     h.roc = 0;
     h.evtclass = 7;
+    h.trigbits = 1;
     mctk_array_n = 0;
+    
     
     MCEV->mcev[0].i1=(int)(rand()*100000);
     MCEV->mcev[0].i2=(int)(rand()*100000); 
