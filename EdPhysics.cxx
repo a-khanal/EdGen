@@ -32,8 +32,8 @@ EdPhysics::EdPhysics(EdModel *model){
       charge[i] = part_pdg[i]->Charge()/3; // Charge is in unit of |e|/3
       masses2[i] = part_pdg[i]->Mass();
       width2[i] = part_pdg[i]->Width();
-     if (width2[i] > 0.001) printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e : Mass will be generated as %s ; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],model->GetMassModelString(),theta_min[i],theta_max[i]);
-      else printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e ; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],theta_min[i],theta_max[i]);
+      if (width2[i] > 0.001) printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e Stable(0/1)=%i: Mass will be generated as %s ; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],part_pdg[i]->Stable(),model->GetMassModelString(),theta_min[i],theta_max[i]);
+      else printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e Stable(0/1)=%i; theta_min=%.3e theta_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],part_pdg[i]->Stable(),theta_min[i],theta_max[i]);
       
     }
     nvertex = model->GetNvertex();
