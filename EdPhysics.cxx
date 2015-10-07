@@ -314,7 +314,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	  vz[atpart] = vertex.Z();
 	}
 	else {
-	  if (part_pdg[overt[i]-1]->Stable() == 1) {
+	  if (part_pdg[overt[i]-1]->Width() == 0.0) {
 	    //	    printf("Origin particle %i at vertex %i is stable??? vertexes of daughters particles as mother \n", particle_id[overt[i]-1],i); 
 	    vx[atpart] = vx[overt[i]-1];
 	    vy[atpart] = vy[overt[i]-1];
