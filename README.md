@@ -40,7 +40,7 @@ Running
 * A template is in input.dat (input_test.dat it is just for my developments at now), and modify the file to fit your reaction
 * In input.dat one can specify the input spetrum (for example for CLAS photon beam). The input spectrum file is written in a txt files format with raw that represent for each bin E_min, E_max, Counts (Does not need to be normalize, the code is going to normalize it if need it). The bin size do not need to be the same for each bin.  An example is written in the output directory as energy.txt 
 * ./EdGen -h will give you the options
-* ./EdGen -i input.dat -o output.root        (Change input.dat or output.root (need to be a *.root) to your desired input and output file format 
+* <b>./EdGen -i input.dat -o output.root        (Change input.dat or output.root (need to be a *.root) to your desired input and output file name) </b> 
   
 Input file
 ----------
