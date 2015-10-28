@@ -55,6 +55,9 @@ EdModel::EdModel(EdInput *inp){
 		       inp->GetTgtYoff(),
 		       inp->GetTgtZoff() );
 
+	if(inp->IsQF()){
+
+	}
     }
 
     length = length / 100. ; // conversion distances in m
@@ -88,5 +91,26 @@ const char * EdModel::GetMassModelString(){
   else if (m_model == 2) return "Flat";
   else if (m_model == 3) return "m=mass";
   else return "Sorry: No mass model supported. Check your input file";
+
+}
+
+TLorentzVector EdModel::GetTarget(){
+ ptar = fFermiMomentum->GetRandom()/1000.;
+  costhtar   = fRand->Uniform( -1., 1. );
+  thtar      = TMath::ACos( costhtar );
+  phtar      = fRand->Uniform( -TMath::Pi(), TMath::Pi() );
+  pxtar      = ptar * TMath::Sin( thtar ) * TMath::Cos( phtar );
+  pytar      = ptar * TMath::Sin( thtar ) * TMath::Sin( phtar );
+  pztar      = ptar * TMath::Cos( thtar );
+
+  // Force spectator on mass shell
+  Espec = TMath::Sqrt(ptar*ptar + fPDG->GetParticle( fSpectatorPDG )->Mass() * fPDG->GetParticle( fSpectatorPDG )->Mass());
+  fSpectatorP4->SetXYZT(-pxtar,-pytar,-pztar, Espec);
+  
+  Etar  = fDeuteronMass - Espec;
+  fTargetP4->SetXYZT(pxtar,pytar,pztar, Etar);
+  
+
+
 
 }

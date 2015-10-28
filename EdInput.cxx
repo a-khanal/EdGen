@@ -24,6 +24,8 @@ EdInput::EdInput(const char *file){
     int poscomma;
     int atvertex = 0;
     
+    fData.isqf=0;//default not a quasi free target
+
     while( !inputfile.eof() ){      //      c1 = inputfile.peek(); // read the first character , if it is a #, skip the line
       inputfile.getline(command,100,delim);
       // printf("read command %s\n",command);
@@ -68,6 +70,16 @@ EdInput::EdInput(const char *file){
 	  valcommand.ReplaceAll("\t","");
 	  fData.ifile = valcommand.Strip();
 	  printf("Input file spectra from %s\n",fData.ifile.Data());
+	}
+	if (valcommand.Contains("qffile:")) {
+	  valcommand.ReplaceAll("qffile:","");
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("\n","");
+	  valcommand.ReplaceAll("\t","");
+	  fData.qf_file = valcommand.Strip();
+	  fData.isqf=1;
+	  printf("Fermi momentum from %s\n",fData.qf_file.Data());
 	}
 	if (valcommand.Contains("beam:")) {
 	  valcommand.ReplaceAll("beam:","");
