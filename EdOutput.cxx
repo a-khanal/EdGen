@@ -13,7 +13,9 @@ EdOutput::EdOutput(EdInput *inp, const char *fileout){
     fTree = new TTree("T", "HG Monte Carlo");
     fNevt    = ((double) inp->GetNevt());
     n_part = inp->GetNpart();
+    if(inp->IsQF()) {n_part++; printf("Total number of particles in root ouput = %d",n_part); }//+1 for spectator in quasifree
     fnvertex = inp->GetNvertex();
+   
     printf("Total weight of event will be = "); 
     for (int i=0; i< fnvertex; i++) {
       if (i==0) f1part[i] = 0;

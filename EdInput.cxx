@@ -8,8 +8,8 @@
 EdInput::EdInput(const char *file){
     printf("Reading %s for input\n", file);
 
-    char command[100];
-    char tmp[100];
+    std::string command;//dglazier, changed to string as char[] was screwing up 
+    std::string tmp;
     ifstream inputfile;
     inputfile.open(file, ifstream::in);
     if( !inputfile ) {
@@ -27,13 +27,16 @@ EdInput::EdInput(const char *file){
     fData.isqf=0;//default not a quasi free target
 
     while( !inputfile.eof() ){      //      c1 = inputfile.peek(); // read the first character , if it is a #, skip the line
-      inputfile.getline(command,100,delim);
+      //      inputfile.getline(command,100,delim);
+      std::getline(inputfile,command); //dglazier, use string version instead
       // printf("read command %s\n",command);
       valcommand = command;
       valc2 = valcommand(0,1);
+      std::cout<<valcommand<<" "<<valc2<<std::endl;
       if (valc2.Contains("#")==false) {
-	
-	//	printf("%s \n",valcommand.Data());
+	    std::cout<<valcommand<<" "<<valc2<<std::endl;
+  
+	//	printf("vv %s \n",valcommand.Data());
 	if (valcommand.Contains("nevt:")) {
 	  valcommand.ReplaceAll("nevt:","");
 	  valcommand.ReplaceAll(";","");
@@ -72,14 +75,24 @@ EdInput::EdInput(const char *file){
 	  printf("Input file spectra from %s\n",fData.ifile.Data());
 	}
 	if (valcommand.Contains("qffile:")) {
+	  // printf("qfffile %s",valcommand.Data());
 	  valcommand.ReplaceAll("qffile:","");
 	  valcommand.ReplaceAll(";","");
 	  valcommand.ReplaceAll(" ","");
 	  valcommand.ReplaceAll("\n","");
 	  valcommand.ReplaceAll("\t","");
-	  fData.qf_file = valcommand.Strip();
+	  fData.qf_file = TString(valcommand(0,valcommand.First(".")+5));
+	  fData.qf_fermi=TString(valcommand(valcommand.First(".")+5,valcommand.Sizeof()));
 	  fData.isqf=1;
 	  printf("Fermi momentum from %s\n",fData.qf_file.Data());
+	}
+	if (valcommand.Contains("qfpdg:")) {
+	  valcommand.ReplaceAll("qfpdg:","");
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  fData.qftpdg = TString(valcommand(0,valcommand.First(","))).Atoi();
+	  fData.qfspdg = TString(valcommand(valcommand.First(",")+1,valcommand.Sizeof())).Atoi();
+	  printf("QuasiFree Target PDG: %d\n",fData.qftpdg,fData.qfspdg);
 	}
 	if (valcommand.Contains("beam:")) {
 	  valcommand.ReplaceAll("beam:","");
@@ -289,7 +302,9 @@ EdInput::EdInput(const char *file){
     }
     if (atvertex!=fData.nvertex) printf("Number of reqeusted vertexes is %i, but format written for just %i vertexes\n",fData.npart, atvertex);
     inputfile.close();
-    printf("Finhed reading input file\n");
+    printf("Finished reading input file\n");
+	  printf("Model for the generator %d\n",fData.model);
+
 }
 
 EdInput::~EdInput(){

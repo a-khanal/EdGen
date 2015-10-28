@@ -17,6 +17,7 @@ EdPhysics::EdPhysics(EdModel *model){
     fRandom = new TRandom2(0);
     printf("Seed number %d\n",fRandom->GetSeed());
     target.SetPxPyPzE(0.0, 0.0, 0.0, model->Get_tgMass()); // target at rest
+    //    if(model->GetInData().IsQF())spectator.SetXYZM(0,0,0,pdg->GetParticle(model->GetInData().qfspdg);
     mass_model = model->GetMassModel();
     n_part = model->GetNpart();
     nvertex = model->GetNvertex();
@@ -63,6 +64,17 @@ EdPhysics::EdPhysics(EdModel *model){
 	}
       }
 
+    }
+    if(model->IsQF()){//Also want to write out spectator for quasifree (add at end =npart)
+      cout<<"Quasi free so store specator information "<<endl;
+      towrite[n_part] = 1;
+      particle_id[n_part] = model->GetInput()->GetInData().qfspdg;
+      theta_min[n_part] = model->GetTheta_min(0);
+      theta_max[n_part] = model->GetTheta_max(TMath::Pi());
+      part_pdg[n_part] = pdg->GetParticle(particle_id[n_part]); 
+      charge[n_part] = part_pdg[n_part]->Charge()/3; // Charge is in unit of |e|/3
+      masses2[n_part] = part_pdg[n_part]->Mass();
+      width2[n_part] = part_pdg[n_part]->Width();
     }
     
  
@@ -116,6 +128,9 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     int test_gen = 0;
     count_phase = 0;
     while (test_gen < nvertex ) test_gen = Gen_Phasespace(model);
+
+    if(model->IsQF())n_part++; //dirty hack to get it to write spectator!
+
     out->SetEin(e_lab);
     out->SetTheta(theta,n_part);
     out->SetPhi(phi,n_part);
@@ -151,6 +166,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     out->Setvy(vy,n_part);
     out->Setvz(vz,n_part);
  
+   if(model->IsQF())n_part--; //dirty hack to get it to write spectator!
 
     
     out->Write();
@@ -210,8 +226,13 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   if (overt[i] == 0) { // (Origin Beam + Tg)
     e_lab = model->GetEnergy();
     beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
-    Wtg = beam + target;
-
+    if(!model->IsQF()) //standard target
+      Wtg = beam + target;
+    else{  //qf target
+      QFTarget(model);
+      Wtg = beam + target;
+      //cout<<"W "<<Wtg.M()<<" "<<e_lab<<endl;
+    }
   }
   else {
     p4vector_c = new TLorentzVector(*p4vector[i][0]); 
@@ -312,6 +333,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	  vx[atpart] = vertex.X();
 	  vy[atpart] = vertex.Y();
 	  vz[atpart] = vertex.Z();
+
 	}
 	else {
 	  if (part_pdg[overt[i]-1]->Width() == 0.0) {
@@ -332,7 +354,19 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       }
     }
   }
- 
+  if(model->GetInput()->IsQF()){
+    theta[n_part] = spectator.Theta();
+    phi[n_part] = spectator.Phi();
+    Ef[n_part] = spectator.E();
+    pf[n_part] = spectator.Rho();
+    px[n_part] = spectator.Px();
+    py[n_part] = spectator.Py();
+    pz[n_part] = spectator.Pz();
+    vx[n_part] = vertex.X();
+    vy[n_part] = vertex.Y();
+    vz[n_part] = vertex.Z();
+  }
+  
   count_phase++;
   if ( (count_phase%100000) == 0) printf("Generated %d events without passing your angle cuts. Could be you want to check your limits\n",count_phase);
   // theta_v_min = TMath::Pi();
@@ -350,6 +384,32 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   return valid_event;
 
 
+}
+void EdPhysics::QFTarget(EdModel *model){
+  Float_t ptar, Etar, Espec, costhtar, thtar, phtar, pxtar, pytar, pztar,smass;
+  //Get Fermi momentum sampled from distribution given in input file
+  ptar = model->GetFermi()->GetRandom()/1000.;
+  //Get random flat cos theta
+  costhtar   = fRandom->Uniform( -1., 1. );
+  thtar      = TMath::ACos( costhtar );
+  //Get random flat phi
+  phtar      = fRandom->Uniform( -TMath::Pi(), TMath::Pi() );
+  //calculate momentum components
+  pxtar      = ptar * TMath::Sin( thtar ) * TMath::Cos( phtar );
+  pytar      = ptar * TMath::Sin( thtar ) * TMath::Sin( phtar );
+  pztar      = ptar * TMath::Cos( thtar );
+  
+  // Force spectator on mass shell
+  //get its mass from input data and PDG database
+  smass=pdg->GetParticle(model->GetInput()->GetInData().qfspdg)->Mass();
+  Espec = TMath::Sqrt(ptar*ptar + smass * smass);
+  //set spectator 4 momentum (opposite p to quasi target)
+  spectator.SetXYZT(-pxtar,-pytar,-pztar, Espec);
+  
+  //calculate quasi target energy from energy conservation
+  Etar  = model->Get_tgMass() - Espec;
+  target.SetXYZT(pxtar,pytar,pztar, Etar);
+  
 }
 
 // double EdPhysics::t_reaction(TLorentzVector *Vrecoil_tg_4 ) {

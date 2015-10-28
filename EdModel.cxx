@@ -1,6 +1,13 @@
 #include "EdModel.h"
+#include "TFile.h"
+#include "TDirectory.h"
+#include <iostream>
 
 EdModel::EdModel(EdInput *inp){
+  fInp=inp;
+  fFermiMomentum=0;
+  fIsQF=kFALSE;
+  H1_spec=0;
 
     if( inp ){
       int tot_part = 100;
@@ -56,10 +63,23 @@ EdModel::EdModel(EdInput *inp){
 		       inp->GetTgtZoff() );
 
 	if(inp->IsQF()){
-
+	  // Get Fermi Momentum Distribution
+	  TDirectory* savedir=gDirectory;//standard ROOT hack for not losing newly created objects when close file
+	  TFile* fermidat = new TFile(inp->GetQFFile());
+	  savedir->cd();
+	  if(!fermidat->IsOpen()) std::cerr<<"EdModel::EdModel(EdInput *inp) : No Quasi Free file found = "<<inp->GetQFFile()<<std::endl;
+	  else {
+	    std::cout << "QF distribution : " << inp->GetQFFermi()<<std::endl;
+	    fFermiMomentum  = (TH1F*)fermidat->Get(inp->GetQFFermi())->Clone("hFermi");
+	    if(!fFermiMomentum){ std::cout<<"Did not find "<<inp->GetQFFermi()<<" in "<<inp->GetQFFile()<<std::endl; exit(-1);}
+	  }
+	  if(fFermiMomentum)   fIsQF=kTRUE;
+	  fermidat->Close();
+	  delete fermidat;
+	  
 	}
     }
-
+    
     length = length / 100. ; // conversion distances in m
     len_x = len_x / 100. ; 
     len_y = len_y / 100. ; 
@@ -69,7 +89,9 @@ EdModel::EdModel(EdInput *inp){
 }
 
 EdModel::~EdModel(){
-    return;
+  if(H1_spec) delete H1_spec;
+  if(fFermiMomentum) delete fFermiMomentum;
+  return;
 }
 
 
@@ -94,23 +116,3 @@ const char * EdModel::GetMassModelString(){
 
 }
 
-TLorentzVector EdModel::GetTarget(){
- ptar = fFermiMomentum->GetRandom()/1000.;
-  costhtar   = fRand->Uniform( -1., 1. );
-  thtar      = TMath::ACos( costhtar );
-  phtar      = fRand->Uniform( -TMath::Pi(), TMath::Pi() );
-  pxtar      = ptar * TMath::Sin( thtar ) * TMath::Cos( phtar );
-  pytar      = ptar * TMath::Sin( thtar ) * TMath::Sin( phtar );
-  pztar      = ptar * TMath::Cos( thtar );
-
-  // Force spectator on mass shell
-  Espec = TMath::Sqrt(ptar*ptar + fPDG->GetParticle( fSpectatorPDG )->Mass() * fPDG->GetParticle( fSpectatorPDG )->Mass());
-  fSpectatorP4->SetXYZT(-pxtar,-pytar,-pztar, Espec);
-  
-  Etar  = fDeuteronMass - Espec;
-  fTargetP4->SetXYZT(pxtar,pytar,pztar, Etar);
-  
-
-
-
-}

@@ -10,8 +10,11 @@ struct inputdata {
     int    model;
     int    mass_model;
   TString ifile;  //input spectrum for beam
-  TString qf_file; //input fermi momentum distribution
+  TString qf_file; //input fermi momentum distribution file 
+  TString qf_fermi; //input fermi momentum distribution histogram
   int isqf; //is the target quasifree?
+  int qftpdg;  //pdg number of qf target
+  int qfspdg;  //pdg number of quasifree spectator
     int    npart; // total number of particles involved
     int    nvertex; // total number of vertexes
     int    npvert[10]; // total number of particle at one vertex
@@ -52,8 +55,10 @@ class EdInput{
 	int    GetModel(){ return fData.model; }
 	int    GetMassModel(){ return fData.mass_model; }
       TString  GetIfile(){ return fData.ifile; }
-      TString  GetQFfile(){ return fData.qf_file; }
-      int IsQF(){return isqf;}
+      TString  GetQFFile(){ return fData.qf_file; }
+      TString  GetQFFermi(){ return fData.qf_fermi; }
+      int IsQF(){return fData.isqf;}
+      inputdata GetInData(){return fData;}
 	int    GetBeamPID(){ return fData.beam_pid; }
 	int    GetNvertex(){ return fData.nvertex; }
 	int    GetOvert(int i){ return fData.overt[i]; }

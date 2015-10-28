@@ -73,6 +73,7 @@ class EdPhysics: public TGenPhaseSpace{
 	TLorentzVector Wtg;
 	TLorentzVector beam;
 	TLorentzVector target;
+	TLorentzVector spectator;
 	TLorentzVector W4vector;
 	TLorentzVector Q4vector;
 	TVector3 vertex;
@@ -84,6 +85,7 @@ class EdPhysics: public TGenPhaseSpace{
 	double GetBeamProfile( double sigma = 1.);
 	int Gen_Phasespace(EdModel *model);
 	int Gen_Mass(int i,EdModel *model);
+	void QFTarget(EdModel *model);  //calculate quasi free target with fermi momentum
 
 	double t_reaction(TLorentzVector *Vrecoil_tg_4 );
 	double phi_meson();
