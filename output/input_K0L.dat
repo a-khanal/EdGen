@@ -1,8 +1,8 @@
 nevt:    10000;
 nprint:  10000;
-model:   1;
+model:   2;
 M_mode:  1;
-ifile:	 energy.txt; 
+ifile:	 energy11_13.txt; 
 beam:    22;
 en:	 2    GeV;
 tg_Z:    1;

@@ -32,10 +32,7 @@ EdInput::EdInput(const char *file){
       // printf("read command %s\n",command);
       valcommand = command;
       valc2 = valcommand(0,1);
-      std::cout<<valcommand<<" "<<valc2<<std::endl;
       if (valc2.Contains("#")==false) {
-	    std::cout<<valcommand<<" "<<valc2<<std::endl;
-  
 	//	printf("vv %s \n",valcommand.Data());
 	if (valcommand.Contains("nevt:")) {
 	  valcommand.ReplaceAll("nevt:","");

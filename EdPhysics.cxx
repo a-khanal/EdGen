@@ -192,6 +192,7 @@ TVector3 EdPhysics::Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert) {
   TLorentzVector test(0.,0.,0.,lifetime);
   TVector3 result;
   test.Boost(b_3);
+  //cout<<test.Rho()<<" "<<Vp_4->M()<<endl;
   if (test.Rho() < 1e-20) result = vert;
   else {
     double toptime = lifetime * 20; // exp(-20) = 2.0e-9
@@ -201,11 +202,20 @@ TVector3 EdPhysics::Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert) {
     double time = fr->GetRandom(0.,toptime);
     TLorentzVector move(0.,0.,0.,time); // displacement for the creation of the two gammas in the pi0 rest frame
     move.Boost(b_3); // displacement for the creation of the two gammas in the LAB frame
+    // result.SetX( vert.X() + move.X() );
+    // result.SetY( vert.Y() + move.Y() );
+    // result.SetZ( vert.Z() + move.Z() );
+    //dglazier version
+  //if particle does not decay immediatly can have detached vertex
+  //calculate length from time L=t x speed = t * gamma*beta*c
+    Double_t len=time*Vp_4->Gamma()*299792458*Vp_4->Beta();
+    TVector3 vec=Vp_4->Vect();//direction
+    vec.SetMag(len);//magnitude
+    result.SetX( vert.X() + vec.X() );
+    result.SetY( vert.Y() + vec.Y() );
+    result.SetZ( vert.Z() + vec.Z() );
+    // cout<<vert.Mag()<<" "<<move.Mag()<<" "<<vec.Mag()<<endl;
  
-    result.SetX( vert.X() + move.X() );
-    result.SetY( vert.Y() + move.Y() );
-    result.SetZ( vert.Z() + move.Z() );
-
     delete fr;
   }
 
@@ -343,6 +353,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	    vz[atpart] = vz[overt[i]-1];
 	  }
 	  else {
+	    // cout<<"Going to do decay vertex "<< particle_id[atpart]<<endl;
 	    vertex.SetXYZ(vx[overt[i]-1],vy[overt[i]-1],vz[overt[i]-1]);
 	    vertex = Decay_vertex(p4vector[i][0],(overt[i]-1),vertex);
 	    vx[atpart] = vertex.X() ;
