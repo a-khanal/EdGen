@@ -180,48 +180,33 @@ double EdPhysics::GetBeamProfile( double sigma){
   return fRandom->Gaus(0.,sigma);
 }
 
-
-
-
 TVector3 EdPhysics::Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert) {
-
   TVector3 b_3 ; // beta to boost the LAB frame for going in the pi0 rest frame 
   b_3 = Vp_4->BoostVector(); // return (px/E,py/E,pz/E) (is all in GeV)
-
   double lifetime = part_pdg[i]->Lifetime();
-  TLorentzVector test(0.,0.,0.,lifetime);
+  TLorentzVector test(0.,0.,0.,TMath::Ccgs()*lifetime);
   TVector3 result;
+
   test.Boost(b_3);
-  //cout<<test.Rho()<<" "<<Vp_4->M()<<endl;
-  if (test.Rho() < 1e-20) result = vert;
+  if (test.Rho() < 0.01) result = vert;  // Delta vertex for t=lifetime different less than 0.1mm
   else {
     double toptime = lifetime * 20; // exp(-20) = 2.0e-9
     //define vertex of the decayed particles...
     TF1 *fr = new TF1("fr","exp(-x/([0]))",0,toptime) ; // 8.4e-17 is the mean lifetime of the pi0
     fr->SetParameter(0,lifetime);
     double time = fr->GetRandom(0.,toptime);
-    TLorentzVector move(0.,0.,0.,time); // displacement for the creation of the two gammas in the pi0 rest frame
+    TLorentzVector move(0.,0.,0.,TMath::Ccgs()*time); // displacement for the creation of the two gammas in the pi0 rest frame (ready to boost (c*t) )
     move.Boost(b_3); // displacement for the creation of the two gammas in the LAB frame
-    // result.SetX( vert.X() + move.X() );
-    // result.SetY( vert.Y() + move.Y() );
-    // result.SetZ( vert.Z() + move.Z() );
-    //dglazier version
-  //if particle does not decay immediatly can have detached vertex
-  //calculate length from time L=t x speed = t * gamma*beta*c
-    Double_t len=time*Vp_4->Gamma()*299792458*Vp_4->Beta();
-    TVector3 vec=Vp_4->Vect();//direction
-    vec.SetMag(len);//magnitude
-    result.SetX( vert.X() + vec.X() );
-    result.SetY( vert.Y() + vec.Y() );
-    result.SetZ( vert.Z() + vec.Z() );
-    // cout<<vert.Mag()<<" "<<move.Mag()<<" "<<vec.Mag()<<endl;
- 
+    result.SetX( vert.X() + move.X() );
+    result.SetY( vert.Y() + move.Y() );
+    result.SetZ( vert.Z() + move.Z() );
     delete fr;
   }
-
   return result;
 
 }
+
+
 
 int EdPhysics::Gen_Mass(int i,EdModel *model) {
   // need to put all values of val_mass[i][j]with this function. The return integer is in case the generation is correct (could be a loop with while ( output < npvert[i] ) In this way I can generate all masses according to the value here generated. Also the order of generation, considering the limit should be random.

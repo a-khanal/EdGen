@@ -59,6 +59,10 @@ Input file
 * ras_x:	 0.2	cm;		 BEAM PROFILE (GAUSSIAN SIGMA IN THE X DIRECTION)
 * ras_y:	 0.2	cm;		 BEAM PROFILE (GAUSSIAN SIGMA IN THE Y DIRECTION)
 * offset:  0.12,0.14,1.1 cm;	 OFFSET TARGET (X,Y,Z)
+* qffile: FermiDist.root hParis; #file containing quasi free momentum distribution (should be a TH1 in MeV)
+*  	  		 	 #second argument should be the name of the TH1 (hArgonne, hParis, hFlat)
+* qfpdg: 2112,2212;		 #pdg id of quasi free target and spectator (total target mass=tg_mass> qf target + spectator)
+*  	 			 #Note if nuclei larger than deuteron you will need to define a new spectator PDG in ed_pdg_table.txt 
 * npart:   5;	       		 NUMBER OF PARTICLE INVOLVED IN THE INTERACTION (EXCLUDING BEAM AND TARGET)
 * pid:     11,2212,113,211,-211;	 PARTICLE ID OF THE PARTICLE SPECIFIED WITH npart
 * theta_min:   2.5,4.0,5.0,4.0,5.0 deg;		 THETA CUT FOR SINGLE PARTICLE (FROM 'pid:' flag) (AT NOW IS AN HARD CUT ON THE SIMULATED DATA)
