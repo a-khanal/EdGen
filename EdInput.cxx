@@ -139,7 +139,7 @@ EdInput::EdInput(const char *file){
 	if (valcommand.Contains("length:")) {
 	  valcommand.ReplaceAll("length:","");
 	  valcommand.ReplaceAll(";","");
-	  if (valcommand.Contains(" m")) factor = 0.01;
+	  if (valcommand.Contains(" m")) factor = 100.;
 	  else factor = 1;
 	  valcommand.ReplaceAll(";","");
 	  valcommand.ReplaceAll(" m","");
@@ -151,7 +151,7 @@ EdInput::EdInput(const char *file){
 	if (valcommand.Contains("ras_x:")) {
 	  valcommand.ReplaceAll("ras_x:","");
 	  valcommand.ReplaceAll(";","");
-	  if (valcommand.Contains(" m")) factor = 0.01;
+	  if (valcommand.Contains(" m")) factor = 100.;
 	  else factor = 1;
 	  valcommand.ReplaceAll(";","");
 	  valcommand.ReplaceAll(" m","");
@@ -163,7 +163,7 @@ EdInput::EdInput(const char *file){
 	if (valcommand.Contains("ras_y:")) {
 	  valcommand.ReplaceAll("ras_y:","");
 	  valcommand.ReplaceAll(";","");
-	  if (valcommand.Contains(" m")) factor = 0.01;
+	  if (valcommand.Contains(" m")) factor = 100.;
 	  else factor = 1;
 	  valcommand.ReplaceAll(";","");
 	  valcommand.ReplaceAll(" m","");
@@ -215,7 +215,7 @@ EdInput::EdInput(const char *file){
 	if (valcommand.Contains("offset:")) {
 	  valcommand.ReplaceAll("offset:","");
 	  valcommand.ReplaceAll(";","");
-	  if (valcommand.Contains(" m")) factor = 0.01;
+	  if (valcommand.Contains(" m")) factor = 100.;
 	  else factor = 1; //rad
 	  valcommand.ReplaceAll(";","");
 	  valcommand.ReplaceAll(" m","");

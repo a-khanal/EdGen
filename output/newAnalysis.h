@@ -30,6 +30,10 @@ public :
   TH1F           *h1_costheta;
   TH1F           *h1_mass;
   TH1F           *h1_mass_K0_1;
+  TH1F           *h1_vz_K0_1;
+  TH1F           *h1_vz_K0_2;
+  TH1F           *h1_vz_piK0_1;
+  TH1F           *h1_vz_piK0_2;
   TH1F           *h1_mass_K0_2;
   TH1F           *h1_mass2_K0_1;
   TH1F           *h1_mass2_K0_2;

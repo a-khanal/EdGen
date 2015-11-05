@@ -51,6 +51,11 @@ void newAnalysis::SlaveBegin(TTree * /*tree*/)
    h1_mass = new TH1F("h1_mass_f","Mass f'_{2}; GeV",100,0.,2.0);
    h1_mass_K0_1 = new TH1F("h1_mass_K0_1","Mass K^{0}_{S}(1); GeV",100,0.,1.5);
    h1_mass_K0_2 = new TH1F("h1_mass_K0_2","Mass K^{0}_{S}(2); GeV",100,0.,1.5);
+   h1_vz_K0_1 = new TH1F("h1_vz_K0_1","Vertex K^{0}_{S}(1); m",530,-0.3,5.0);
+   h1_vz_K0_2 = new TH1F("h1_vz_K0_2","Vertex K^{0}_{S}(2); m",530,-0.3,5.0);
+   h1_vz_piK0_1 = new TH1F("h1_vz_piK0_1","Vertex #pi^{+} from K^{0}_{S}(1); m",530,-0.3,5.0);
+   h1_vz_piK0_2 = new TH1F("h1_vz_piK0_2","Vertex #pi^{+} from K^{0}_{S}(2); m",530,-0.3,5.0);
+
    h1_mass2_K0_1 = new TH1F("h1_mass2_K0_1","Mass K^{0}_{S}(1) from #pi^{+} + #pi^{-}; GeV",100,0.,1.5);
    h1_mass2_K0_2 = new TH1F("h1_mass2_K0_2","Mass K^{0}_{S}(2) from #pi^{+} + #pi^{-}; GeV",100,0.,1.5);
    h1_costheta2 = new TH1F("h1_costheta2","cos(#theta) f'_{2} distribution",100,-1.,1.);
@@ -65,6 +70,10 @@ void newAnalysis::SlaveBegin(TTree * /*tree*/)
    fOutput->Add(h1_mass_K0_2);
    fOutput->Add(h1_mass2_K0_1);
    fOutput->Add(h1_mass2_K0_2);
+   fOutput->Add(h1_vz_K0_1);
+   fOutput->Add(h1_vz_K0_2);
+   fOutput->Add(h1_vz_piK0_1);
+   fOutput->Add(h1_vz_piK0_2);
    fOutput->Add(h1_mass2);
    fOutput->Add(h1_costheta2);
    fOutput->Add(h1_theta_pim);
@@ -95,6 +104,7 @@ Bool_t newAnalysis::Process(Long64_t entry)
   b_px->GetEntry(entry);
   b_py->GetEntry(entry);
   b_pz->GetEntry(entry);
+  b_vz->GetEntry(entry);
   b_Ef->GetEntry(entry);
   b_Ein_beam->GetEntry(entry);
 
@@ -127,6 +137,10 @@ Bool_t newAnalysis::Process(Long64_t entry)
   h1_costheta2->Fill(p_fp2.CosTheta());
   h1_theta_pim->Fill(p_pim_1.Theta());
   h2_mass_ebeam->Fill(Ein_beam,p_fp2.M());
+  h1_vz_K0_1->Fill(vz[2]);
+  h1_vz_K0_2->Fill(vz[3]);
+  h1_vz_piK0_1->Fill(vz[4]);
+  h1_vz_piK0_2->Fill(vz[6]);
 
    return kTRUE;
 }
