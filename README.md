@@ -107,10 +107,10 @@ Examples
 * 2 particles per vertex, but 3 vertex <br />
 ** Create generated output file: ./EdGen -i input_test.dat <br />
 ** Analyze the output (with TProof) of the generated file (files newAnalysis.C , newAnalysis.h, run_newAnalysis.C): root run_newAnalysis.C <br />
-* Photon production phasespace Omega + pi+ + pi-
+* Photon production phasespace Omega + pi+ + pi- <br />
 ** Create generated output file: ./EdGen -i input_test_5.dat <br />
 ** Analyze the output (with TProof) of the generated file (files analysis_5.C , analysis_5.h, run_analysis_5.C): root run_analysis_5.C <br />
-* Photon production phasespace a2->Omega + pi+ + pi-
+* Photon production phasespace a2->Omega + pi+ + pi- <br />
 ** Create generated output file: ./EdGen -i input_test_6.dat <br />
 ** Analyze the output (with TProof) of the generated file (files analysis_6.C , analysis_6.h, run_analysis_6.C): root run_analysis_6.C <br />
 * See other examples of input file with input.dat (default), etc.
