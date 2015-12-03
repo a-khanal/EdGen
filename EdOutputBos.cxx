@@ -273,7 +273,7 @@ void  EdOutput::MakeFileBOS(){
 
    for (int i=0; i<nentries ; i++) {
     fTree->GetEntry(i);
-    if(i % 1000000 == 0 ){
+    if(i % 1 == 0 ){
        printf("Analyzed %09d events of total %09d \n",i,nentries);
      }
     tot_part = 0;
@@ -286,7 +286,7 @@ void  EdOutput::MakeFileBOS(){
     HEAD = (clasHEAD_t *) makeBank(&bcs_,"HEAD",0,8,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
     MCEV = (clasMCEV_t *) makeBank(&bcs_,"MCEV",0,2,1); 
     MCTK = (clasMCTK_t *) makeBank(&bcs_,"MCTK",0,11,tot_part); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)  
-    MCVX = (clasMCVX_t *) makeBank(&bcs_,"MCVX",0,5,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
+    MCVX = (clasMCVX_t *) makeBank(&bcs_,"MCVX",0,5,tot_part); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
     MCHD = (clasMCHD_t *) makeBank(&bcs_,"MCHD",0,16,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
     TAGR = (clasTAGR_t *) makeBank(&bcs_,"TAGR",0,6,1); // void *makeBank(BOSbank *bcs, char *bankname, int banknum, int ncol, int nrow)
 
@@ -316,9 +316,6 @@ void  EdOutput::MakeFileBOS(){
     MCEV->mcev[0].i1=(int)(rand()*100000);
     MCEV->mcev[0].i2=(int)(rand()*100000); 
     
-    MCVX->mcvx[0].x =vx[0]*100.0;
-    MCVX->mcvx[0].y =vy[0]*100.0;
-    MCVX->mcvx[0].z =vz[0]*100.0;
     fweight = 1.0;
     for (int j=0; j<fnvertex; j++) {
       fweight = weight[f1part[j]] * fweight;
@@ -340,6 +337,9 @@ void  EdOutput::MakeFileBOS(){
     for (int j=0; j<n_part; j++) {
       if (towrite[j] == 1) {
 
+	MCVX->mcvx[mctk_array_n].x =vx[j]*100.0;
+	MCVX->mcvx[mctk_array_n].y =vy[j]*100.0;
+	MCVX->mcvx[mctk_array_n].z =vz[j]*100.0;
 	
 	MCTK->mctk[mctk_array_n].id = particle_id[j];
 	MCTK->mctk[mctk_array_n].cx = px[j]/pf[j];
@@ -360,7 +360,7 @@ void  EdOutput::MakeFileBOS(){
 
 
    // Writing into bos file
-    
+    printf("at event %i \n",i);
     icode = putBOS(&bcs_, BosOutputUnitNo, "C");
     if(!icode){
       fprintf(stdout,"ERROR - Trouble writing out BOS bank. \n");
