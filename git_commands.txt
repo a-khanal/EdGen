@@ -29,5 +29,9 @@ git merge -s ours master
 git checkout master
 git merge Development
 
+-discard local changes and download full master branch from online repo
+git fetch --all
+git reset --hard origin/master
+
 -merging tools (this will open applications like vimdiff, check for commands before) if you want to do a more involving merging. One can also setup which merging tool to use
 git mergetool 
