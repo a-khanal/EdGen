@@ -304,8 +304,8 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 
       SetDecay(Wtg, npvert[i], val_mass[i]);
       weight2 = Generate();
-      good_weight = fRandom->Uniform();
-      if (weight2 <= good_weight) {
+      good_weight = fRandom->Uniform(1.0);
+      if (good_weight <= weight2) {
 	weight2 = 1.0;
 	valid_event++;
       }
