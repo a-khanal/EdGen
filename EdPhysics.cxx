@@ -280,6 +280,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   int valid_event = 0;
   int good_mass = 0; 
   int failed_event = 0;
+  double good_weight = 0.;
   valid_event = 0;
 
 
@@ -302,8 +303,12 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //   printf("mass generated\n");
 
       SetDecay(Wtg, npvert[i], val_mass[i]);
-      valid_event++;
       weight2 = Generate();
+      good_weight = fRandom->Uniform();
+      if (weight2 <= good_weight) {
+	weight2 = 1.0;
+	valid_event++;
+      }
       //      printf("weight= %.3e\n",weight2);
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
