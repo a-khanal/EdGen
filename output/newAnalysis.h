@@ -152,6 +152,7 @@ void newAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("vy", vy, &b_vy);
    fChain->SetBranchAddress("vz", vz, &b_vz);
    fChain->SetBranchAddress("weight", weight, &b_weight);
+
 }
 
 Bool_t newAnalysis::Notify()

@@ -45,7 +45,6 @@ void newAnalysis::SlaveBegin(TTree * /*tree*/)
    // The tree argument is deprecated (on PROOF 0 is passed).
 
    TString option = GetOption();
-
    h1_phi = new TH1F("h1_phi","#phi #pi^{+} distribution (K^{0}_{S}(1) rest frame)",150,-180,360);
    h1_costheta = new TH1F("h1_costheta","cos(#theta) #pi^{+} distribution (K^{0}_{S}(1) rest frame)",100,-1.,1.);
    h1_mass = new TH1F("h1_mass_f","Mass f'_{2}; GeV",100,0.,2.0);
@@ -78,6 +77,7 @@ void newAnalysis::SlaveBegin(TTree * /*tree*/)
    fOutput->Add(h1_costheta2);
    fOutput->Add(h1_theta_pim);
    fOutput->Add(h2_mass_ebeam);
+
 
 }
 
