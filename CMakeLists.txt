@@ -20,6 +20,7 @@ if(WITHBOS)
 	  ${PROJECT_SOURCE_DIR}/EdOutputBos.cxx
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.cxx
 	  ${PROJECT_SOURCE_DIR}/EdProcess.cxx
+	  ${PROJECT_SOURCE_DIR}/EdCrossSection.cxx
 	  )
 	file(GLOB headers 
 	  ${PROJECT_SOURCE_DIR}/EdGen.h
@@ -28,6 +29,7 @@ if(WITHBOS)
 	  ${PROJECT_SOURCE_DIR}/EdOutputBos.h
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.h
 	  ${PROJECT_SOURCE_DIR}/EdProcess.h
+	  ${PROJECT_SOURCE_DIR}/EdCrossSection.h
 	  )
 	message("Setting also BOS output")
 else()
@@ -42,6 +44,7 @@ else()
 	  ${PROJECT_SOURCE_DIR}/EdOutput.cxx
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.cxx
 	  ${PROJECT_SOURCE_DIR}/EdProcess.cxx
+	  ${PROJECT_SOURCE_DIR}/EdCrossSection.cxx
 	  )
 	file(GLOB headers 
 	  ${PROJECT_SOURCE_DIR}/EdGen.h
@@ -50,6 +53,7 @@ else()
 	  ${PROJECT_SOURCE_DIR}/EdOutput.h
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.h
 	  ${PROJECT_SOURCE_DIR}/EdProcess.h
+	  ${PROJECT_SOURCE_DIR}/EdCrossSection.h
 	  )
 	message("No CLAS6LIB found")
 endif()
