@@ -6,7 +6,7 @@ EdProcess::EdProcess(const char *file, char *file2){
     fout  = new EdOutput(finp,file2);
     fmodel = new EdModel(finp);
     fphy  = new EdPhysics(fmodel);
-   
+    fcross = new EdCrossSection(fmodel);
  
     return;
 }

@@ -5,6 +5,7 @@
 #include "EdInput.h"
 #include "EdOutput.h"
 #include "EdModel.h"
+#include "EdCrossSection.h"
 #include "TString.h"
 
 
@@ -21,6 +22,6 @@ class EdProcess {
 	EdOutput   *fout;
 	EdPhysics  *fphy;
 	EdModel    *fmodel;
-
+	EdCrossSection *fcross;
 };
 #endif//__EdProcess_h
