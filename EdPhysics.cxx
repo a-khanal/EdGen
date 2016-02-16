@@ -77,8 +77,7 @@ EdPhysics::EdPhysics(EdModel *model){
       width2[n_part] = part_pdg[n_part]->Width();
     }
     
- 
-
+    fcross = new EdCrossSection(model);
  
  
     return;

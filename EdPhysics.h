@@ -4,6 +4,7 @@
 
 #include "EdModel.h"
 #include "EdOutput.h"
+#include "EdCrossSection.h"
 #include <iostream>
 #include "TLorentzVector.h"
 #include "TF2.h"
@@ -38,6 +39,8 @@ class EdPhysics: public TGenPhaseSpace{
 	TParticlePDG *part_pdg[MAX_PART];
 	TLorentzVector *p4vector[MAX_PART][MAX_PART];
 	TLorentzVector *p4vector_c;
+        EdCrossSection *fcross;
+        int yes_crossection; 
 
 
 	double theta[MAX_PART];
