@@ -75,7 +75,7 @@ class EdCrossSection{
  ============================================================================
  */
 	
-	void kin2to2(double Ecm, double theta, double mass[5], double pa[4],double pb[4],double pc[4], double pd[4]);
+	void kin2to2(double Ecm, double theta, double mass2[5], double pa[4],double pb[4],double pc[4], double pd[4]);
 	double complex lambda(double complex a, double b, double c);
 	double lambda_real(double a, double b, double c);
 	double snorm(double p[4]);
@@ -83,19 +83,19 @@ class EdCrossSection{
 	double complex Pi0PhotAmpS(double pa[4],double pb[4],double pc[4], int hel[4]);
 	void Regge_CGLNAi(double complex s, double complex t, double complex CGLNA[5]);
 	double Pi0PhotCS_S(double E,double theta);
-	double Cos2T(double E, double z, double mass[5]);
+	double Cos2T(double E, double z);
 	void CGLNA2F(struct Kin var, double complex Ai[5], double complex Fi[5]);
-	void kinematics(double complex s, double complex t, double mass[], struct Kin *var);
+	void kinematics(double complex s, double complex t, double mass2[], struct Kin *var);
 	void MltPole2F(double s, double t, double complex MltPole[5][10] ,double complex CGLNF[5]);
 	void MAID_Pi0(double s, double complex MltPole[5][10]);
-	double Coef(double E, double mass[5]);
+	double Coef(double E);
 
 
    private:
 	double MP;
 	double MPI;
 	double EPS;
-
+	double mass[5];
 
 };
 #endif//__EdCrossSection_h

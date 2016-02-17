@@ -282,7 +282,8 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   double good_weight = 0.;
   valid_event = 0;
   TVector3 b_3 ;
-  TLorentzVector *p4_cmass;
+  TLorentzVector p4_cmass;
+  TLorentzVector Wtg_copy;
 
 
   for (int i=0; i<nvertex; i++) {
@@ -306,6 +307,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       SetDecay(Wtg, npvert[i], val_mass[i]);
       b_3 =  Wtg.BoostVector();
       b_3 = -b_3;
+      Wtg_copy = Wtg;
       weight2 = Generate();
       good_weight = fRandom->Uniform(1.0);
       if (good_weight <= weight2) {
@@ -316,9 +318,11 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
 	p4vector[i][j+1] = GetDecay(j);
-	if (j==1) {p4_cmass = GetDecay(j);
-	  p4_cmass->Boost(b_3);
-	  weight2=fcross->Pi0PhotCS_S(Wtg.E(),p4_cmass->Theta());
+	if (j==1) {p4_cmass.SetPxPyPzE(p4vector[i][j+1]->Px(),p4vector[i][j+1]->Py(),p4vector[i][j+1]->Pz(),p4vector[i][j+1]->E());
+	  p4_cmass.Boost(b_3);
+	  Wtg_copy.Boost(b_3);
+	  weight2=fcross->Pi0PhotCS_S(Wtg_copy.E(),p4_cmass.Theta()) /1000/fcross->Coef(Wtg_copy.E());
+	  //	  cout << "E=" << Wtg_copy.E() << "   cos(Theta)=" << TMath::Cos(p4_cmass.Theta()) << "   Dsig/DOmega=" << weight2 << "  E1=" << p4vector[i][j+1]->E() << "  E2=" << p4_cmass.E() << endl;
 	}
 	//	cout << "Particle n." << atpart << " Mass=" << p4vector[atpart]->M() << endl; 
 	for (int k=i+1; k<nvertex; k++) {

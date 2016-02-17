@@ -12,8 +12,11 @@ EdCrossSection::EdCrossSection(EdModel *model){
   MP= 0.938272046;
   MPI = 0.1349766;
   EPS = 0.0000;
-
-  double mass[5] = {0.0, 0.0, MP, MPI, MP};
+  mass[0] = 0.0;
+  mass[1] = 0.0;
+  mass[2] = MP;
+  mass[3] = MPI;
+  mass[4] = MP;
   double plab;
   double E, z, theta;
 
@@ -22,8 +25,8 @@ EdCrossSection::EdCrossSection(EdModel *model){
   printf("Plab   E      Cos     t        Dsig/Dt    Dsig/DOmega\n");
   printf("GeV    GeV    -       GeV^2    mb/Gev^2     mb\n");
   for( z = -1; z <= 1; z = z + 0.1 ){
-    printf("%.3f  %.3f  %.3f  %.3f  %.3f  %.3f\n",plab, E, z,Cos2T(E,z, mass),
-	   Pi0PhotCS_S(E,acos(z))/1000, Pi0PhotCS_S(E,acos(z))/Coef(E, mass)/1000 );
+    printf("%.3f  %.3f  %.3f  %.3f  %.3f  %.3f\n",plab, E, z,Cos2T(E,z),
+	   Pi0PhotCS_S(E,acos(z))/1000, Pi0PhotCS_S(E,acos(z))/Coef(E)/1000 );
   }
 
 }
@@ -195,7 +198,6 @@ double EdCrossSection::Pi0PhotCS_S(double E,double theta){
  * compute the differential cross section from s-channel helicities
  * in micro barns/Gev^2
  */
-	double mass[5] = {0.0, 0.0, MP, MPI, MP};
 	double pa[4], pb[4], pc[4], pd[4];
 	int hel[4] = {2,1,0,1};						// hel = {1,+,0,+} (x2)
 	double complex  res[4] ;
@@ -234,7 +236,7 @@ double complex EdCrossSection::Pi0PhotAmpS(double pa[4],double pb[4],double pc[4
 	double complex Ai[5] = {0}, FiReg[5] = {0}, FiMAID[5] = {0}, Fi[5] = {0};
 	double pab[4], pbc[4], pca[4], pd[4];
 	struct Kin var;
-	double mass[5]={0};
+	double mass2[5]={0};
 	double complex MltPole[5][10];
 	int i;
 	// Only valid for Q^2 = 0 --> photon helicity should be +1 or -1
@@ -249,12 +251,12 @@ double complex EdCrossSection::Pi0PhotAmpS(double pa[4],double pb[4],double pc[4
 	var.s = snorm( pab ) + I*EPS;
 	var.t = snorm( pca ) - I*EPS;
 	// photon should be real
-	mass[1]   = 0.0;
-	mass[2]  = sqrt( snorm( pb ) );
-	mass[3]  = sqrt( snorm( pc ) );
-	mass[4]  = sqrt( snorm( pd ) );
+	mass2[1]   = 0.0;
+	mass2[2]  = sqrt( snorm( pb ) );
+	mass2[3]  = sqrt( snorm( pc ) );
+	mass2[4]  = sqrt( snorm( pd ) );
 
-	kinematics(var.s,var.t, mass, &var);	// fill the structure var with all kin. quantities
+	kinematics(var.s,var.t, mass2, &var);	// fill the structure var with all kin. quantities
 
 	// Compute the CGLN Fi for a given model
 	// CHANGE HERE TO CHANGE THE MODEL
@@ -372,13 +374,13 @@ void EdCrossSection::CGLNA2F(struct Kin var, double complex Ai[5], double comple
 }
 
 // *********************************************************************************
-void EdCrossSection::kin2to2(double Ecm, double theta, double mass[5], double pa[4],double pb[4],double pc[4], double pd[4]){
+void EdCrossSection::kin2to2(double Ecm, double theta, double mass2[5], double pa[4],double pb[4],double pc[4], double pd[4]){
 /*
  * Kinematics of the 2-to-2 reaction, a + b --> c + d
  * Inputs:
  * 		Ecm center of mass energy
  * 		cos cosine of the scattering angle in the center of mass
- * 		mass = {ma,mb,mc,md} vector with the masses of external particles
+ * 		mass2 = {ma,mb,mc,md} vector with the masses of external particles
  * 	Outputs:
  * 		pa, pb, pc, pd are the momenta of the particles
  */
@@ -386,7 +388,7 @@ void EdCrossSection::kin2to2(double Ecm, double theta, double mass[5], double pa
 	double pi, pf;					// initial and final breakup momenta
 	double ma, mb, mc, md;			// masses of the particles
 
-	ma = mass[1]; mb = mass[2]; mc = mass[3]; md = mass[4];
+	ma = mass2[1]; mb = mass2[2]; mc = mass2[3]; md = mass2[4];
 
 	// Check that inputs are valid
 	if( ( ma<0 ) || ( mb<0 ) || ( mc<0 ) || ( md<0 )  ) {
@@ -415,7 +417,7 @@ void EdCrossSection::kin2to2(double Ecm, double theta, double mass[5], double pa
 }
 
 // *********************************************************************************
-void EdCrossSection::kinematics(double complex s, double complex t, double mass[5], struct Kin *var)
+void EdCrossSection::kinematics(double complex s, double complex t, double mass2[5], struct Kin *var)
 {
 	double m12, m22, m32, m42; 	// masses squared
 	double complex t0, t1, u ;
@@ -423,15 +425,15 @@ void EdCrossSection::kinematics(double complex s, double complex t, double mass[
 	var->s = s;
 	var->t = t;
 
-	var->m1 = mass[1];
-	var->m2 = mass[2];
-	var->m3 = mass[3];
-	var->m4 = mass[4];
+	var->m1 = mass2[1];
+	var->m2 = mass2[2];
+	var->m3 = mass2[3];
+	var->m4 = mass2[4];
 
-	m12 = mass[1] * mass[1] ;
-	m22 = mass[2] * mass[2] ;
-	m32 = mass[3] * mass[3] ;
-	m42 = mass[4] * mass[4] ;
+	m12 = mass2[1] * mass2[1] ;
+	m22 = mass2[2] * mass2[2] ;
+	m32 = mass2[3] * mass2[3] ;
+	m42 = mass2[4] * mass2[4] ;
 
 	var->ks = csqrt( lambda(s, m12, m22) / 4 / s );
 	var->qs = csqrt( lambda(s, m32, m42) / 4 / s );
@@ -464,7 +466,7 @@ void EdCrossSection::kinematics(double complex s, double complex t, double mass[
 }
 
 // *********************************************************************************
-double EdCrossSection::Cos2T(double E, double z, double mass[5]){
+double EdCrossSection::Cos2T(double E, double z){
 	/*
 	 * Compute t from Ecm = W and cos = z
 	 */
@@ -483,7 +485,7 @@ double EdCrossSection::Cos2T(double E, double z, double mass[5]){
 }
 
 // *********************************************************************************
-double EdCrossSection::Coef(double E, double mass[5]){
+double EdCrossSection::Coef(double E){
 	/*
 	 * dSig/dt = Coef dSig/dOmega
 	 * Coef = Pi/qi/qf

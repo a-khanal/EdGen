@@ -1,10 +1,10 @@
-nevt:    100000;
-nprint:  10000;
-model:   2;
+nevt:    100;
+nprint:  100;
+model:   1;
 M_mode:  1;
 ifile:	 energy.txt; 
 beam:    22;
-en:	 5.5    GeV;
+en:	 1.0    GeV;
 tg_Z:    1;
 tg_N:    0;
 tg_mass: 0.9383 GeV;
