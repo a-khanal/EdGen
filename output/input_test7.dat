@@ -19,7 +19,7 @@ theta_max: 180.0,180.0 deg;
 nvertex: 1;
 vertex:  0,2;
 v_type:  1,1.0;
-output:  1;
+output:  3;
 END
 # Models
 # 1 Phase Space Single Energy (for example e-)

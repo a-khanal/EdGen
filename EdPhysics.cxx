@@ -318,7 +318,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
 	p4vector[i][j+1] = GetDecay(j);
-	if (j==1) {p4_cmass.SetPxPyPzE(p4vector[i][j+1]->Px(),p4vector[i][j+1]->Py(),p4vector[i][j+1]->Pz(),p4vector[i][j+1]->E());
+	if (j==0) {p4_cmass.SetPxPyPzE(p4vector[i][j+1]->Px(),p4vector[i][j+1]->Py(),p4vector[i][j+1]->Pz(),p4vector[i][j+1]->E());
 	  p4_cmass.Boost(b_3);
 	  Wtg_copy.Boost(b_3);
 	  weight2=fcross->Pi0PhotCS_S(Wtg_copy.E(),p4_cmass.Theta()) /1000/fcross->Coef(Wtg_copy.E());
