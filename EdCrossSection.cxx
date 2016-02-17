@@ -298,7 +298,7 @@ double complex EdCrossSection::Pi0PhotAmpS(double pa[4],double pb[4],double pc[4
 	else return 0.0 ;
 
 	// if negative photon helicity, nucleon flip amplitude changes sign
-	if (hel[0] == -2 && hel[1] != hel[3] ) amp = -amp;
+	if (hel[0] == -2 && hel[1] != hel[3] ) amp = -1*amp;
 
 	// there is a factor 8*PI*W between Hi and helicity amplitudes
 	return amp * 8 * M_PI * csqrt(var.s);
@@ -325,9 +325,9 @@ void EdCrossSection::Regge_CGLNAi(double complex s, double complex t, double com
 	aaxi = alpA[0] + t*alpA[1] + t*t*alpA[2];
 
 	// Regge factors:
-	Rv = cgamma( 1.0 - avec, 0)/2 * ( 1-cexp(-I*M_PI*avec) ) * cpow(s,avec-1);
-	Rc = cgamma( 1.0 - acut, 0)/2 * ( 1-cexp(-I*M_PI*acut) ) * cpow(s,acut-1);
-	Ra = cgamma( 1.0 - aaxi, 0)/2 * ( 1-cexp(-I*M_PI*aaxi) ) * cpow(s,aaxi-1);
+	Rv = cgamma( 1.0 - 1.0*avec, 0)/2 * ( 1.0-1.0*cexp(-1.0*I*M_PI*avec) ) * cpow(s,avec-1);
+	Rc = cgamma( 1.0 - 1.0*acut, 0)/2 * ( 1.0-1.0*cexp(-1.0*I*M_PI*acut) ) * cpow(s,acut-1);
+	Ra = cgamma( 1.0 - 1.0*aaxi, 0)/2 * ( 1.0-1.0*cexp(-1.0*I*M_PI*aaxi) ) * cpow(s,aaxi-1);
 	Rc = Rc / clog(s);
 	// IF ONLY VECTOR POLE
 	//Rc = 0; Ra = 0;
@@ -360,14 +360,14 @@ void EdCrossSection::CGLNA2F(struct Kin var, double complex Ai[5], double comple
 	Fi[1] = Fi[1]  + ( w - var.m2 ) * ( w - var.m4 ) * Ai[4];
 	Fi[1] = Fi[1] * csqrt( E2p * E4p ) / ( 8 * M_PI * w);
 
-	Fi[2] = -(w + var.m2) * Ai[1] + (var.m3*var.m3 - var.t)/2 * (Ai[3] - Ai[4]);
+	Fi[2] = -1.0*(w + var.m2) * Ai[1] + (var.m3*var.m3 - var.t)/2 * (Ai[3] - Ai[4]);
 	Fi[2] = Fi[2]  + ( w + var.m2 ) * ( w + var.m4 ) * Ai[4];
 	Fi[2] = Fi[2] * csqrt( E2m * E4m ) / ( 8 * M_PI * w);
 
 	Fi[3] = (w + var.m2) * (  (w - var.m2)*Ai[2] + Ai[3] - Ai[4] );
 	Fi[3] = Fi[3] * csqrt( E2m * E4p) * var.qs  / ( 8 * M_PI * w);
 
-	Fi[4] = (w - var.m2) * ( -(w + var.m2)*Ai[2] + Ai[3] - Ai[4] );
+	Fi[4] = (w - var.m2) * ( -1.0*(w + var.m2)*Ai[2] + Ai[3] - Ai[4] );
 	Fi[4] = Fi[4] * csqrt( E2p * E4m) * var.qs  / ( 8 * M_PI * w);
 
 	return;
@@ -449,7 +449,7 @@ void EdCrossSection::kinematics(double complex s, double complex t, double mass2
 	// t1 = tmin ; t0 = tmax ; t0 < t < t1
 	t1 = cpow(m12 - m32 - m22 + m42,2)/(4*s) - (var->ks - var->qs) * (var->ks - var->qs);
 	t0 = t1 - 4 * var->ks *var->qs ;
-	u = - s - t + m12 + m22 + m32 + m42 ;	// Mandelstam s variable
+	u = -1.0* s - 1.0*t + m12 + m22 + m32 + m42 ;	// Mandelstam s variable
 	var->phi = s * (t - t1) * (t0 - t) ;	// Kibble function
 
 	var->coss = 1 + (t - t1)/(2 * var->qs * var->ks) ;
