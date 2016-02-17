@@ -281,6 +281,8 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   int failed_event = 0;
   double good_weight = 0.;
   valid_event = 0;
+  TVector3 b_3 ;
+  TLorentzVector *p4_cmass;
 
 
   for (int i=0; i<nvertex; i++) {
@@ -302,6 +304,8 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //   printf("mass generated\n");
 
       SetDecay(Wtg, npvert[i], val_mass[i]);
+      b_3 =  Wtg.BoostVector();
+      b_3 = -b_3;
       weight2 = Generate();
       good_weight = fRandom->Uniform(1.0);
       if (good_weight <= weight2) {
@@ -312,6 +316,10 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
 	p4vector[i][j+1] = GetDecay(j);
+	if (j==1) {p4_cmass = GetDecay(j);
+	  p4_cmass->Boost(b_3);
+	  weight2=fcross->Pi0PhotCS_S(Wtg.E(),p4_cmass->Theta());
+	}
 	//	cout << "Particle n." << atpart << " Mass=" << p4vector[atpart]->M() << endl; 
 	for (int k=i+1; k<nvertex; k++) {
 	  //	  printf ("i=%i k=%i \n",i,k);
@@ -387,6 +395,8 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 
 
 }
+
+
 void EdPhysics::QFTarget(EdModel *model){
   Float_t ptar, Etar, Espec, costhtar, thtar, phtar, pxtar, pytar, pztar,smass;
   //Get Fermi momentum sampled from distribution given in input file

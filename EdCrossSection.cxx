@@ -13,6 +13,19 @@ EdCrossSection::EdCrossSection(EdModel *model){
   MPI = 0.1349766;
   EPS = 0.0000;
 
+  double mass[5] = {0.0, 0.0, MP, MPI, MP};
+  double plab;
+  double E, z, theta;
+
+  plab = 1; // Units = GeV
+  E = sqrt( MP*MP + 2*MP*plab ); // Ecm = 3.2031 GeV corresponds to Plab = 9 GeV
+  printf("Plab   E      Cos     t        Dsig/Dt    Dsig/DOmega\n");
+  printf("GeV    GeV    -       GeV^2    mb/Gev^2     mb\n");
+  for( z = -1; z <= 1; z = z + 0.1 ){
+    printf("%.3f  %.3f  %.3f  %.3f  %.3f  %.3f\n",plab, E, z,Cos2T(E,z, mass),
+	   Pi0PhotCS_S(E,acos(z))/1000, Pi0PhotCS_S(E,acos(z))/Coef(E, mass)/1000 );
+  }
+
 }
 
 // *********************************************************************************
@@ -55,12 +68,12 @@ void EdCrossSection::MAID_Pi0(double s, double complex MltPole[5][10]){
 	double complex MpPi0[10] = {0}, MmPi0[10] = {0};
 
 	FILE *pi0maidL[6];	// Load MAID multipoles
-		pi0maidL[0] = fopen("pi0maidL0.txt","r");
-		pi0maidL[1] = fopen("pi0maidL1.txt","r");
-		pi0maidL[2] = fopen("pi0maidL2.txt","r");
-		pi0maidL[3] = fopen("pi0maidL3.txt","r");
-		pi0maidL[4] = fopen("pi0maidL4.txt","r");
-		pi0maidL[5] = fopen("pi0maidL5.txt","r");
+		pi0maidL[0] = fopen("MAID/pi0maidL0.txt","r");
+		pi0maidL[1] = fopen("MAID/pi0maidL1.txt","r");
+		pi0maidL[2] = fopen("MAID/pi0maidL2.txt","r");
+		pi0maidL[3] = fopen("MAID/pi0maidL3.txt","r");
+		pi0maidL[4] = fopen("MAID/pi0maidL4.txt","r");
+		pi0maidL[5] = fopen("MAID/pi0maidL5.txt","r");
 
 	/*    W          EL+(0)           EL+(+)           EL+(-)       w(lab)  w(cm)
  	 	 (MeV)      Re      Im       Re      Im       Re      Im      (MeV)   (MeV)*/
