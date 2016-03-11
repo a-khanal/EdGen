@@ -273,7 +273,7 @@ void  EdOutput::MakeFileBOS(){
 
    for (int i=0; i<nentries ; i++) {
     fTree->GetEntry(i);
-    if(i % 1 == 0 ){
+    if(i % 1000000 == 0 ){
        printf("Analyzed %09d events of total %09d \n",i,nentries);
      }
     tot_part = 0;
