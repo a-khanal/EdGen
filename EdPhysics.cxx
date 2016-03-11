@@ -15,6 +15,7 @@ EdPhysics::EdPhysics(EdModel *model){
     pdg = new TDatabasePDG();
     pdg->ReadPDGTable("eg_pdg_table.txt");
     fRandom = new TRandom2(0);
+    //   gRandom->Delete();
     gRandom = fRandom;
     printf("Seed number %d\n",fRandom->GetSeed());
     target.SetPxPyPzE(0.0, 0.0, 0.0, model->Get_tgMass()); // target at rest
