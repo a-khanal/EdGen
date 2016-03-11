@@ -360,7 +360,7 @@ void  EdOutput::MakeFileBOS(){
 
 
    // Writing into bos file
-    printf("at event %i \n",i);
+    //   printf("at event %i \n",i);
     icode = putBOS(&bcs_, BosOutputUnitNo, "C");
     if(!icode){
       fprintf(stdout,"ERROR - Trouble writing out BOS bank. \n");
