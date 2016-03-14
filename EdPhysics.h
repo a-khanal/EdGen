@@ -73,6 +73,7 @@ class EdPhysics: public TGenPhaseSpace{
 	int distr_mass[10][10];
 	double max_mass[10][10];
 	TRandom2 *fRandom;
+	TRandom2 *gRandom;
 	TLorentzVector Wtg;
 	TLorentzVector beam;
 	TLorentzVector target;
