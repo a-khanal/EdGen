@@ -10,6 +10,7 @@
 #include "TTree.h"
 #include "TString.h"
 #include "TChain.h"
+#include "TGraph.h"
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -69,6 +70,7 @@ class EdOutput {
 	void Setvz(double *, int);
 	void Setweight(double *, int);
 	void Settowrite(int *, int);
+	void SetGraph(TGraph *);
 
     private:
 	void InitTree();
@@ -77,6 +79,7 @@ class EdOutput {
 
 	TFile *fOutfile;
 	TTree *fTree;
+	TGraph *fGraph;
 
 	double fNevt;
 	int    fnvertex;

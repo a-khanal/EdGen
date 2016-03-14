@@ -172,6 +172,10 @@ void EdOutput::Settowrite(int *val, int tot){
 
 }
 
+void EdOutput::SetGraph(TGraph *graph){
+  fGraph = graph;
+}
+
 void EdOutput::Write(){
     fTree->Fill();
 

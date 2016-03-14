@@ -1,5 +1,5 @@
-nevt:    100;
-nprint:  100;
+nevt:    100000;
+nprint:  1000;
 model:   2;
 M_mode:  1;
 ifile:	 energy.txt; 
