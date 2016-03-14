@@ -160,7 +160,7 @@ void newAnalysis::Terminate()
    // the results graphically or save the results to file.
 
 
-  TFile file_out("analysis_output.root","recreate");
+  TFile file_out("analysis_new_output.root","recreate");
   TList *outlist = GetOutputList();
   
   outlist->Write();
