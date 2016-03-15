@@ -1,6 +1,6 @@
-nevt:    100000;
+nevt:    10000;
 nprint:  1000;
-model:   2;
+model:   1;
 M_mode:  1;
 ifile:	 energy.txt; 
 beam:    22;

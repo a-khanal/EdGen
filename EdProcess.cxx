@@ -7,7 +7,7 @@ EdProcess::EdProcess(const char *file, char *file2){
     fmodel = new EdModel(finp);
     fphy  = new EdPhysics(fmodel);
     fcross = new EdCrossSection(fmodel);
- 
+    fout->SetGraph(fcross->Get_graph());
     return;
 }
 
@@ -23,6 +23,7 @@ void EdProcess::Run(){
     fmtst[1] = "ROOT and LUND";
     fmtst[2] = "ROOT and BOS";
     int fmt = finp->Get_fmt();
+
  
     for( evt = 0; evt < nevt; evt++ ){
       if( (evt%nprnt) == 0 ){printf("Event %10d \n", evt);}

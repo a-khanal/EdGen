@@ -48,7 +48,7 @@ void analysis_7::SlaveBegin(TTree * /*tree*/)
    h1_phi = new TH1F("h1_phi","#phi #pi^{0} distribution",150,-180,360);
    h1_costheta = new TH1F("h1_costheta","cos(#theta) #pi^{0} distribution (W rest frame)",100,-1.,1.);
    h1_phi_cross = new TH1F("h1_phi_cross","#phi #pi^{0} distribution (CROSS SECTION)",150,-180,360);
-   h1_costheta_cross = new TH1F("h1_costheta_cross","cos(#theta) #pi^{0} distribution (W rest frame) (CROSS SECTION)",100,-1.,1.);
+   h1_costheta_cross = new TH1F("h1_costheta_cross","cos(#theta) #pi^{0} distribution (W rest frame) (CROSS SECTION) /100 ",100,-1.,1.);
    fOutput->Add(h1_phi);
    fOutput->Add(h1_costheta);
    fOutput->Add(h1_phi_cross);
@@ -93,7 +93,7 @@ Bool_t analysis_7::Process(Long64_t entry)
   p_pi0.Boost(b_3);
   h1_costheta->Fill(p_pi0.CosTheta());
   h1_phi->Fill(p_pi0.Phi()/TMath::Pi()*180.);
-  h1_costheta_cross->Fill(p_pi0.CosTheta(),weight[1]);
+  h1_costheta_cross->Fill(p_pi0.CosTheta(),weight[1]/100);
   h1_phi_cross->Fill(p_pi0.Phi()/TMath::Pi()*180.,weight[1]);
 
    return kTRUE;

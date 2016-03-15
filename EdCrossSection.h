@@ -7,6 +7,7 @@
 // You know now what’s the prize for using this code ;)
 
 #include "EdModel.h"
+#include "TGraph.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <complex.h>    	/* Standard Library of Complex Numbers */
@@ -89,6 +90,7 @@ class EdCrossSection{
 	void MltPole2F(double s, double t, double complex MltPole[5][10] ,double complex CGLNF[5]);
 	void MAID_Pi0(double s, double complex MltPole[5][10]);
 	double Coef(double E);
+	TGraph* Get_graph(){return fgraph;};
 
 
    private:
@@ -96,6 +98,7 @@ class EdCrossSection{
 	double MPI;
 	double EPS;
 	double mass[5];
+	TGraph *fgraph;
 
 };
 #endif//__EdCrossSection_h

@@ -19,16 +19,29 @@ EdCrossSection::EdCrossSection(EdModel *model){
   mass[4] = MP;
   double plab;
   double E, z, theta;
+  double v_costh[21];
+  double v_dsigdom[21];
+  char Title[60];
+  int v_i=0;
 
-  plab = 1; // Units = GeV
+  plab = model->GetEnergy(); // Units = GeV
   E = sqrt( MP*MP + 2*MP*plab ); // Ecm = 3.2031 GeV corresponds to Plab = 9 GeV
   printf("Plab   E      Cos     t        Dsig/Dt    Dsig/DOmega\n");
   printf("GeV    GeV    -       GeV^2    mb/Gev^2     mb\n");
   for( z = -1; z <= 1; z = z + 0.1 ){
     printf("%.3f  %.3f  %.3f  %.3f  %.3f  %.3f\n",plab, E, z,Cos2T(E,z),
 	   Pi0PhotCS_S(E,acos(z))/1000, Pi0PhotCS_S(E,acos(z))/Coef(E)/1000 );
+    v_costh[v_i] = z;
+    v_dsigdom[v_i] = Pi0PhotCS_S(E,acos(z))/Coef(E)/1000;
+    v_i++;
   }
+  
+  sprintf(Title,"Cross section for E_{#gamma}=%.3f;cos(#theta);d#sigma /d#Omega (mb)",plab);
+  fgraph = new TGraph(v_i,v_costh,v_dsigdom);
+  fgraph->SetName("Cross_Section");
+  fgraph->SetTitle(Title);
 
+  
 }
 
 // *********************************************************************************

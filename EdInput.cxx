@@ -89,7 +89,7 @@ EdInput::EdInput(const char *file){
 	  valcommand.ReplaceAll(" ","");
 	  fData.qftpdg = TString(valcommand(0,valcommand.First(","))).Atoi();
 	  fData.qfspdg = TString(valcommand(valcommand.First(",")+1,valcommand.Sizeof())).Atoi();
-	  printf("QuasiFree Target PDG: %d\n",fData.qftpdg,fData.qfspdg);
+	  printf("QuasiFree Target PDG: %d\n",fData.qftpdg);
 	}
 	if (valcommand.Contains("beam:")) {
 	  valcommand.ReplaceAll("beam:","");
