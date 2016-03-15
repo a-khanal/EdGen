@@ -184,6 +184,7 @@ void EdOutput::Write(){
 void EdOutput::Close(){
     fOutfile = new TFile(fOutName, "RECREATE");
     fTree->Write();
+    fGraph->Write();
     fOutfile->Close();
     delete fOutfile;
 
