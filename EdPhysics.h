@@ -9,7 +9,7 @@
 #include "TF2.h"
 #include "TF1.h"
 #include "TVector3.h"
-#include "TGenPhaseSpace.h"
+#include "EdGenPhaseSpace.h"
 #include "TDatabasePDG.h"
 #include "TParticlePDG.h"
 #include "TRandom2.h"
@@ -18,7 +18,7 @@
 
 using namespace std;
 
-class EdPhysics: public TGenPhaseSpace{
+class EdPhysics: public EdGenPhaseSpace{
     public:
 	EdPhysics(EdModel *);
 	~EdPhysics();
