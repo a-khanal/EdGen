@@ -1,7 +1,4 @@
-// @(#)root/physics:$Id$
-// Author: Rene Brun , Valerio Filippini  06/09/2000 
-
-//_____________________________________________________________________________________
+//_based on TGenPhaseSpace___________________________________________________________
 //
 //  Utility class to generate n-body event,
 //  with constant cross-section (default)
@@ -95,7 +92,7 @@ Double_t EdGenPhaseSpace::Generate()
    rno[0] = 0;
    Int_t n;
    if (fNt>2) {
-      for (n=1; n<fNt-1; n++)  rno[n]=gRandom->Rndm();   // fNt-2 random numbers
+      for (n=1; n<fNt-1; n++)  rno[n]=ps_Random->Rndm();   // fNt-2 random numbers
       qsort(rno+1 ,fNt-2 ,sizeof(Double_t) ,DoubleMax);  // sort them
    }
    rno[fNt-1] = 1;
@@ -126,9 +123,9 @@ Double_t EdGenPhaseSpace::Generate()
    while (1) {
       fDecPro[i].SetPxPyPzE(0, -pd[i-1], 0 , TMath::Sqrt(pd[i-1]*pd[i-1]+fMass[i]*fMass[i]) );
 
-      Double_t cZ   = 2*gRandom->Rndm() - 1;
+      Double_t cZ   = 2*ps_Random->Rndm() - 1;
       Double_t sZ   = TMath::Sqrt(1-cZ*cZ);
-      Double_t angY = 2*TMath::Pi() * gRandom->Rndm();
+      Double_t angY = 2*TMath::Pi() * ps_Random->Rndm();
       Double_t cY   = TMath::Cos(angY);
       Double_t sY   = TMath::Sin(angY);
       for (j=0; j<=i; j++) {

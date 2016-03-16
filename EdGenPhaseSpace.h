@@ -9,7 +9,7 @@
 #define __EdGenPhaseSpace_h
 
 #include "TLorentzVector.h"
-
+#include "TRandom2.h"
 
 class EdGenPhaseSpace : public TObject {
 private:  
@@ -19,7 +19,7 @@ private:
    Double_t     fTeCmTm;         // total energy in the C.M. minus the total mass
    Double_t     fWtMax;          // maximum weigth 
    TLorentzVector  fDecPro[18];  //kinematics of the generated particles 
-
+   TRandom2 *ps_Random;
    Double_t PDK(Double_t a, Double_t b, Double_t c);  
 
 public:
@@ -34,7 +34,7 @@ public:
 
    Int_t    GetNt()      const { return fNt;}
    Double_t GetWtMax()   const { return fWtMax;}
-
+   void SetRandom(TRandom2 *fRandom) {ps_Random = fRandom;};
 };
 
 #endif//__EdGenPhaseSpace_h
