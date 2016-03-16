@@ -19,6 +19,7 @@ if(WITHBOS)
 	  ${PROJECT_SOURCE_DIR}/EdModel.cxx
 	  ${PROJECT_SOURCE_DIR}/EdOutputBos.cxx
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.cxx
+	  ${PROJECT_SOURCE_DIR}/EdGenPhaseSpace.cxx
 	  ${PROJECT_SOURCE_DIR}/EdProcess.cxx
 	  ${PROJECT_SOURCE_DIR}/EdCrossSection.cxx
 	  )
@@ -28,6 +29,7 @@ if(WITHBOS)
 	  ${PROJECT_SOURCE_DIR}/EdModel.h
 	  ${PROJECT_SOURCE_DIR}/EdOutputBos.h
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.h
+	  ${PROJECT_SOURCE_DIR}/EdGenPhaseSpace.h
 	  ${PROJECT_SOURCE_DIR}/EdProcess.h
 	  ${PROJECT_SOURCE_DIR}/EdCrossSection.h
 	  )
@@ -43,6 +45,7 @@ else()
 	  ${PROJECT_SOURCE_DIR}/EdModel.cxx
 	  ${PROJECT_SOURCE_DIR}/EdOutput.cxx
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.cxx
+	  ${PROJECT_SOURCE_DIR}/EdGenPhaseSpace.cxx
 	  ${PROJECT_SOURCE_DIR}/EdProcess.cxx
 	  ${PROJECT_SOURCE_DIR}/EdCrossSection.cxx
 	  )
@@ -51,7 +54,8 @@ else()
 	  ${PROJECT_SOURCE_DIR}/EdInput.h
 	  ${PROJECT_SOURCE_DIR}/EdModel.h
 	  ${PROJECT_SOURCE_DIR}/EdOutput.h
-	  ${PROJECT_SOURCE_DIR}/EdPhysics.h
+	  ${PROJECT_SOURCE_DIR}/EdPhysics.h	
+	  ${PROJECT_SOURCE_DIR}/EdGenPhaseSpace.h	
 	  ${PROJECT_SOURCE_DIR}/EdProcess.h
 	  ${PROJECT_SOURCE_DIR}/EdCrossSection.h
 	  )

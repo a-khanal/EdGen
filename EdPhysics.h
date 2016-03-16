@@ -10,7 +10,7 @@
 #include "TF2.h"
 #include "TF1.h"
 #include "TVector3.h"
-#include "TGenPhaseSpace.h"
+#include "EdGenPhaseSpace.h"
 #include "TDatabasePDG.h"
 #include "TParticlePDG.h"
 #include "TRandom2.h"
@@ -19,7 +19,7 @@
 
 using namespace std;
 
-class EdPhysics: public TGenPhaseSpace{
+class EdPhysics: public EdGenPhaseSpace{
     public:
 	EdPhysics(EdModel *);
 	~EdPhysics();
@@ -90,6 +90,7 @@ class EdPhysics: public TGenPhaseSpace{
 	int Gen_Phasespace(EdModel *model);
 	int Gen_Mass(int i,EdModel *model);
 	void QFTarget(EdModel *model);  //calculate quasi free target with fermi momentum
+	Double_t Generate_PhaseSpace();
 
 	double t_reaction(TLorentzVector *Vrecoil_tg_4 );
 	double phi_meson();
