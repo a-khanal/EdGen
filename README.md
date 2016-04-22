@@ -31,7 +31,7 @@ This version is running correctly on ifarm.jlab.org. The version of cmake there 
 * cd build
 * if you want to install BOS output support you will need to have correctly setup in your environment variables CLAS6LIB CLAS6INC and CERNLIB (the environment show before has been tested)
 * if you don't want BOS support, just unset those environment variables (CLAS6LIB CLAS6INC and CERNLIB). If you will request a BOS output the code will not create any bos file (strangely enough)
-* cmake ../ ( at jlab /work/halla/parity/disk2/zana/Cmake/cmake-2.8.8/bin/cmake ../ )
+* cmake ../ 
 * make 
 
 Running
