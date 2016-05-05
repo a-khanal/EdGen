@@ -29,6 +29,8 @@ struct inputdata {
     double length;
     double lenx;
     double leny;
+    double sigx;
+    double sigy;
  
     double theta_min[100];
     double theta_max[100];
@@ -60,6 +62,8 @@ class EdInput{
       int IsQF(){return fData.isqf;}
       inputdata GetInData(){return fData;}
 	int    GetBeamPID(){ return fData.beam_pid; }
+	double GetSigBeamX(){ return fData.sigx; }
+	double GetSigBeamY(){ return fData.sigy; }
 	int    GetNvertex(){ return fData.nvertex; }
 	int    GetOvert(int i){ return fData.overt[i]; }
 	int    GetNpvert(int i){ return fData.npvert[i]; }

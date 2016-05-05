@@ -12,6 +12,9 @@
 #include "TTree.h"
 #include "TString.h"
 #include "TChain.h"
+#include "TDatabasePDG.h"
+#include "TParticlePDG.h"
+#include "TRandom2.h"
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -49,6 +52,7 @@ class EdOutput {
 	void Close();
 	void MakeFileLUND();
 	void MakeFileBOS();
+	void MakeFileA2();	
 	void SetTheta( double *, int);
 	void SetPhi(double *, int);
 	void SetEf(double *, int);
@@ -87,6 +91,9 @@ class EdOutput {
 	int towrite[MAX_PART];
 
 	int n_part;
+	int pid_beam;
+	double beam_s_cosx;
+	double beam_s_cosy;
 	double theta[MAX_PART];
 	double phi[MAX_PART];
 	double Ef[MAX_PART];

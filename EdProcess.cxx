@@ -18,10 +18,12 @@ void EdProcess::Run(){
 
     int evt;
     int nprnt = finp->GetNprnt();
-    TString fmtst[3];    
+    TString fmtst[4];    
     fmtst[0] = "ROOT";
     fmtst[1] = "ROOT and LUND";
     fmtst[2] = "ROOT and BOS";
+    fmtst[3] = "ROOT and A2";
+   
     int fmt = finp->Get_fmt();
  
     for( evt = 0; evt < nevt; evt++ ){
@@ -35,6 +37,10 @@ void EdProcess::Run(){
     if (fmt == 3 ) { // also LUND format 
       printf("Creating BOS output \n") ;
       fout->MakeFileBOS();
+    }
+    if (fmt == 4 ) { // also LUND format 
+      printf("Creating A2 output \n") ;
+      fout->MakeFileA2();
     }
 
 

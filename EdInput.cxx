@@ -172,6 +172,30 @@ EdInput::EdInput(const char *file){
 	  fData.leny = factor*valcommand.Atof();
 	  printf("Raster Y: %.4f cm\n",fData.leny);	  
 	}
+	if (valcommand.Contains("b_s_cosx:")) {
+	  valcommand.ReplaceAll("b_s_cosx:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains(" m")) factor = 0.01;
+	  else factor = 1;
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" m","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("cm","");
+	  fData.sigx = factor*valcommand.Atof();
+	  printf("Beam  cosX distribution sigma: %.4f cm\n",fData.sigx);	  
+	}
+	if (valcommand.Contains("b_s_cosy:")) {
+	  valcommand.ReplaceAll("b_s_cosy:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains(" m")) factor = 0.01;
+	  else factor = 1;
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" m","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("cm","");
+	  fData.sigy = factor*valcommand.Atof();
+	  printf("Beam  cosY distribution sigma: %.4f cm\n",fData.sigy);	  
+	}
 	if (valcommand.Contains("theta_min:")) {
 	  valcommand.ReplaceAll("theta_min:","");
 	  valcommand.ReplaceAll(";","");
