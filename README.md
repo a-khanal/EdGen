@@ -52,6 +52,7 @@ Input file
 * ifile:	 energy.txt; 		 INPUT FILE SPECTRUM FOR BEAM (NEEDED FOR OPTION MODEL = 2) 
 * beam:    22;			 BEAM PARTICLE ID
 * en:	 11.0    GeV;		 BEAM ENERGY (NEEDED FOR OPTION MODEL = 1)
+* Erange:  2.0,5.0 GeV;          ENERGY RANGE FOR BEAM FLAT BETWEEN THESE 2 VALUES (NEEDED FOR OPTION MODEL = 3)
 * tg_Z:    1;	 		 TARGET Z (NOT WORKING YET)
 * tg_N:    1;			 TARGET N (NOT WORKING YET)
 * tg_mass  1.876  GeV;           TARGET MASS
@@ -79,9 +80,10 @@ Models
 -------
 * 1 Phase Space Single Energy (for example e-)
 * 2 Phase Space Energy Spectrum (for example gamma)
-* 3 Cross Section (sorry, not yet)
-* 4 Amplitudes (sorry, not yet) 
-* 5 Data Points (sorry, not yet)
+* 3 Phase Space Energy Spectrum (for example gamma) flat energy spectrum
+* 4 Cross Section (sorry, not yet)
+* 5 Amplitudes (sorry, not yet) 
+* 6 Data Points (sorry, not yet)
 
 Mass Models
 -------
@@ -114,3 +116,6 @@ Examples
 ** Create generated output file: ./EdGen -i input_test_6.dat <br />
 ** Analyze the output (with TProof) of the generated file (files analysis_6.C , analysis_6.h, run_analysis_6.C): root run_analysis_6.C <br />
 * See other examples of input file with input.dat (default), etc.
+* Photon production phasespace (flat energy range)  Omega + pi+ + pi- <br />
+** Create generated output file: ./EdGen -i input_test_7.dat <br />
+** Analyze the output (with TProof) of the generated file (files analysis_5.C , analysis_5.h, run_analysis_5.C analysis_5_output.root): root run_analysis_5.C <br />

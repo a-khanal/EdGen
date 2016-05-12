@@ -8,6 +8,9 @@ EdModel::EdModel(EdInput *inp){
   fFermiMomentum=0;
   fIsQF=kFALSE;
   H1_spec=0;
+  e_out_min = 0.;
+  e_out_max = 0.;
+  fRandom = 0;
 
     if( inp ){
       int tot_part = 100;
@@ -38,6 +41,11 @@ EdModel::EdModel(EdInput *inp){
 	  axis->Set(Input_spectrum->GetEntries(), new_bins); 
 	  delete new_bins; 
 	  delete Input_spectrum;
+	}
+	if (ph_model == 3) {
+	  e_out_min = inp->GetEnergy_min();
+	  e_out_max = inp->GetEnergy_max();
+	  printf("Set Energy range for beam from %.6f GeV to %.6f GeV \n",e_out_min,e_out_max); 
 	}
 	tg_Z = inp->Get_tg_Z();
 	tg_N = inp->Get_tg_N();
@@ -104,7 +112,9 @@ double EdModel::GetEnergy(){
   else if (ph_model == 2) { // PhaseSpace Multiple Energy
     while (isnan(e_out) || e_out ==0) e_out = H1_spec->GetRandom();
   }
-
+  else if (ph_model == 3) { // PhaseSpace Flat multiple Energy
+    e_out = fRandom->Uniform(e_out_min,e_out_max);
+  }
   return e_out;
 }
 
