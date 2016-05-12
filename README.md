@@ -118,4 +118,4 @@ Examples
 * See other examples of input file with input.dat (default), etc.
 * Photon production phasespace (flat energy range)  Omega + pi+ + pi- <br />
 ** Create generated output file: ./EdGen -i input_test_7.dat <br />
-** Analyze the output (with TProof) of the generated file (files analysis_5.C , analysis_5.h, run_analysis_5.C analysis_5_output.root): root run_analysis_5.C <br />
+** Analyze the output (with TProof) of the generated file (files analysis_7.C , analysis_7.h, run_analysis_7.C analysis_7_output.root): root run_analysis_7.C <br />
