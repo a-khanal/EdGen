@@ -11,7 +11,6 @@
 
 
 EdPhysics::EdPhysics(EdModel *model){
-  
     pdg = new TDatabasePDG();
     pdg->ReadPDGTable("eg_pdg_table.txt");
     fRandom = new TRandom2(0);
@@ -52,6 +51,7 @@ EdPhysics::EdPhysics(EdModel *model){
       if (overt[i] == 0) printf("Vertex n. %i, Origin (Beam + Tg) --> ",i+1);
       else printf("Vertex n. %i, Origin (pid=%i %.3e GeV,  Lifetime=%.3e) --> ",i+1,particle_id[overt[i]-1],part_pdg[overt[i]-1]->Mass(),part_pdg[overt[i]-1]->Lifetime());
       for(int j=0; j<npvert[i] ; j++) {
+	p4vector[i][j] = new TLorentzVector();
 	masses[i][j] = part_pdg[atpart]->Mass();
 	width[i][j] = part_pdg[atpart]->Width();
 	//	if (width[i][j] <= 0.001) val_mass[i][j] = masses[i][j];
@@ -227,6 +227,7 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   if (overt[i] == 0) { // (Origin Beam + Tg)
     e_lab = model->GetEnergy();
     beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
+    //    printf("Set energy from beam \n");
     if(!model->IsQF()) //standard target
       Wtg = beam + target;
     else{  //qf target
@@ -236,10 +237,11 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
     }
   }
   else {
+    //    TLorentzVector *p4vector_calc = p4vector[i][0]; 
     p4vector_c = new TLorentzVector(*p4vector[i][0]); 
     
     Wtg = *p4vector_c;
-    //   printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
+    // printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
   }
   //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[i]-1,Wtg.M());
 

@@ -3,6 +3,7 @@
 #
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(EdGen)
+set(CMAKE_BUILD_TYPE Debug)
 set(useROOT true)        # use true or false
 include(FindROOT.cmake)
 
@@ -17,6 +18,7 @@ if(WITHBOS)
 	  ${PROJECT_SOURCE_DIR}/EdGen.cxx
 	  ${PROJECT_SOURCE_DIR}/EdInput.cxx
 	  ${PROJECT_SOURCE_DIR}/EdModel.cxx
+	  ${PROJECT_SOURCE_DIR}/EdHisto.cxx
 	  ${PROJECT_SOURCE_DIR}/EdOutputBos.cxx
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.cxx
 	  ${PROJECT_SOURCE_DIR}/EdGenPhaseSpace.cxx
@@ -27,6 +29,7 @@ if(WITHBOS)
 	  ${PROJECT_SOURCE_DIR}/EdGen.h
 	  ${PROJECT_SOURCE_DIR}/EdInput.h
 	  ${PROJECT_SOURCE_DIR}/EdModel.h
+	  ${PROJECT_SOURCE_DIR}/EdHisto.h
 	  ${PROJECT_SOURCE_DIR}/EdOutputBos.h
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.h
 	  ${PROJECT_SOURCE_DIR}/EdGenPhaseSpace.h
@@ -43,6 +46,7 @@ else()
 	  ${PROJECT_SOURCE_DIR}/EdGen.cxx
 	  ${PROJECT_SOURCE_DIR}/EdInput.cxx
 	  ${PROJECT_SOURCE_DIR}/EdModel.cxx
+	  ${PROJECT_SOURCE_DIR}/EdHisto.cxx
 	  ${PROJECT_SOURCE_DIR}/EdOutput.cxx
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.cxx
 	  ${PROJECT_SOURCE_DIR}/EdGenPhaseSpace.cxx
@@ -53,6 +57,7 @@ else()
 	  ${PROJECT_SOURCE_DIR}/EdGen.h
 	  ${PROJECT_SOURCE_DIR}/EdInput.h
 	  ${PROJECT_SOURCE_DIR}/EdModel.h
+	  ${PROJECT_SOURCE_DIR}/EdHisto.h
 	  ${PROJECT_SOURCE_DIR}/EdOutput.h
 	  ${PROJECT_SOURCE_DIR}/EdPhysics.h	
 	  ${PROJECT_SOURCE_DIR}/EdGenPhaseSpace.h	
