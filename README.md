@@ -8,24 +8,19 @@ This version respect to the common version it supports the BOS output format (fo
 
 Prerequisites
 -------------
-* CERN ROOT  (tested at now with version ROOT 5.34/09
+* CERN ROOT  (tested at now with version ROOT 5.34.34 (seems there are problem with earlier version of root)
 * git 
 * cmake
 * Tested on ifarm.jlab.org on June 5 2014. Needs CLAS software (and OLD CERN LIBS) 
 * Environment variables on ifarm.jlab.org
 
 .
-setenv CERNLIB /apps/cernlib/x86_64_rhel4/2005/lib
 
-setenv CVSROOT /group/clas/clas_cvs
-
-setup cernlib tcl
-
-source /group/clas/builds/environment.csh
+source ./environment.csh (own version of environment variables for setting CLAS software in ifarm. It uses the latest version of root 5.34.34)
 
 Install
 -------
-This version is running correctly on ifarm.jlab.org. The version of cmake there is too old, so, just use /work/halla/parity/disk2/zana/Cmake/cmake-2.8.8/bin/cmake rather than the default cmake.
+
 * cd EdGen (go to the EdGen directory)
 * mkdir build
 * cd build
