@@ -8,7 +8,7 @@
 setenv PREFIX /group/clas/builds
 
 ### non-system builds of programs and libraries
-setenv GCC /apps/gcc/4.8.0
+#setenv GCC /apps/gcc/4.8.0
 #setenv ROOT /apps/root/5.34.05
 setenv CERN /apps/cernlib/x86_64_rhel6_4.7.2/2005
 setenv PYTHON /apps/python
@@ -22,7 +22,7 @@ setenv BOOST /group/clas/boost/boost-1.53.0
 setenv PATH .:${PREFIX}/bin
 setenv PATH ${PATH}:${PREFIX}/scripts
 
-setenv PATH ${PATH}:${GCC}/bin
+#setenv PATH ${PATH}:${GCC}/bin
 #setenv PATH ${PATH}:${ROOT}/root/bin
 setenv PATH ${PATH}:${PYTHON}/bin
 setenv PATH ${PATH}:${SCONS}/bin
@@ -40,7 +40,7 @@ setenv PATH ${PATH}:./bin:./build/bin
 ### run-time library loading path
 setenv LD_LIBRARY_PATH .:${PREFIX}/lib
 
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GCC}/lib64
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GCC}/lib64
 #setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ROOT}/root/lib
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PYTHON}/lib
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SCONS}/lib
