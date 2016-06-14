@@ -75,6 +75,7 @@ setenv CLAS6LIB ${PREFIX}/lib
 ########################################################################
 
 setenv CLAS_PARMS /group/clas/parms
+setenv JLAB_ROOT /site/12gev_phys
 setenv JLAB_VERSION 1.3
 source $JLAB_ROOT/$JLAB_VERSION/ce/jlab.csh
 
