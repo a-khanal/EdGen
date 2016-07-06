@@ -129,6 +129,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     double pos_z = fRandom->Uniform(-0.5*tglength,0.5*tglength);
     vertex.SetXYZ(pos_x,pos_y,pos_z);
     vertex = vertex + tgtoff;
+    //    printf("vertex at X=%.3e Y=%.3e Z=%.3e \n",pos_x,pos_y,pos_z);
     int test_gen = 0;
     count_phase = 0;
     while (test_gen < nvertex ) test_gen = Gen_Phasespace(model);
@@ -170,6 +171,8 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     out->Setvy(vy,n_part);
     out->Setvz(vz,n_part);
  
+    //    printf("written vertex at X=%.3e Y=%.3e Z=%.3e \n",vx[0],vy[0],vz[0]);
+
    if(model->IsQF())n_part--; //dirty hack to get it to write spectator!
 
     
@@ -288,6 +291,17 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   int failed_event = 0;
   double good_weight = 0.;
   valid_event = 0;
+  double tglx = model->GetLx();
+  double tgly = model->GetLy();
+  double tglength = model->GetLength();
+
+  TVector3 tgtoff = model->GetTgtOffset();
+
+  double pos_x = GetBeamProfile(tglx);
+  double pos_y = GetBeamProfile(tgly);
+  double pos_z = fRandom->Uniform(-0.5*tglength,0.5*tglength);
+  vertex.SetXYZ(pos_x,pos_y,pos_z);
+  vertex = vertex + tgtoff;
 
 
   for (int i=0; i<nvertex; i++) {
@@ -341,6 +355,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	  vx[atpart] = vertex.X();
 	  vy[atpart] = vertex.Y();
 	  vz[atpart] = vertex.Z();
+	  //	  printf("part %i written vertex at X=%.3e Y=%.3e Z=%.3e \n",atpart,vx[atpart],vy[atpart],vz[atpart]);
 
 	}
 	else {
@@ -350,7 +365,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	    vy[atpart] = vy[overt[i]-1];
 	    vz[atpart] = vz[overt[i]-1];
 	  }
-	  else {
+	  else if (part_pdg[overt[i]-1]->Width() > 0.0 && j==0 && i!=0){
 	    // cout<<"Going to do decay vertex "<< particle_id[atpart]<<endl;
 	    vertex.SetXYZ(vx[overt[i]-1],vy[overt[i]-1],vz[overt[i]-1]);
 	    vertex = Decay_vertex(p4vector[i][0],(overt[i]-1),vertex);
@@ -358,6 +373,12 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	    vy[atpart] = vertex.Y();
 	    vz[atpart] = vertex.Z();
 	  }
+	  else if (part_pdg[overt[i]-1]->Width() > 0.0 && j>0){
+	    vx[atpart] = vertex.X() ;
+	    vy[atpart] = vertex.Y();
+	    vz[atpart] = vertex.Z();
+	  }
+	  
 	}
 	atpart++;
       }
