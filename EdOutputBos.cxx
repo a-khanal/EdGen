@@ -211,7 +211,7 @@ void  EdOutput::MakeFileLUND(){
     if(i % 1000000 == 0 ){
       printf("Analyzed %09d events of total %09d \n",i,nentries);
     }
-    sprintf(outstring,"%i %i %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e",tot_part,(Z_ion+N_ion),Z_ion,x,y,W,Q2,nu);
+    sprintf(outstring,"%i %i %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e",n_part,(Z_ion+N_ion),Z_ion,x,y,W,Q2,nu);
     OUT << outstring << endl;
     fweight = 1.0;
     for (int j=0; j<fnvertex; j++) {
