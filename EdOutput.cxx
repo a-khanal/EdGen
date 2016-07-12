@@ -203,7 +203,7 @@ void  EdOutput::MakeFileLUND(){
   file.ReplaceAll("root","lund"); 
   char outstring[200];
 
-  
+  int active;
   Int_t nentries = (Int_t)fTree->GetEntries();
   int tot_part = 0;
   for (int j=0; j<n_part; j++) {
@@ -219,7 +219,7 @@ void  EdOutput::MakeFileLUND(){
     if(i % 1000000 == 0 ){
       printf("Analyzed %09d events of total %09d \n",i,nentries);
     }
-    sprintf(outstring,"%i %i %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e",tot_part,(Z_ion+N_ion),Z_ion,x,y,W,Q2,nu);
+    sprintf(outstring,"%i %i %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e",n_part,(Z_ion+N_ion),Z_ion,x,y,W,Q2,nu);
     OUT << outstring << endl;
     fweight = 1.0;
     for (int j=0; j<fnvertex; j++) {
@@ -227,15 +227,15 @@ void  EdOutput::MakeFileLUND(){
     }
     //    OUT << tot_part << " " << (Z_ion + N_ion)  << " " << Z_ion  << " " << "0"  << " " << "0" << " "  << x << " " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
     for (int j=0; j<n_part; j++) {
-      if (towrite[j] == 1) {
-	vxcm = vx[j]*100.0;
-	vycm = vy[j]*100.0;
-	vzcm = vz[j]*100.0;
+      if (towrite[j] == 1) active = 1;
+      else active = 0;
+      vxcm = vx[j]*100.0;
+      vycm = vy[j]*100.0;
+      vzcm = vz[j]*100.0;
 
-	sprintf(outstring,"  1 %i 1 %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e",charge[j],particle_id[j],px[j],py[j],pz[j],Ef[j],fweight,vxcm,vycm,vzcm); 
-	OUT << outstring << endl;
+      sprintf(outstring,"  %i %i %i %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e",j+1,charge[j],active,particle_id[j],px[j],py[j],pz[j],Ef[j],fweight,vxcm,vycm,vzcm); 
+      OUT << outstring << endl;
 	//	OUT << " \t " << "1" << " \t " << charge[j] << " \t " << "1" << " \t " << particle_id[j] << " \t " << "0" << " \t " << "0" << " \t " << px[j] << " \t " << py[j] << " \t " << pz[j] << " \t " << Ef[j] << " \t " << "0" << " \t " << vxcm  << " \t " << vycm << " \t " << vzcm << endl;
-      }
     }
   }
 

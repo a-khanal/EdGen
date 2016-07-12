@@ -1,10 +1,11 @@
 nevt:    100000;
 nprint:  10000;
-model:   2;
+model:   3;
 M_mode:  1;
 ifile:	 energy.txt; 
 beam:    22;
 en:	 5.5    GeV;
+Erange:  2.0,4.0 GeV;
 tg_Z:    1;
 tg_N:    0;
 tg_mass: 938.272 MeV;

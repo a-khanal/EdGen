@@ -27,9 +27,10 @@ END
 # Models
 # 1 Phase Space Single Energy (for example e-)
 # 2 Phase Space Energy Spectrum (for example gamma)
-# 3 Cross Section (sorry, not yet)
-# 4 Amplitudes (sorry, not yet) 
-# 5 Data Points (sorry, not yet)
+# 3 Phase Space Energy Spectrum (for example gamma) flat energy
+# 4 Cross Section (sorry, not yet)
+# 5 Amplitudes (sorry, not yet) 
+# 6 Data Points (sorry, not yet)
 #
 # M_model (Mass model: if width of particle>1MeV, one can
 #   generate the mass according to different distributions)

@@ -242,7 +242,7 @@ EdInput::EdInput(const char *file){
 	  if (valcommand.Contains(" m")) factor = 100.;
 	  else factor = 1; //rad
 	  valcommand.ReplaceAll(";","");
-	  valcommand.ReplaceAll(" m","");
+	  valcommand.ReplaceAll("m","");
 	  valcommand.ReplaceAll(" ","");
 	  valcommand.ReplaceAll("cm","");
 	  valc2 = valcommand(0,valcommand.First(","));
@@ -253,6 +253,21 @@ EdInput::EdInput(const char *file){
 	  valcommand.Replace(0,valc2.Length()+1,"");
 	  fData.off_z = factor*valcommand.Atof();
 	  printf("Offset_X=%.2f ;  Offset_Y=%.2f ; Offset_Z=%.2f\n",fData.off_x,fData.off_y,fData.off_z);
+	}
+	if (valcommand.Contains("Erange:")) {
+	  valcommand.ReplaceAll("Erange:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains("MeV")) factor = 0.001;
+	  else factor = 1;
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("GeV","");
+	  valcommand.ReplaceAll("MeV","");
+	  valc2 = valcommand(0,valcommand.First(","));
+	  fData.e_energy_min = factor*valc2.Atof();
+	  valcommand.Replace(0,valc2.Length()+1,"");
+	  fData.e_energy_max = factor*valcommand.Atof();
+	  printf("Energy_Min=%.2f ;  Energy_Max=%.2f ;\n",fData.e_energy_min,fData.e_energy_max);
 	}
 	if (valcommand.Contains("npart:")) {
 	  valcommand.ReplaceAll("npart:","");

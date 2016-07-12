@@ -8,24 +8,19 @@ This version respect to the common version it supports the BOS output format (fo
 
 Prerequisites
 -------------
-* CERN ROOT  (tested at now with version ROOT 5.34/09
+* CERN ROOT  (tested at now with version ROOT 5.34.34 (seems there are problem with earlier version of root)
 * git 
 * cmake
 * Tested on ifarm.jlab.org on June 5 2014. Needs CLAS software (and OLD CERN LIBS) 
 * Environment variables on ifarm.jlab.org
 
 .
-setenv CERNLIB /apps/cernlib/x86_64_rhel4/2005/lib
 
-setenv CVSROOT /group/clas/clas_cvs
-
-setup cernlib tcl
-
-source /group/clas/builds/environment.csh
+source ./environment.csh (own version of environment variables for setting CLAS software in ifarm. It uses the latest version of root 5.34.34)
 
 Install
 -------
-This version is running correctly on ifarm.jlab.org. The version of cmake there is too old, so, just use /work/halla/parity/disk2/zana/Cmake/cmake-2.8.8/bin/cmake rather than the default cmake.
+
 * cd EdGen (go to the EdGen directory)
 * mkdir build
 * cd build
@@ -52,6 +47,7 @@ Input file
 * ifile:	 energy.txt; 		 INPUT FILE SPECTRUM FOR BEAM (NEEDED FOR OPTION MODEL = 2) 
 * beam:    22;			 BEAM PARTICLE ID
 * en:	 11.0    GeV;		 BEAM ENERGY (NEEDED FOR OPTION MODEL = 1)
+* Erange:  2.0,5.0 GeV;          ENERGY RANGE FOR BEAM FLAT BETWEEN THESE 2 VALUES (NEEDED FOR OPTION MODEL = 3)
 * tg_Z:    1;	 		 TARGET Z (NOT WORKING YET)
 * tg_N:    1;			 TARGET N (NOT WORKING YET)
 * tg_mass  1.876  GeV;           TARGET MASS
@@ -68,9 +64,9 @@ Input file
 * theta_min:   2.5,4.0,5.0,4.0,5.0 deg;		 THETA CUT FOR SINGLE PARTICLE (FROM 'pid:' flag) (AT NOW IS AN HARD CUT ON THE SIMULATED DATA)
 * theta_max:   180.0,180.0,180.0,180.0,180.0 deg;		 THETA CUT FOR SINGLE PARTICLE (FROM 'pid:' flag) (AT NOW IS AN HARD CUT ON THE SIMULATED DATA)
 * nvertex: 2;			 NUMBER OF VERTEXES IN THE INTERACTION
-* vertex:  0,3;			 ORIGIN OF THE VERTEX (0 STANDS FOR BEAM+TARGET),PARTICLE GOING OUT OF VERTEX (READ IN SEQUENCE FROM pid
+* vertex:  0,3;			 ORIGIN OF THE VERTEX (0 STANDS FOR BEAM+TARGET; IN THIS EXAMPLE: 1 STANDS FOR 11, 2-->2212, 3-->113, 4-->211, 4-->-211), NUMBER OF PARTICLES GOING OUT OF VERTEX (READ IN SEQUENCE FROM THE pid ENTRY)
 * v_type:  1,1.0;		 TYPE OF VERTEX (AT NOW JUST OPTION 1, IN THE FUTURE DIFFERENT CROSS SECTION CAN BE APPLIED AT EACH VERTEX)
-* vertex:  3,2;			 ORIGIN OF VERTEX (3 IN THIS CASE IS PARTICLE WITH pid=113), PARTICLE GOING OUT OF VERTEX
+* vertex:  3,2;			 ORIGIN OF VERTEX (3 IN THIS CASE IS PARTICLE WITH pid=113), NUMBER OF PARTICLE GOING OUT OF VERTEX (STARTING FROM THE ONE LEFT FROM THE PREVIOUS VERTEX IN THE pid ENTRY: IN THIS EXAMPLE: 211,-211)
 * v_type:  1,1.0;		 SAME AS BEFORE
 * output:  2;			 OUTPUT FORMAT (SEE BELOW FOR OPTIONS)
 * END
@@ -79,9 +75,10 @@ Models
 -------
 * 1 Phase Space Single Energy (for example e-)
 * 2 Phase Space Energy Spectrum (for example gamma)
-* 3 Cross Section (sorry, not yet)
-* 4 Amplitudes (sorry, not yet) 
-* 5 Data Points (sorry, not yet)
+* 3 Phase Space Energy Spectrum (for example gamma) flat energy spectrum
+* 4 Cross Section (sorry, not yet)
+* 5 Amplitudes (sorry, not yet) 
+* 6 Data Points (sorry, not yet)
 
 Mass Models
 -------
@@ -114,3 +111,6 @@ Examples
 ** Create generated output file: ./EdGen -i input_test_6.dat <br />
 ** Analyze the output (with TProof) of the generated file (files analysis_6.C , analysis_6.h, run_analysis_6.C): root run_analysis_6.C <br />
 * See other examples of input file with input.dat (default), etc.
+* Photon production phasespace (flat energy range)  Omega + pi+ + pi- <br />
+** Create generated output file: ./EdGen -i input_test_7.dat <br />
+** Analyze the output (with TProof) of the generated file (files analysis_7.C , analysis_7.h, run_analysis_7.C analysis_7_output.root): root run_analysis_7.C <br />

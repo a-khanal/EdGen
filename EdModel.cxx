@@ -8,6 +8,10 @@ EdModel::EdModel(EdInput *inp){
   fFermiMomentum=0;
   fIsQF=kFALSE;
   H1_spec=0;
+  e_out_min = 0.;
+  e_out_max = 0.;
+  fRandom = 0;
+  histo_Random_set = 0;
 
     if( inp ){
       int tot_part = 100;
@@ -26,7 +30,7 @@ EdModel::EdModel(EdInput *inp){
 	  Input_spectrum->Branch("E_counts",&E_counts,"E_counts/F");
 	  printf("Reading input file %s\n",ifile.Data());
 	  Input_spectrum->ReadFile(ifile.Data(), "Energy_1:Energy_2:E_counts");
-	  H1_spec = new TH1F("H1_spec","H1_spec",Input_spectrum->GetEntries(),Input_spectrum->GetMinimum("Energy_1"),Input_spectrum->GetMaximum("Energy_2"));
+	  H1_spec = new EdHisto("H1_spec","H1_spec",Input_spectrum->GetEntries(),Input_spectrum->GetMinimum("Energy_1"),Input_spectrum->GetMaximum("Energy_2"));
 	  Axis_t *new_bins = new Axis_t[Input_spectrum->GetEntries() + 1];	    
 	  TAxis *axis = H1_spec->GetXaxis(); 
 	  for (int i=0; i< Input_spectrum->GetEntries(); i++) {
@@ -38,6 +42,11 @@ EdModel::EdModel(EdInput *inp){
 	  axis->Set(Input_spectrum->GetEntries(), new_bins); 
 	  delete new_bins; 
 	  delete Input_spectrum;
+	}
+	if (ph_model == 3) {
+	  e_out_min = inp->GetEnergy_min();
+	  e_out_max = inp->GetEnergy_max();
+	  printf("Set Energy range for beam from %.6f GeV to %.6f GeV \n",e_out_min,e_out_max); 
 	}
 	tg_Z = inp->Get_tg_Z();
 	tg_N = inp->Get_tg_N();
@@ -102,9 +111,19 @@ double EdModel::GetEnergy(){
 
   }
   else if (ph_model == 2) { // PhaseSpace Multiple Energy
-    while (isnan(e_out) || e_out ==0) e_out = H1_spec->GetRandom();
+    //    printf("here 1 %d\n",histo_Random_set);
+    if (histo_Random_set == 0 || H1_spec->GetRandom2() == 0) {
+      histo_Random_set = 1;
+      // printf("here 2 \n");
+      H1_spec->SetRandom(fRandom);
+      // printf("here 3 \n");
+    
+    }
+    while (isnan(e_out) || e_out ==0) e_out = H1_spec->GetEdRandom();
   }
-
+  else if (ph_model == 3) { // PhaseSpace Flat multiple Energy
+    e_out = fRandom->Uniform(e_out_min,e_out_max);
+  }
   return e_out;
 }
 

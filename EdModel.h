@@ -2,13 +2,13 @@
 #define __EdModel_h
 
 #include "EdInput.h"
+#include "EdHisto.h"
 #include <math.h>
 #include <cstdlib>
 
 #include <TVector3.h>
-#include <TH1F.h>
 #include "TTree.h"
-
+#include "TRandom2.h"
 
 // HG electron beam
 
@@ -43,10 +43,13 @@ class EdModel{
 	Bool_t IsQF() {return fIsQF;}
 	TH1F* GetFermi(){return fFermiMomentum;}
 	EdInput* GetInput(){return fInp;}
+	void SetRandom(TRandom2* thisRandom) {fRandom = thisRandom;};
    private:
 	double length;
 	double len_x;
 	double len_y;
+	double e_out_min;
+	double e_out_max;
 	int    tg_Z;
 	int    tg_N;
 	double tg_mass;
@@ -66,10 +69,12 @@ class EdModel{
 	int    v_type[10]; // vertex type (1= ratio  of probability , 2= cross section
 	double v_ratio[10]; // ration to be applied to vertex
 	TVector3 offset;
-	TH1F   *H1_spec;
+	EdHisto   *H1_spec;
 	TH1F* fFermiMomentum; //possible fermi momentum distribution for qf target
 	Bool_t fIsQF;  //Check if QuasiFree model
 	EdInput* fInp; //Saves having to duplicate getter functions....
+	TRandom2* fRandom;
+	int histo_Random_set;
 
 };
 #endif//__EdModel_h
