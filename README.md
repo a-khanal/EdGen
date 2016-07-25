@@ -16,7 +16,9 @@ Prerequisites
 
 .
 
-source ./environment.csh (own version of environment variables for setting CLAS software in ifarm. It uses the latest version of root 5.34.34)
+source ./environment.csh (own version of environment variables for setting CLAS software in ifarm. It uses the latest version of root 5.34.34). This is not needed: 
+1) OUTSIDE THE JLAB FARM 
+2) IN THE JLAB FARM IF YOU DON'T NEED BOS SUPPORT (you are using gemc, for example)
 
 Install
 -------
