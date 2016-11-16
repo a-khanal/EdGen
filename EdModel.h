@@ -24,6 +24,7 @@ class EdModel{
 	int    Get_tgN() {return tg_N; }
 	double Get_tgMass() {return tg_mass; }
 	double GetEnergy();
+	double GetTGMomentum();
 	const char * GetMassModelString();
 	double GetBeamPID() {return beam_pid;}
 	//	char* GetInFileName() {return ifile.data()};
@@ -50,13 +51,17 @@ class EdModel{
 	double len_y;
 	double e_out_min;
 	double e_out_max;
+	double tg_mom_min;
+	double tg_mom_max;
 	int    tg_Z;
 	int    tg_N;
 	double tg_mass;
 	int    ph_model;
+	int    tg_ph_model;
 	int    m_model;
 	TString ifile;
 	double energy;
+	double tg_momentum;
 	int    beam_pid;
 	double theta_min[100];
 	double theta_max[100];

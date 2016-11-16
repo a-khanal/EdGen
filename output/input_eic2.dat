@@ -2,35 +2,35 @@ nevt:    100000;
 nprint:  10000;
 model:   1;
 M_mode:  1;
-ifile:	 energy.txt; 
+ifile:	 energy3.txt; 
 beam:    11;
-en:	 5.5    GeV;
+en:	 12.0    GeV;
 tg_Z:    1;
 tg_N:    1;
-tg_mass: 1875.61 MeV;
-length:	 40	cm;
-ras_x:	 0.2	cm;
-ras_y:	 0.2	cm;	
-offset:  0.12,0.14,1.1 cm;
-npart:   5;
-pid:     11,2212,113,211,-211;
-theta_min: 0.5,4.0,5.0,4.0,5.0 deg;
-theta_max: 5.0,180.0,180.0,180.0,180.0 deg;
+tg_mass: 37.224390 GeV;
+tg_mom:  40.0  GeV;
+tg_mod:  1;
+length:	 0.5	cm;
+ras_x:	 0.05	cm;
+ras_y:	 0.05	cm;	
+offset:  0.0,0.0,0.0 cm;
+npart:   4;
+pid:     11,800008,22,800007;
+theta_min: 0.0,0.0,0.0,0.0 deg;
+theta_max: 180.0,180.0,180.0,180.0 deg;
 nvertex: 2;
-vertex:  0,3;
+vertex:  0,2;
 v_type:  1,1.0;
-vertex:  3,2;
+vertex:  2,2;
 v_type:  1,1.0;
 output:  1;
-#comment here 
 END
 # Models
 # 1 Phase Space Single Energy (for example e-)
 # 2 Phase Space Energy Spectrum (for example gamma)
-# 3 Phase Space Energy Spectrum (for example gamma) flat energy
-# 4 Cross Section (sorry, not yet)
-# 5 Amplitudes (sorry, not yet) 
-# 6 Data Points (sorry, not yet)
+# 3 Cross Section (sorry, not yet)
+# 4 Amplitudes (sorry, not yet) 
+# 5 Data Points (sorry, not yet)
 #
 # M_model (Mass model: if width of particle>1MeV, one can
 #   generate the mass according to different distributions)
@@ -46,3 +46,7 @@ END
 # 1  ROOT only
 # 2  ROOT + LUND
 # 3  ROOT + BOS
+# 4  ROOT + A2
+# Sn116: Target-Mass: 107961.738
+# Sn-120: Target-Mass: 111688.180
+# Sn-124: Target-Mass: 115417.416

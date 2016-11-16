@@ -20,6 +20,7 @@ EdModel::EdModel(EdInput *inp){
 	len_x = inp->Get_lenx();
 	len_y = inp->Get_leny();
 	ph_model = inp->GetModel();
+	tg_ph_model = inp->GetTGModel();
 	m_model = inp->GetMassModel();
 	beam_pid = inp->GetBeamPID();
 	if (ph_model == 2) {
@@ -48,10 +49,16 @@ EdModel::EdModel(EdInput *inp){
 	  e_out_max = inp->GetEnergy_max();
 	  printf("Set Energy range for beam from %.6f GeV to %.6f GeV \n",e_out_min,e_out_max); 
 	}
+	if (tg_ph_model == 3) {
+	  tg_mom_min = inp->GetTGMomentum_min();
+	  tg_mom_max = inp->GetTGMomentum_max();
+	  printf("Set Target Energy range for beam from %.6f GeV to %.6f GeV \n",tg_mom_min,tg_mom_max); 
+	}	
 	tg_Z = inp->Get_tg_Z();
 	tg_N = inp->Get_tg_N();
 	tg_mass = inp->Get_tg_mass();
 	energy = inp->Get_eEnergy();
+	tg_momentum = inp->Get_tgMomentum();
 	npart = inp->GetNpart();
 	tot_part = npart;
 	for (int i=0; i<tot_part; i++) {
@@ -126,6 +133,22 @@ double EdModel::GetEnergy(){
   }
   return e_out;
 }
+
+
+double EdModel::GetTGMomentum(){
+  double e_out = 0.;
+  if (tg_ph_model == 1) { // PhaseSpace Single Energy
+    e_out = tg_momentum;
+
+  }
+  else if (tg_ph_model == 3) { // PhaseSpace Flat multiple Energy
+    e_out = fRandom->Uniform(tg_mom_min,tg_mom_max);
+  }
+  return e_out;
+}
+
+
+
 
 const char * EdModel::GetMassModelString(){
   if (m_model == 1) return "Breit-Wigner";

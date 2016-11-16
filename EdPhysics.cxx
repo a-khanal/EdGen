@@ -18,8 +18,16 @@ EdPhysics::EdPhysics(EdModel *model){
     model->SetRandom(fRandom);
     //   gRandom->Delete();
     gRandom = fRandom;
+    tg_momentum = 0.0;
+    tg_random = 0;
+    tg_momentum = model->GetTGMomentum();
+    tg_mass =  model->Get_tgMass();
+    if (tg_momentum > 0.0 ) {
+      tg_random = 1;
+      printf("Target is assumed moving \n");
+    }
     printf("Seed number %d\n",fRandom->GetSeed());
-    target.SetPxPyPzE(0.0, 0.0, 0.0, model->Get_tgMass()); // target at rest
+    //    target.SetPxPyPzE(0.0, 0.0, 0.0, tg_mass); // target at rest
     //    if(model->GetInData().IsQF())spectator.SetXYZM(0,0,0,pdg->GetParticle(model->GetInData().qfspdg);
     mass_model = model->GetMassModel();
     n_part = model->GetNpart();
@@ -229,7 +237,10 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   //  printf("Energy = %f \n",e_lab);
   if (overt[i] == 0) { // (Origin Beam + Tg)
     e_lab = model->GetEnergy();
+    tg_momentum = model->GetTGMomentum();
     beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
+    if (tg_momentum>0.0) target.SetPxPyPzE(0.0, 0.0,-tg_momentum,pow(pow(tg_momentum,2)+pow(tg_mass,2),0.5));
+    else  target.SetPxPyPzE(0.0, 0.0,0.0,tg_mass);
     //    printf("Set energy from beam \n");
     if(!model->IsQF()) //standard target
       Wtg = beam + target;

@@ -8,6 +8,7 @@ struct inputdata {
     int    nevt;
     int    nprnt;
     int    model;
+    int    tg_model;
     int    mass_model;
   TString ifile;  //input spectrum for beam
   TString qf_file; //input fermi momentum distribution file 
@@ -26,8 +27,11 @@ struct inputdata {
     int    pid[100];
     int    beam_pid;
     double e_energy;
+    double tg_momentum;
     double e_energy_min;
     double e_energy_max;
+    double tg_momentum_min;
+    double tg_momentum_max;
     double length;
     double lenx;
     double leny;
@@ -55,6 +59,7 @@ class EdInput{
 	int    GetNprnt(){ return fData.nprnt; }
 	int    GetNpart(){ return fData.npart; }
 	int    GetModel(){ return fData.model; }
+	int    GetTGModel(){ return fData.tg_model; }
 	int    GetMassModel(){ return fData.mass_model; }
       TString  GetIfile(){ return fData.ifile; }
       TString  GetQFFile(){ return fData.qf_file; }
@@ -70,8 +75,11 @@ class EdInput{
 	int    GetV_ratio(int i){ return fData.v_ratio[i]; }
 	int    GetPid(int i){ return fData.pid[i]; }
 	double Get_eEnergy(){ return fData.e_energy; }
+	double Get_tgMomentum(){ return fData.tg_momentum; }
 	double GetEnergy_min(){ return fData.e_energy_min; }
 	double GetEnergy_max(){ return fData.e_energy_max; }
+	double GetTGMomentum_min(){ return fData.tg_momentum_min; }
+	double GetTGMomentum_max(){ return fData.tg_momentum_max; }
 	double Get_length(){ return fData.length; }
 	int    Get_tg_Z(){ return fData.tg_Z; }
 	int    Get_tg_N(){ return fData.tg_N; }
