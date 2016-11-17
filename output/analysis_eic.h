@@ -1,8 +1,11 @@
+//////////////////////////////////////////////////////////
+// This class has been automatically generated on
+// Fri Nov 11 15:44:26 2016 by ROOT version 5.34/21
 // from TChain T/
 //////////////////////////////////////////////////////////
 
-#ifndef analysis_7_h
-#define analysis_7_h
+#ifndef analysis_eic_h
+#define analysis_eic_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -20,42 +23,40 @@ class   TH2F;
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
-class analysis_7 : public TSelector {
+class analysis_eic : public TSelector {
 public :
-  TH1F           *h1_mass_omega;
-  TH1F           *h1_mass_omega_pi_pi;
-  TH2F           *h2_pimomega_pipomega;
-  TH1F           *h1_omega1;
-  TH1F           *h1_omega2;
-  TH1F           *h1_omega3;
-  TH1F           *h1_omega4;
+  TH1F           *h1_photon_energy;
+  TH1F           *h1_nuclei_energy;
+  TH1F           *h1_nuclei_angle;
+  TH1F           *h1_photon_angle;
+  TH1F           *h1_photon_energy_CM;
 
 
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
 
    // Declaration of leaf types
    Int_t           n_part;
-   Double_t        theta[7];   //[n_part]
-   Double_t        phi[7];   //[n_part]
+   Double_t        theta[6];   //[n_part]
+   Double_t        phi[6];   //[n_part]
    Double_t        x;
    Double_t        Ein_beam;
-   Double_t        Ef[7];   //[n_part]
+   Double_t        Ef[6];   //[n_part]
    Double_t        Q2;
    Double_t        nu;
    Double_t        W;
    Double_t        y;
    Int_t           Z_ion;
    Int_t           N_ion;
-   Int_t           particle_id[7];   //[n_part]
-   Int_t           charge[7];   //[n_part]
-   Double_t        pf[7];   //[n_part]
-   Double_t        px[7];   //[n_part]
-   Double_t        py[7];   //[n_part]
-   Double_t        pz[7];   //[n_part]
-   Double_t        vx[7];   //[n_part]
-   Double_t        vy[7];   //[n_part]
-   Double_t        vz[7];   //[n_part]
-   Double_t        weight[7];   //[n_part]
+   Int_t           particle_id[6];   //[n_part]
+   Int_t           charge[6];   //[n_part]
+   Double_t        pf[6];   //[n_part]
+   Double_t        px[6];   //[n_part]
+   Double_t        py[6];   //[n_part]
+   Double_t        pz[6];   //[n_part]
+   Double_t        vx[6];   //[n_part]
+   Double_t        vy[6];   //[n_part]
+   Double_t        vz[6];   //[n_part]
+   Double_t        weight[6];   //[n_part]
 
    // List of branches
    TBranch        *b_n_part;   //!
@@ -81,8 +82,8 @@ public :
    TBranch        *b_vz;   //!
    TBranch        *b_weight;   //!
 
-   analysis_7(TTree * /*tree*/ =0) : fChain(0) { }
-   virtual ~analysis_7() { }
+   analysis_eic(TTree * /*tree*/ =0) : fChain(0) { }
+   virtual ~analysis_eic() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -97,13 +98,13 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   ClassDef(analysis_7,0);
+   ClassDef(analysis_eic,0);
 };
 
 #endif
 
-#ifdef analysis_7_cxx
-void analysis_7::Init(TTree *tree)
+#ifdef analysis_eic_cxx
+void analysis_eic::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -142,7 +143,7 @@ void analysis_7::Init(TTree *tree)
    fChain->SetBranchAddress("weight", weight, &b_weight);
 }
 
-Bool_t analysis_7::Notify()
+Bool_t analysis_eic::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -153,4 +154,4 @@ Bool_t analysis_7::Notify()
    return kTRUE;
 }
 
-#endif // #ifdef analysis_7_cxx
+#endif // #ifdef analysis_eic_cxx

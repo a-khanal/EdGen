@@ -45,15 +45,22 @@ void analysis_7::SlaveBegin(TTree * /*tree*/)
    // The tree argument is deprecated (on PROOF 0 is passed).
 
    TString option = GetOption();
-   h1_phi = new TH1F("h1_phi","#phi #pi^{0} distribution",150,-180,360);
-   h1_costheta = new TH1F("h1_costheta","cos(#theta) #pi^{0} distribution (W rest frame)",100,-1.,1.);
-   h1_phi_cross = new TH1F("h1_phi_cross","#phi #pi^{0} distribution (CROSS SECTION)",150,-180,360);
-   h1_costheta_cross = new TH1F("h1_costheta_cross","cos(#theta) #pi^{0} distribution (W rest frame) (CROSS SECTION) /100 ",100,-1.,1.);
-   fOutput->Add(h1_phi);
-   fOutput->Add(h1_costheta);
-   fOutput->Add(h1_phi_cross);
-   fOutput->Add(h1_costheta_cross);
 
+   h1_mass_omega  = new TH1F("h1_mass_omega","Mass #omega; GeV",200,0.,2.0);
+   h1_mass_omega_pi_pi  = new TH1F("h1_mass_omega_pi_pi","Invariant Mass (#omega + #pi^{+} + #pi^{-}); GeV",200,0.,2.0);
+   h2_pimomega_pipomega = new TH2F("h2_pimomega_pipomega","Dalitz ;M^{2}(#pi^{-}#omega);M^{2}(#pi^{+}#omega)",200,0.,2.0,200,0.,2.0);
+   h1_omega1  = new TH1F("h1_omega1","Mass #omega (fast #pi^{+} fast #pi^{-}); GeV",200,0.,2.0);
+   h1_omega2  = new TH1F("h1_omega2","Mass #omega (fast #pi^{+} slow #pi^{-}); GeV",200,0.,2.0);
+   h1_omega3  = new TH1F("h1_omega3","Mass #omega (slow #pi^{+} fast #pi^{-}); GeV",200,0.,2.0);
+   h1_omega4  = new TH1F("h1_omega4","Mass #omega (slow #pi^{+} slow #pi^{-}); GeV",200,0.,2.0);
+
+   fOutput->Add(h1_mass_omega);
+   fOutput->Add(h1_mass_omega_pi_pi);
+   fOutput->Add(h2_pimomega_pipomega);
+   fOutput->Add(h1_omega1);
+   fOutput->Add(h1_omega2);
+   fOutput->Add(h1_omega3);
+   fOutput->Add(h1_omega4);
 }
 
 Bool_t analysis_7::Process(Long64_t entry)
@@ -81,20 +88,62 @@ Bool_t analysis_7::Process(Long64_t entry)
   b_py->GetEntry(entry);
   b_pz->GetEntry(entry);
   b_weight->GetEntry(entry);
-  b_Ein_beam->GetEntry(entry);
 
 
-  TLorentzVector p_pr(px[0],py[0],pz[0],Ef[0]);
-  TLorentzVector p_pi0(px[1],py[1],pz[1],Ef[1]);
 
-  TLorentzVector p_W = p_pr+p_pi0;
-  TVector3 b_3 =  p_W.BoostVector();
-  b_3 = -b_3;
-  p_pi0.Boost(b_3);
-  h1_costheta->Fill(p_pi0.CosTheta());
-  h1_phi->Fill(p_pi0.Phi()/TMath::Pi()*180.);
-  h1_costheta_cross->Fill(p_pi0.CosTheta(),weight[1]/100);
-  h1_phi_cross->Fill(p_pi0.Phi()/TMath::Pi()*180.,weight[1]);
+  TLorentzVector p_pip(px[2],py[2],pz[2],Ef[2]);
+  TLorentzVector p_pim(px[3],py[3],pz[3],Ef[3]);
+  TLorentzVector p_pip2(px[5],py[5],pz[5],Ef[5]);
+  TLorentzVector p_pim2(px[6],py[6],pz[6],Ef[6]);
+  TLorentzVector p_pi0(px[4],py[4],pz[4],Ef[4]);
+  TLorentzVector p_omega(px[1],py[1],pz[1],Ef[1]);
+
+  TLorentzVector p_d1 = p_pim+p_omega;
+  TLorentzVector p_d2 = p_pip+p_omega;
+  TLorentzVector p_tot = p_pip+p_pim+p_omega;
+
+  double beta_pip1 = p_pip.Beta();
+  double beta_pim1 = p_pim.Beta();
+  double beta_pip2 = p_pip2.Beta();
+  double beta_pim2 = p_pim2.Beta();
+
+  double weight_v = weight[0] * weight[4];
+  
+
+  h1_mass_omega->Fill(p_omega.M(),weight_v);
+  h1_mass_omega_pi_pi->Fill(p_tot.M(),weight_v);
+  h2_pimomega_pipomega->Fill(p_d1.M2(),p_d2.M2(),weight_v);
+
+  TLorentzVector p_pip_fast,p_pip_slow,p_pim_fast,p_pim_slow;
+  if (beta_pip1 >  beta_pip2) {
+    p_pip_fast = p_pip;
+    p_pip_slow = p_pip2;
+  }
+  else {
+    p_pip_fast = p_pip2;
+    p_pip_slow = p_pip;
+  }
+
+  if (beta_pim1 >  beta_pim2) {
+    p_pim_fast = p_pim;
+    p_pim_slow = p_pim2;
+  }
+  else {
+    p_pim_fast = p_pim2;
+    p_pim_slow = p_pim;
+  }
+
+  TLorentzVector p_omega1 = p_pip_fast+p_pim_fast+p_pi0;
+  TLorentzVector p_omega2 = p_pip_fast+p_pim_slow+p_pi0;
+  TLorentzVector p_omega3 = p_pip_slow+p_pim_fast+p_pi0;
+  TLorentzVector p_omega4 = p_pip_slow+p_pim_slow+p_pi0;
+
+  h1_omega1->Fill(p_omega1.M(),weight_v);
+  h1_omega2->Fill(p_omega2.M(),weight_v);
+  h1_omega3->Fill(p_omega3.M(),weight_v);
+  h1_omega4->Fill(p_omega4.M(),weight_v);
+
+  
 
    return kTRUE;
 }
@@ -112,7 +161,6 @@ void analysis_7::Terminate()
    // The Terminate() function is the last function to be called during
    // a query. It always runs on the client, it can be used to present
    // the results graphically or save the results to file.
-
   TFile file_out("analysis_7_output.root","recreate");
   TList *outlist = GetOutputList();
   

@@ -11,14 +11,24 @@
 
 
 EdPhysics::EdPhysics(EdModel *model){
-  
     pdg = new TDatabasePDG();
     pdg->ReadPDGTable("eg_pdg_table.txt");
     fRandom = new TRandom2(0);
     SetRandom(fRandom);
     gRandom = fRandom;
+    model->SetRandom(fRandom);
+    //   gRandom->Delete();
+    gRandom = fRandom;
+    tg_momentum = 0.0;
+    tg_random = 0;
+    tg_momentum = model->GetTGMomentum();
+    tg_mass =  model->Get_tgMass();
+    if (tg_momentum > 0.0 ) {
+      tg_random = 1;
+      printf("Target is assumed moving \n");
+    }
     printf("Seed number %d\n",fRandom->GetSeed());
-    target.SetPxPyPzE(0.0, 0.0, 0.0, model->Get_tgMass()); // target at rest
+    //    target.SetPxPyPzE(0.0, 0.0, 0.0, tg_mass); // target at rest
     //    if(model->GetInData().IsQF())spectator.SetXYZM(0,0,0,pdg->GetParticle(model->GetInData().qfspdg);
     mass_model = model->GetMassModel();
     n_part = model->GetNpart();
@@ -50,6 +60,7 @@ EdPhysics::EdPhysics(EdModel *model){
       if (overt[i] == 0) printf("Vertex n. %i, Origin (Beam + Tg) --> ",i+1);
       else printf("Vertex n. %i, Origin (pid=%i %.3e GeV,  Lifetime=%.3e) --> ",i+1,particle_id[overt[i]-1],part_pdg[overt[i]-1]->Mass(),part_pdg[overt[i]-1]->Lifetime());
       for(int j=0; j<npvert[i] ; j++) {
+	p4vector[i][j] = new TLorentzVector();
 	masses[i][j] = part_pdg[atpart]->Mass();
 	width[i][j] = part_pdg[atpart]->Width();
 	//	if (width[i][j] <= 0.001) val_mass[i][j] = masses[i][j];
@@ -126,6 +137,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     double pos_z = fRandom->Uniform(-0.5*tglength,0.5*tglength);
     vertex.SetXYZ(pos_x,pos_y,pos_z);
     vertex = vertex + tgtoff;
+    //    printf("vertex at X=%.3e Y=%.3e Z=%.3e \n",pos_x,pos_y,pos_z);
     int test_gen = 0;
     count_phase = 0;
     while (test_gen < nvertex ) test_gen = Gen_Phasespace(model);
@@ -167,6 +179,8 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     out->Setvy(vy,n_part);
     out->Setvz(vz,n_part);
  
+    //    printf("written vertex at X=%.3e Y=%.3e Z=%.3e \n",vx[0],vy[0],vz[0]);
+
    if(model->IsQF())n_part--; //dirty hack to get it to write spectator!
 
     
@@ -223,7 +237,11 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   //  printf("Energy = %f \n",e_lab);
   if (overt[i] == 0) { // (Origin Beam + Tg)
     e_lab = model->GetEnergy();
+    tg_momentum = model->GetTGMomentum();
     beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
+    if (tg_momentum>0.0) target.SetPxPyPzE(0.0, 0.0,-tg_momentum,pow(pow(tg_momentum,2)+pow(tg_mass,2),0.5));
+    else  target.SetPxPyPzE(0.0, 0.0,0.0,tg_mass);
+    //    printf("Set energy from beam \n");
     if(!model->IsQF()) //standard target
       Wtg = beam + target;
     else{  //qf target
@@ -233,10 +251,11 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
     }
   }
   else {
+    //    TLorentzVector *p4vector_calc = p4vector[i][0]; 
     p4vector_c = new TLorentzVector(*p4vector[i][0]); 
     
     Wtg = *p4vector_c;
-    //   printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
+    // printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
   }
   //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[i]-1,Wtg.M());
 
@@ -286,6 +305,17 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   TVector3 b_3 ;
   TLorentzVector p4_cmass;
   TLorentzVector Wtg_copy;
+  double tglx = model->GetLx();
+  double tgly = model->GetLy();
+  double tglength = model->GetLength();
+
+  TVector3 tgtoff = model->GetTgtOffset();
+
+  double pos_x = GetBeamProfile(tglx);
+  double pos_y = GetBeamProfile(tgly);
+  double pos_z = fRandom->Uniform(-0.5*tglength,0.5*tglength);
+  vertex.SetXYZ(pos_x,pos_y,pos_z);
+  vertex = vertex + tgtoff;
 
 
   for (int i=0; i<nvertex; i++) {
@@ -348,6 +378,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	  vx[atpart] = vertex.X();
 	  vy[atpart] = vertex.Y();
 	  vz[atpart] = vertex.Z();
+	  //	  printf("part %i written vertex at X=%.3e Y=%.3e Z=%.3e \n",atpart,vx[atpart],vy[atpart],vz[atpart]);
 
 	}
 	else {
@@ -357,7 +388,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	    vy[atpart] = vy[overt[i]-1];
 	    vz[atpart] = vz[overt[i]-1];
 	  }
-	  else {
+	  else if (part_pdg[overt[i]-1]->Width() > 0.0 && j==0 && i!=0){
 	    // cout<<"Going to do decay vertex "<< particle_id[atpart]<<endl;
 	    vertex.SetXYZ(vx[overt[i]-1],vy[overt[i]-1],vz[overt[i]-1]);
 	    vertex = Decay_vertex(p4vector[i][0],(overt[i]-1),vertex);
@@ -365,6 +396,12 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	    vy[atpart] = vertex.Y();
 	    vz[atpart] = vertex.Z();
 	  }
+	  else if (part_pdg[overt[i]-1]->Width() > 0.0 && j>0){
+	    vx[atpart] = vertex.X() ;
+	    vy[atpart] = vertex.Y();
+	    vz[atpart] = vertex.Z();
+	  }
+	  
 	}
 	atpart++;
       }

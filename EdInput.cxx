@@ -55,6 +55,13 @@ EdInput::EdInput(const char *file){
 	  fData.model = valcommand.Atoi();
 	  printf("Model for the generator %d\n",fData.model);
 	}
+	if (valcommand.Contains("tg_mod:")) {
+	  valcommand.ReplaceAll("tg_mod:","");
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  fData.tg_model = valcommand.Atoi();
+	  printf("Model for the target generator %d\n",fData.tg_model);
+	}
 	if (valcommand.Contains("M_mode:")) {
 	  valcommand.ReplaceAll("M_mode:","");
 	  valcommand.ReplaceAll(";","");
@@ -109,6 +116,18 @@ EdInput::EdInput(const char *file){
 	  valcommand.ReplaceAll("MeV","");
 	  fData.e_energy = factor*valcommand.Atof();
 	  printf("Beam energy of %.4f\n",fData.e_energy);
+	}
+	if (valcommand.Contains("tg_mom:")) {
+	  valcommand.ReplaceAll("tg_mom:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains("MeV")) factor = 0.001;
+	  else factor = 1;
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("GeV","");
+	  valcommand.ReplaceAll("MeV","");
+	  fData.tg_momentum = factor*valcommand.Atof();
+	  printf("Target momentum of %.4f\n",fData.tg_momentum);
 	}
 	if (valcommand.Contains("tg_Z:")) {
 	  valcommand.ReplaceAll("tg_Z:","");
@@ -218,7 +237,7 @@ EdInput::EdInput(const char *file){
 	  if (valcommand.Contains(" m")) factor = 100.;
 	  else factor = 1; //rad
 	  valcommand.ReplaceAll(";","");
-	  valcommand.ReplaceAll(" m","");
+	  valcommand.ReplaceAll("m","");
 	  valcommand.ReplaceAll(" ","");
 	  valcommand.ReplaceAll("cm","");
 	  valc2 = valcommand(0,valcommand.First(","));
@@ -229,6 +248,36 @@ EdInput::EdInput(const char *file){
 	  valcommand.Replace(0,valc2.Length()+1,"");
 	  fData.off_z = factor*valcommand.Atof();
 	  printf("Offset_X=%.2f ;  Offset_Y=%.2f ; Offset_Z=%.2f\n",fData.off_x,fData.off_y,fData.off_z);
+	}
+	if (valcommand.Contains("Erange:")) {
+	  valcommand.ReplaceAll("Erange:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains("MeV")) factor = 0.001;
+	  else factor = 1;
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("GeV","");
+	  valcommand.ReplaceAll("MeV","");
+	  valc2 = valcommand(0,valcommand.First(","));
+	  fData.e_energy_min = factor*valc2.Atof();
+	  valcommand.Replace(0,valc2.Length()+1,"");
+	  fData.e_energy_max = factor*valcommand.Atof();
+	  printf("Energy_Min=%.2f ;  Energy_Max=%.2f ;\n",fData.e_energy_min,fData.e_energy_max);
+	}
+	if (valcommand.Contains("TGrange:")) {
+	  valcommand.ReplaceAll("TGrange:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains("MeV")) factor = 0.001;
+	  else factor = 1;
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("GeV","");
+	  valcommand.ReplaceAll("MeV","");
+	  valc2 = valcommand(0,valcommand.First(","));
+	  fData.tg_momentum_min = factor*valc2.Atof();
+	  valcommand.Replace(0,valc2.Length()+1,"");
+	  fData.tg_momentum_max = factor*valcommand.Atof();
+	  printf("TG Energy_Min=%.2f ;  TG Energy_Max=%.2f ;\n",fData.tg_momentum_min,fData.tg_momentum_max);
 	}
 	if (valcommand.Contains("npart:")) {
 	  valcommand.ReplaceAll("npart:","");
