@@ -51,6 +51,7 @@ void EdOutput::InitTree(){
     fTree->Branch("nu", &nu, "nu/D");
 
     fTree->Branch("W", &W, "W/D");
+    fTree->Branch("t", &t_val, "t/D");
     fTree->Branch("y", &y, "y/D");
 
   

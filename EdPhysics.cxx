@@ -123,6 +123,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     //    for (int i=0; i<(n_part+1) ; i++) p4vector[i]->SetPxPyPzE(0.,0.,0.,0.);
     W4vector.SetXYZT(0.,0.,0.,0.);
     Q4vector.SetXYZT(0.,0.,0.,0.);
+    t4vector.SetXYZT(0.,0.,0.,0.);
 
     double pos_x = GetBeamProfile(tglx);
     double pos_y = GetBeamProfile(tgly);
@@ -155,7 +156,8 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     Z_ion = model->Get_tgZ(); 
     N_ion = model->Get_tgN();
     W = W4vector.M();
-    Q2= -Q4vector.M2(); 
+    Q2= -Q4vector.M2();
+    t_val= t4vector.M2();
     nu= Q4vector.Dot(target)/target.M(); 
     x = Q2/(2*target.M()*nu);
     y = Q4vector.Dot(target)/beam.Dot(target);
@@ -164,6 +166,7 @@ void EdPhysics::MakeEvent(EdOutput *out , EdModel *model){
     out->SetN_ion(N_ion);
     out->Setx(x);
     out->Sety(y);
+    out->Sett(t_val);
     out->SetW(W);
     out->SetQ2(Q2);
     out->Setnu(nu);
@@ -348,7 +351,9 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	py[atpart] = p4vector[i][j+1]->Py();
 	pz[atpart] = p4vector[i][j+1]->Pz();
 	if (atpart<npvert[0] && atpart>0) W4vector += *p4vector[i][j+1]; // I am assuming that the first particle is the scattered beam
-	if (atpart == 0)      Q4vector= beam - *p4vector[0][j+1];
+	if (atpart == 0)      Q4vector= beam - *p4vector[0][j+1];  // atpart=0->j=0 first particle in the first vertex array: should be the recoiling electron
+	if (atpart == 1)      t4vector= target - *p4vector[0][j+1]; // atpart=1->j=1 second particle in the first vertex array: should be the recoiling nuclei
+
 	weight[atpart] = weight2;
 	//	else weight[atpart] =  weight[overt[i]-1] * weight2;
 	if (overt[i] ==0) {

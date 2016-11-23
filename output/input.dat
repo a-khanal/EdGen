@@ -7,7 +7,7 @@ beam:    11;
 en:	 11.0    GeV;
 tg_Z:    1;
 tg_N:    1;
-tg_mass: 1875.61 MeV;
+tg_mass: 9.38272e-01 GeV;
 length:	 40	cm;
 ras_x:	 0.2	cm;
 ras_y:	 0.2	cm;	

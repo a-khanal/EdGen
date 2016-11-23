@@ -62,6 +62,7 @@ class EdOutput {
 	void Setx(double val){if (isnan(val)) x = 0; else x = val;}
 	void SetW(double val){if (isnan(val)) W = 0; else W = val; }
 	void Sety(double val){if (isnan(val)) y = 0; else y = val; }
+	void Sett(double val){if (isnan(val)) t_val = 0; else t_val = val; }
 	void SetQ2(double val){if (isnan(val)) Q2 = 0; else Q2 = val; }
 	void Setnu(double val){if (isnan(val)) nu = 0; else nu = val; }
 	void SetZ_ion(int val){Z_ion = val; }
@@ -99,6 +100,7 @@ class EdOutput {
 	double W;
 	double y;
 	double Q2;
+	double t_val;
 	double nu;
 	int particle_id[MAX_PART];
 	int charge[MAX_PART];

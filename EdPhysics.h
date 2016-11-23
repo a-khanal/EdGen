@@ -50,6 +50,7 @@ class EdPhysics: public EdGenPhaseSpace{
 	double x;
 	double W;
 	double y;
+	double t_val;
 	double Q2;
 	double nu;
 	double e_lab;
@@ -77,6 +78,7 @@ class EdPhysics: public EdGenPhaseSpace{
 	TLorentzVector spectator;
 	TLorentzVector W4vector;
 	TLorentzVector Q4vector;
+	TLorentzVector t4vector;
 	TVector3 vertex;
 	double theta_min[MAX_PART];
 	double theta_max[MAX_PART];
