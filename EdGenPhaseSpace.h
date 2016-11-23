@@ -30,6 +30,7 @@ public:
 
    Bool_t          SetDecay(TLorentzVector &P, Int_t nt, const Double_t *mass, Option_t *opt="");
    Double_t        Generate();
+   Double_t        Generate_t();
    TLorentzVector *GetDecay(Int_t n); 
 
    Int_t    GetNt()      const { return fNt;}
