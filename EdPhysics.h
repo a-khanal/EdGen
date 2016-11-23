@@ -82,6 +82,8 @@ class EdPhysics: public EdGenPhaseSpace{
 	TVector3 vertex;
 	double theta_min[MAX_PART];
 	double theta_max[MAX_PART];
+	double energy_min[MAX_PART];
+	double energy_max[MAX_PART];
 	int count_phase;
 
 	TVector3 Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert);

@@ -58,6 +58,8 @@ EdModel::EdModel(EdInput *inp){
 	  pid[i] = inp->GetPid(i);
 	  theta_min[i] = inp->Get_thetaMin(i);
 	  theta_max[i] = inp->Get_thetaMax(i);
+	  energy_min[i] = inp->Get_energyMin(i);
+	  energy_max[i] = inp->Get_energyMax(i);
 	}
 	nvertex = inp->GetNvertex();
 	tot_part = nvertex;

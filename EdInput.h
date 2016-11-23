@@ -34,6 +34,8 @@ struct inputdata {
  
     double theta_min[100];
     double theta_max[100];
+    double energy_min[100];
+    double energy_max[100];
 
     int    tg_Z;
     int    tg_N;
@@ -81,6 +83,8 @@ class EdInput{
 	int    Get_fmt(){ return fData.out_fmt; }
 	double Get_thetaMin(int i){ return fData.theta_min[i]; }
 	double Get_thetaMax(int i){ return fData.theta_max[i]; }
+	double Get_energyMin(int i){ return fData.energy_min[i]; }
+	double Get_energyMax(int i){ return fData.energy_max[i]; }
 
 	double GetTgtXoff(){ return fData.off_x; }
 	double GetTgtYoff(){ return fData.off_y; }

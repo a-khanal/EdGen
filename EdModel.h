@@ -40,6 +40,8 @@ class EdModel{
 	int    GetV_ratio(int i){ return v_ratio[i]; }
 	double GetTheta_min(int i) {return theta_min[i];}
 	double GetTheta_max(int i) {return theta_max[i];}
+	double GetEnergy_min(int i) {return energy_min[i];}
+	double GetEnergy_max(int i) {return energy_max[i];}
 	Bool_t IsQF() {return fIsQF;}
 	TH1F* GetFermi(){return fFermiMomentum;}
 	EdInput* GetInput(){return fInp;}
@@ -60,6 +62,8 @@ class EdModel{
 	int    beam_pid;
 	double theta_min[100];
 	double theta_max[100];
+	double energy_min[100];
+	double energy_max[100];
 	int    pid[100];
 	int    npart;
 	int    nvertex; // total number of vertexes

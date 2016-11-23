@@ -212,6 +212,46 @@ EdInput::EdInput(const char *file){
 	  fData.theta_max[fData.npart -1] = factor*valcommand.Atof();
 	  printf(" %f \n",fData.theta_max[fData.npart -1]);
 	}
+	if (valcommand.Contains("energy_min:")) {
+	  valcommand.ReplaceAll("energy_min:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains("MeV")) factor = 0.001;
+	  else factor = 1;
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("GeV","");
+	  valcommand.ReplaceAll("MeV","");
+	  printf("Energy min for particles: ");
+	  for (int i=0; i<fData.npart -1; i++) {
+	    poscomma = valcommand.First(",");
+	    valc2 = valcommand(0,poscomma);
+	    fData.energy_min[i] = factor*valc2.Atof();
+	    valcommand.Replace(0,poscomma+1,"");
+	    printf(" %f",fData.energy_min[i]);
+	  }
+	  fData.energy_min[fData.npart -1] = factor*valcommand.Atof();
+	  printf(" %f \n",fData.energy_min[fData.npart -1]);
+	}
+	if (valcommand.Contains("energy_max:")) {
+	  valcommand.ReplaceAll("energy_max:","");
+	  valcommand.ReplaceAll(";","");
+	  if (valcommand.Contains("MeV")) factor = 0.001;
+	  else factor = 1;
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("GeV","");
+	  valcommand.ReplaceAll("MeV","");
+	  printf("Energy min for particles: ");
+	  for (int i=0; i<fData.npart -1; i++) {
+	    poscomma = valcommand.First(",");
+	    valc2 = valcommand(0,poscomma);
+	    fData.energy_max[i] = factor*valc2.Atof();
+	    valcommand.Replace(0,poscomma+1,"");
+	    printf(" %f",fData.energy_max[i]);
+	  }
+	  fData.energy_max[fData.npart -1] = factor*valcommand.Atof();
+	  printf(" %f \n",fData.energy_max[fData.npart -1]);
+	}
 	if (valcommand.Contains("offset:")) {
 	  valcommand.ReplaceAll("offset:","");
 	  valcommand.ReplaceAll(";","");
