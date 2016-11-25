@@ -22,6 +22,7 @@ EdPhysics::EdPhysics(EdModel *model){
     target.SetPxPyPzE(0.0, 0.0, 0.0, model->Get_tgMass()); // target at rest
     //    if(model->GetInData().IsQF())spectator.SetXYZM(0,0,0,pdg->GetParticle(model->GetInData().qfspdg);
     mass_model = model->GetMassModel();
+    ph_model = model->GetPhModel();
     n_part = model->GetNpart();
     nvertex = model->GetNvertex();
     part_pdg[n_part] = pdg->GetParticle(model->GetBeamPID()); // Beam particle stored in part_pdg[n_part]
@@ -450,6 +451,10 @@ void EdPhysics::QFTarget(EdModel *model){
   target.SetXYZT(pxtar,pytar,pztar, Etar);
   
 }
+
+
+
+
 
 // double EdPhysics::t_reaction(TLorentzVector *Vrecoil_tg_4 ) {
 //   TLorentzVector tg_v4;

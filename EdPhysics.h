@@ -24,11 +24,13 @@ class EdPhysics: public EdGenPhaseSpace{
 	~EdPhysics();
 
 	void MakeEvent(EdOutput * , EdModel *);
+
 	enum nucl {kProton, kNeutron};
     private:
 
 	int n_part;
 	int mass_model;
+	int ph_model;
 	int nvertex; // total number of vertexes
 	int npvert[10]; // total number of particle at one vertex
 	int overt[10];  // particle at origin of one vertex (need to be already existing)

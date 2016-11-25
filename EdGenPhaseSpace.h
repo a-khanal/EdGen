@@ -20,6 +20,8 @@ private:
    Double_t     fWtMax;          // maximum weigth 
    TLorentzVector  fDecPro[18];  //kinematics of the generated particles 
    TRandom2 *ps_Random;
+   TLorentzVector *tg_4mom;
+   double t_value;
    Double_t PDK(Double_t a, Double_t b, Double_t c);  
 
 public:
@@ -36,6 +38,9 @@ public:
    Int_t    GetNt()      const { return fNt;}
    Double_t GetWtMax()   const { return fWtMax;}
    void SetRandom(TRandom2 *fRandom) {ps_Random = fRandom;};
+   void SetTarget_4p(TLorentzVector *f_4mom) {tg_4mom = f_4mom;};
+   void Set_tvalue(double f_val) {t_val = f_val;};
+
 };
 
 #endif//__EdGenPhaseSpace_h

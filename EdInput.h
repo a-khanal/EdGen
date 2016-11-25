@@ -10,6 +10,7 @@ struct inputdata {
     int    model;
     int    mass_model;
   TString ifile;  //input spectrum for beam
+  TString tfile;  //input spectrum for beam
   TString qf_file; //input fermi momentum distribution file 
   TString qf_fermi; //input fermi momentum distribution histogram
   int isqf; //is the target quasifree?
@@ -59,6 +60,7 @@ class EdInput{
 	int    GetModel(){ return fData.model; }
 	int    GetMassModel(){ return fData.mass_model; }
       TString  GetIfile(){ return fData.ifile; }
+      TString  GetTfile(){ return fData.tfile; }
       TString  GetQFFile(){ return fData.qf_file; }
       TString  GetQFFermi(){ return fData.qf_fermi; }
       int IsQF(){return fData.isqf;}

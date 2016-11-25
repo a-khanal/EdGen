@@ -71,6 +71,15 @@ EdInput::EdInput(const char *file){
 	  fData.ifile = valcommand.Strip();
 	  printf("Input file spectra from %s\n",fData.ifile.Data());
 	}
+	if (valcommand.Contains("tfile:")) {
+	  valcommand.ReplaceAll("tfile:","");
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("\n","");
+	  valcommand.ReplaceAll("\t","");
+	  fData.tfile = valcommand.Strip();
+	  printf("Input file spectra for t distribution from %s\n",fData.tfile.Data());
+	}
 	if (valcommand.Contains("qffile:")) {
 	  // printf("qfffile %s",valcommand.Data());
 	  valcommand.ReplaceAll("qffile:","");

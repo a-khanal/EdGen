@@ -12,16 +12,18 @@ EdModel::EdModel(EdInput *inp){
   e_out_max = 0.;
   fRandom = 0;
   histo_Random_set = 0;
+  histo_tRandom_set = 0;
 
     if( inp ){
       int tot_part = 100;
       ifile = inp->GetIfile();
-	length = inp->Get_length();
-	len_x = inp->Get_lenx();
-	len_y = inp->Get_leny();
-	ph_model = inp->GetModel();
-	m_model = inp->GetMassModel();
-	beam_pid = inp->GetBeamPID();
+      tfile = inp->GetTfile();
+      length = inp->Get_length();
+      len_x = inp->Get_lenx();
+      len_y = inp->Get_leny();
+      ph_model = inp->GetModel();
+      m_model = inp->GetMassModel();
+      beam_pid = inp->GetBeamPID();
 	if (ph_model == 2) {
 	  Float_t Energy_1, Energy_2, E_counts;
 	  TTree *Input_spectrum = new TTree("Hin", "HG Monte Carlo input");
@@ -47,6 +49,27 @@ EdModel::EdModel(EdInput *inp){
 	  e_out_min = inp->GetEnergy_min();
 	  e_out_max = inp->GetEnergy_max();
 	  printf("Set Energy range for beam from %.6f GeV to %.6f GeV \n",e_out_min,e_out_max); 
+	}
+	if (ph_model == 5) {
+	  Float_t Energy_1, Energy_2, E_counts;
+	  TTree *Input_spectrum = new TTree("Hin", "HG Monte Carlo input");
+	  Input_spectrum->Branch("Energy_1",&Energy_1,"Energy_1/F");
+	  Input_spectrum->Branch("Energy_2",&Energy_2,"Energy_2/F");
+	  Input_spectrum->Branch("E_counts",&E_counts,"E_counts/F");
+	  printf("Reading input file for t distribution %s\n",tfile.Data());
+	  Input_spectrum->ReadFile(tfile.Data(), "Energy_1:Energy_2:E_counts");
+	  H1_tspec = new EdHisto("H1_tspec","H1_tspec",Input_spectrum->GetEntries(),Input_spectrum->GetMinimum("Energy_1"),Input_spectrum->GetMaximum("Energy_2"));
+	  Axis_t *new_bins = new Axis_t[Input_spectrum->GetEntries() + 1];	    
+	  TAxis *axis = H1_tspec->GetXaxis(); 
+	  for (int i=0; i< Input_spectrum->GetEntries(); i++) {
+	    Input_spectrum->GetEntry(i);
+	    new_bins[i] = Energy_1;
+	    H1_tspec->SetBinContent(i+1,E_counts);
+	    if (i+1 == Input_spectrum->GetEntries()) new_bins[i+1] = Energy_2; 
+	  }
+	  axis->Set(Input_spectrum->GetEntries(), new_bins); 
+	  delete new_bins; 
+	  delete Input_spectrum;
 	}
 	tg_Z = inp->Get_tg_Z();
 	tg_N = inp->Get_tg_N();
@@ -101,6 +124,7 @@ EdModel::EdModel(EdInput *inp){
 
 EdModel::~EdModel(){
   if(H1_spec) delete H1_spec;
+  if(H1_tspec) delete H1_tspec;
   if(fFermiMomentum) delete fFermiMomentum;
   return;
 }
@@ -125,6 +149,22 @@ double EdModel::GetEnergy(){
   }
   else if (ph_model == 3) { // PhaseSpace Flat multiple Energy
     e_out = fRandom->Uniform(e_out_min,e_out_max);
+  }
+  return e_out;
+}
+
+double EdModel::Get_tvalue(){
+  double e_out = 0.;
+  if (ph_model == 5) { // PhaseSpace Multiple Energy
+    //    printf("here 1 %d\n",histo_Random_set);
+    if (histo_tRandom_set == 0 || H1_tspec->GetRandom2() == 0) {
+      histo_tRandom_set = 1;
+      // printf("here 2 \n");
+      H1_tspec->SetRandom(fRandom);
+      // printf("here 3 \n");
+    
+    }
+    while (isnan(e_out) || e_out ==0) e_out = H1_tspec->GetEdRandom();
   }
   return e_out;
 }

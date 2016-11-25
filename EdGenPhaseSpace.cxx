@@ -169,6 +169,7 @@ Double_t EdGenPhaseSpace::Generate_t()
    Double_t rno[kMAXP];
    rno[0] = 0;
    Int_t n;
+   fNt = fNt -1 ;
    if (fNt>2) {
       for (n=1; n<fNt-1; n++)  rno[n]=ps_Random->Rndm();   // fNt-2 random numbers
       qsort(rno+1 ,fNt-2 ,sizeof(Double_t) ,DoubleMax);  // sort them
@@ -176,7 +177,10 @@ Double_t EdGenPhaseSpace::Generate_t()
    rno[fNt-1] = 1;
 
    Double_t invMas[kMAXP], sum=0;
+   Int_t n2;
    for (n=0; n<fNt; n++) {
+     n2 = n;
+     if (n > 0) n2 = n+1; // n=1 correspond to the recoiled nuclei 
       sum      += fMass[n];
       invMas[n] = rno[n]*fTeCmTm + sum;
    }

@@ -24,6 +24,7 @@ class EdModel{
 	int    Get_tgN() {return tg_N; }
 	double Get_tgMass() {return tg_mass; }
 	double GetEnergy();
+	double Get_tvalue();
 	const char * GetMassModelString();
 	double GetBeamPID() {return beam_pid;}
 	//	char* GetInFileName() {return ifile.data()};
@@ -58,6 +59,7 @@ class EdModel{
 	int    ph_model;
 	int    m_model;
 	TString ifile;
+	TString tfile;
 	double energy;
 	int    beam_pid;
 	double theta_min[100];
@@ -74,11 +76,13 @@ class EdModel{
 	double v_ratio[10]; // ration to be applied to vertex
 	TVector3 offset;
 	EdHisto   *H1_spec;
+	EdHisto   *H1_tspec;
 	TH1F* fFermiMomentum; //possible fermi momentum distribution for qf target
 	Bool_t fIsQF;  //Check if QuasiFree model
 	EdInput* fInp; //Saves having to duplicate getter functions....
 	TRandom2* fRandom;
 	int histo_Random_set;
+	int histo_tRandom_set;
 
 };
 #endif//__EdModel_h
