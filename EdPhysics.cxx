@@ -235,7 +235,7 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   //  printf("Energy = %f \n",e_lab);
   if (overt[i] == 0) { // (Origin Beam + Tg)
     e_lab = model->GetEnergy();
-    beam.SetPxPyPzE(0.0, 0.0,e_lab,e_lab);
+    beam.SetPxPyPzE(0.0, 0.0,e_lab,pow(pow(e_lab,2)+pow(part_pdg[n_part]->Mass(),2),0.5));
     //    printf("Set energy from beam \n");
     if(!model->IsQF()) //standard target
       Wtg = beam + target;
@@ -329,7 +329,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //   printf("mass generated\n");
 
       SetDecay(Wtg, npvert[i], val_mass[i]);
-      weight2 = Generate();
+      weight2 = Generate_event();
       good_weight = fRandom->Uniform(1.0);
       if (good_weight <= weight2) {
 	weight2 = 1.0;
@@ -453,7 +453,32 @@ void EdPhysics::QFTarget(EdModel *model){
 }
 
 
+Double_t EdPhysics::Generate_event(){
 
+  Double_t calc_weight;
+  if (ph_model == 5) {
+    double e_val = model->Get_evalue);
+    double q2_val = model->Get_qvalue();
+    double t_calc = model->Get_tvalue();
+    double costheta_e ;
+    
+    if (e_val > 0.0) costheta_e = 1. -  0.5 * ( q2_Val + pow(part_pdg[n_part]->Mass(),2) + pow(part_pdg[0]->Mass(),2) ) ;  
+    double phi_e = fRandom->Uniform(TMath::Pi());
+
+    double val_tmass[10];
+    val_tmass[0] = val_mass[0][0];
+    val_tmass[1] = val_mass[0][1];
+    val_tmass[2] = model->Get_tvalue();
+    val_tmass[3] = model->Get_qvalue();
+    SetDecay(Wtg,4, val_tmass);
+    calc_weight = Generate();
+    for 
+
+  } 
+  else calc_weight = Generate();
+
+
+}
 
 
 // double EdPhysics::t_reaction(TLorentzVector *Vrecoil_tg_4 ) {

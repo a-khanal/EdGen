@@ -25,6 +25,8 @@ class EdModel{
 	double Get_tgMass() {return tg_mass; }
 	double GetEnergy();
 	double Get_tvalue();
+	double Get_qvalue();
+	double Get_evalue();
 	const char * GetMassModelString();
 	double GetBeamPID() {return beam_pid;}
 	//	char* GetInFileName() {return ifile.data()};
@@ -60,6 +62,8 @@ class EdModel{
 	int    m_model;
 	TString ifile;
 	TString tfile;
+	TString qfile;
+	TString efile;
 	double energy;
 	int    beam_pid;
 	double theta_min[100];
@@ -77,12 +81,16 @@ class EdModel{
 	TVector3 offset;
 	EdHisto   *H1_spec;
 	EdHisto   *H1_tspec;
+	EdHisto   *H1_qspec;
+	EdHisto   *H1_espec;
 	TH1F* fFermiMomentum; //possible fermi momentum distribution for qf target
 	Bool_t fIsQF;  //Check if QuasiFree model
 	EdInput* fInp; //Saves having to duplicate getter functions....
 	TRandom2* fRandom;
 	int histo_Random_set;
 	int histo_tRandom_set;
+	int histo_qRandom_set;
+	int histo_eRandom_set;
 
 };
 #endif//__EdModel_h

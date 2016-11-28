@@ -80,6 +80,24 @@ EdInput::EdInput(const char *file){
 	  fData.tfile = valcommand.Strip();
 	  printf("Input file spectra for t distribution from %s\n",fData.tfile.Data());
 	}
+	if (valcommand.Contains("qfile:")) {
+	  valcommand.ReplaceAll("qfile:","");
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("\n","");
+	  valcommand.ReplaceAll("\t","");
+	  fData.qfile = valcommand.Strip();
+	  printf("Input file spectra for q2 distribution from %s\n",fData.qfile.Data());
+	}
+	if (valcommand.Contains("efile:")) {
+	  valcommand.ReplaceAll("efile:","");
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  valcommand.ReplaceAll("\n","");
+	  valcommand.ReplaceAll("\t","");
+	  fData.efile = valcommand.Strip();
+	  printf("Input file spectra for E scattered electron distribution from %s\n",fData.efile.Data());
+	}
 	if (valcommand.Contains("qffile:")) {
 	  // printf("qfffile %s",valcommand.Data());
 	  valcommand.ReplaceAll("qffile:","");

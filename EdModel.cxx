@@ -13,11 +13,14 @@ EdModel::EdModel(EdInput *inp){
   fRandom = 0;
   histo_Random_set = 0;
   histo_tRandom_set = 0;
+  histo_qRandom_set = 0;
+  histo_eRandom_set = 0;
 
     if( inp ){
       int tot_part = 100;
       ifile = inp->GetIfile();
       tfile = inp->GetTfile();
+      qfile = inp->GetQfile();
       length = inp->Get_length();
       len_x = inp->Get_lenx();
       len_y = inp->Get_leny();
@@ -68,6 +71,42 @@ EdModel::EdModel(EdInput *inp){
 	    if (i+1 == Input_spectrum->GetEntries()) new_bins[i+1] = Energy_2; 
 	  }
 	  axis->Set(Input_spectrum->GetEntries(), new_bins); 
+	  delete new_bins; 
+	  delete Input_spectrum;
+	  TTree *Input_spectrum = new TTree("Hin", "HG Monte Carlo input");
+	  Input_spectrum->Branch("Energy_1",&Energy_1,"Energy_1/F");
+	  Input_spectrum->Branch("Energy_2",&Energy_2,"Energy_2/F");
+	  Input_spectrum->Branch("E_counts",&E_counts,"E_counts/F");
+	  printf("Reading input file for q distribution %s\n",qfile.Data());
+	  Input_spectrum->ReadFile(qfile.Data(), "Energy_1:Energy_2:E_counts");
+	  H1_qspec = new EdHisto("H1_qspec","H1_qspec",Input_spectrum->GetEntries(),Input_spectrum->GetMinimum("Energy_1"),Input_spectrum->GetMaximum("Energy_2"));
+	  Axis_t *new_bins = new Axis_t[Input_spectrum->GetEntries() + 1];	    
+	  TAxis *axisq = H1_tspec->GetXaxis(); 
+	  for (int i=0; i< Input_spectrum->GetEntries(); i++) {
+	    Input_spectrum->GetEntry(i);
+	    new_bins[i] = Energy_1;
+	    H1_qspec->SetBinContent(i+1,E_counts);
+	    if (i+1 == Input_spectrum->GetEntries()) new_bins[i+1] = Energy_2; 
+	  }
+	  axisq->Set(Input_spectrum->GetEntries(), new_bins); 
+	  delete new_bins; 
+	  delete Input_spectrum;
+	  TTree *Input_spectrum = new TTree("Hin", "HG Monte Carlo input");
+	  Input_spectrum->Branch("Energy_1",&Energy_1,"Energy_1/F");
+	  Input_spectrum->Branch("Energy_2",&Energy_2,"Energy_2/F");
+	  Input_spectrum->Branch("E_counts",&E_counts,"E_counts/F");
+	  printf("Reading input file for Energy e' distribution %s\n",efile.Data());
+	  Input_spectrum->ReadFile(efile.Data(), "Energy_1:Energy_2:E_counts");
+	  H1_espec = new EdHisto("H1_espec","H1_espec",Input_spectrum->GetEntries(),Input_spectrum->GetMinimum("Energy_1"),Input_spectrum->GetMaximum("Energy_2"));
+	  Axis_t *new_bins = new Axis_t[Input_spectrum->GetEntries() + 1];	    
+	  TAxis *axise = H1_espec->GetXaxis(); 
+	  for (int i=0; i< Input_spectrum->GetEntries(); i++) {
+	    Input_spectrum->GetEntry(i);
+	    new_bins[i] = Energy_1;
+	    H1_espec->SetBinContent(i+1,E_counts);
+	    if (i+1 == Input_spectrum->GetEntries()) new_bins[i+1] = Energy_2; 
+	  }
+	  axisq->Set(Input_spectrum->GetEntries(), new_bins); 
 	  delete new_bins; 
 	  delete Input_spectrum;
 	}
@@ -165,6 +204,38 @@ double EdModel::Get_tvalue(){
     
     }
     while (isnan(e_out) || e_out ==0) e_out = H1_tspec->GetEdRandom();
+  }
+  return e_out;
+}
+
+double EdModel::Get_qvalue(){
+  double e_out = 0.;
+  if (ph_model == 5) { // PhaseSpace Multiple Energy
+    //    printf("here 1 %d\n",histo_Random_set);
+    if (histo_qRandom_set == 0 || H1_qspec->GetRandom2() == 0) {
+      histo_qRandom_set = 1;
+      // printf("here 2 \n");
+      H1_qspec->SetRandom(fRandom);
+      // printf("here 3 \n");
+    
+    }
+    while (isnan(e_out) || e_out ==0) e_out = H1_qspec->GetEdRandom();
+  }
+  return e_out;
+}
+
+double EdModel::Get_evalue(){
+  double e_out = 0.;
+  if (ph_model == 5) { // PhaseSpace Multiple Energy
+    //    printf("here 1 %d\n",histo_Random_set);
+    if (histo_eRandom_set == 0 || H1_espec->GetRandom2() == 0) {
+      histo_eRandom_set = 1;
+      // printf("here 2 \n");
+      H1_espec->SetRandom(fRandom);
+      // printf("here 3 \n");
+    
+    }
+    while (isnan(e_out) || e_out ==0) e_out = H1_espec->GetEdRandom();
   }
   return e_out;
 }
