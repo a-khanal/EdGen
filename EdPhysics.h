@@ -93,6 +93,8 @@ class EdPhysics: public EdGenPhaseSpace{
 	double GetBeamProfile( double sigma = 1.);
 	int Gen_Phasespace(EdModel *model);
 	int Gen_Mass(int i,EdModel *model);
+	int Gen_Mass_t(EdModel *model);
+	Double_t Calc_gamma(double t_gen);
 	void QFTarget(EdModel *model);  //calculate quasi free target with fermi momentum
 
 	double t_reaction(TLorentzVector *Vrecoil_tg_4 );

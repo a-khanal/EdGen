@@ -284,6 +284,67 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   return good_gen; 
 }
 
+int EdPhysics::Gen_Mass_t(EdModel *model) {
+  // need to put all values of val_mass[i][j]with this function. The return integer is in case the generation is correct (could be a loop with while ( output < npvert[i] ) In this way I can generate all masses according to the value here generated. Also the order of generation, considering the limit should be random.
+  double prob[10];
+  fRandom->RndmArray(npvert[i],prob);
+  int good_gen = 1;
+  int k;
+  double total_gen = 0.;
+  //  for (int j=0; j<MAX_PART; j++) {
+    //  }
+  //  printf("Energy = %f \n",e_lab);
+  if (overt[i] == 0) { // (Origin Beam + Tg)
+    e_lab = model->GetEnergy();
+    beam.SetPxPyPzE(0.0, 0.0,e_lab,pow(pow(e_lab,2)+pow(part_pdg[n_part]->Mass(),2),0.5));
+    //    printf("Set energy from beam \n");
+    if(!model->IsQF()) //standard target
+      Wtg = beam + target;
+    else{  //qf target
+      QFTarget(model);
+      Wtg = beam + target;
+      //cout<<"W "<<Wtg.M()<<" "<<e_lab<<endl;
+    }
+  }
+  else {
+    //    TLorentzVector *p4vector_calc = p4vector[i][0]; 
+    p4vector_c = new TLorentzVector(*p4vector[i][0]); 
+    
+    Wtg = *p4vector_c;
+    // printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
+  }
+  //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[i]-1,Wtg.M());
+
+  for (int j=0; j<npvert[i] ; j++) {
+    k = (int)TMath::LocMin(npvert[i],prob);
+    val_mass[i][k] = masses[i][k];
+    if (width[i][k] > 0.001) {
+      val_mass[i][k] = 0.;
+      prob[k] = prob[k] +1;
+      if (mass_model==1 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
+	while (val_mass[i][k] <= 0.001) val_mass[i][k] = fRandom->BreitWigner(masses[i][k],width[i][k]); // Sometimes the random value is outside the limits 
+	if ( val_mass[i][k] > (Wtg.M()+max_mass[i][k] - total_gen))  good_gen = 0;
+      }
+      else if (mass_model==1 && (Wtg.M()+max_mass[i][k] - total_gen) < 0.001 ) good_gen = 0;
+      else if (mass_model==2 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
+	val_mass[i][k] = fRandom->Uniform(0.001,Wtg.M()+max_mass[i][k] - total_gen); // Sometimes the random val_massm is outside the limits ?!??!?!
+      }
+      else if (mass_model==2 && (Wtg.M()+max_mass[i][k] - total_gen) < 0.001 ) good_gen = 0; 
+      else if (mass_model==3 && (Wtg.M()+max_mass[i][k] - total_gen) > masses[i][k] ) val_mass[i][k] = masses[i][k] ;
+      else if (mass_model==3 && (Wtg.M()+max_mass[i][k] - total_gen) > masses[i][k] ) good_gen = 0;
+      else if (mass_model==4 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
+	while (val_mass[i][k] <= 0.001 || val_mass[i][k] > (Wtg.M()+max_mass[i][k] - total_gen)) val_mass[i][k] = fRandom->BreitWigner(masses[i][k],width[i][k]); // Sometimes the random value is outside the limits 
+	       }
+
+      else if (mass_model < 1 || mass_model > 3 ) printf("Mass model %i not allowed: Please check your input file \n",mass_model);
+      else good_gen = 0;
+      total_gen = total_gen + val_mass[i][k] ; 
+    }
+  }  // Take away from the mass the stable particle
+  //  printf("good_gen = %d \n",good_gen);
+  return good_gen; 
+}
+
 
 int EdPhysics::Gen_Phasespace(EdModel *model){
 
@@ -452,6 +513,13 @@ void EdPhysics::QFTarget(EdModel *model){
   
 }
 
+Double_t EdPhysics::Calc_gamma(double t_gen){
+
+  Double_t calc_gamma_v = 0.;
+  calc_gamma_v =  ( target.M(),2) + pow(part_pdg[1]->Mass(),2) - t ) / ( 2 * target->M() *  part_pdg[1]->Mass()) ;
+
+  return calc_gamma_v;
+}
 
 Double_t EdPhysics::Generate_event(){
 
@@ -460,11 +528,16 @@ Double_t EdPhysics::Generate_event(){
     double e_val = model->Get_evalue);
     double q2_val = model->Get_qvalue();
     double t_calc = model->Get_tvalue();
-    double costheta_e ;
-    
+    double costheta_e = 1.;
+    double mom_e = 0.;
+    if ( pow(e_val,2) - pow( part_pdg[n_part]->Mass(),2) > 0.)  mom_e = pow( pow(e_val,2) - pow( part_pdg[n_part]->Mass(),2) , 0.5);  
     if (e_val > 0.0) costheta_e = 1. -  0.5 * ( q2_Val + pow(part_pdg[n_part]->Mass(),2) + pow(part_pdg[0]->Mass(),2) ) ;  
-    double phi_e = fRandom->Uniform(TMath::Pi());
-
+    double sintheta_e = 0.;
+    if (cotheta_e >1. || costheta_e < 1.) costheta_e = 1.;
+    else sintheta_e = pow(1-pow(costheta_e,2),0.5);
+    double phi_e = fRandom->Uniform(TMath::Pi());    
+    p4vector[i][1]->SetPxPyPzE(mom_e *sintheta_e *TMath::Cos(phi_e),mom_e *sintheta_e *TMath::Sin(phi_e),mom_e*costheta_e,e_val);  // Fix scattered electron. I can now calculate the gamma*
+    
     double val_tmass[10];
     val_tmass[0] = val_mass[0][0];
     val_tmass[1] = val_mass[0][1];
