@@ -536,8 +536,20 @@ Double_t EdPhysics::Generate_event(){
     if (cotheta_e >1. || costheta_e < 1.) costheta_e = 1.;
     else sintheta_e = pow(1-pow(costheta_e,2),0.5);
     double phi_e = fRandom->Uniform(TMath::Pi());    
-    p4vector[i][1]->SetPxPyPzE(mom_e *sintheta_e *TMath::Cos(phi_e),mom_e *sintheta_e *TMath::Sin(phi_e),mom_e*costheta_e,e_val);  // Fix scattered electron. I can now calculate the gamma*
+    p4vector[0][1]->SetPxPyPzE(mom_e *sintheta_e *TMath::Cos(phi_e),mom_e *sintheta_e *TMath::Sin(phi_e),mom_e*costheta_e,e_val);  // Fix scattered electron. I can now calculate the gamma*
     
+    TLorentzVector gammastar = *p4vector[0][1] - beam;
+    
+    Wtg = gammastar + target;
+
+    TVector3 beta_Wtg = Wtg.BoostVector();
+    TVector3 beta_Tg =  target.BoostVector();
+
+    double gamma_Wtg = Wtg.Gamma();
+    double gamma_Tg = target.Gamma();
+    double gamma_n = Calc_gamma(t_calc);
+    
+    if (beta_TG.Mag()> 0.0) 
     double val_tmass[10];
     val_tmass[0] = val_mass[0][0];
     val_tmass[1] = val_mass[0][1];
