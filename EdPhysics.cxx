@@ -284,7 +284,7 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   return good_gen; 
 }
 
-int EdPhysics::Gen_Mass_t(EdModel *model) {
+int EdPhysics::Gen_Mass_t(EdModel *model, double t_gen) {
   // need to put all values of val_mass[i][j]with this function. The return integer is in case the generation is correct (could be a loop with while ( output < npvert[i] ) In this way I can generate all masses according to the value here generated. Also the order of generation, considering the limit should be random.
   double prob[10];
   fRandom->RndmArray(npvert[i],prob);
@@ -342,6 +342,10 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
     }
   }  // Take away from the mass the stable particle
   //  printf("good_gen = %d \n",good_gen);
+
+
+  mass_meson = 0.7; // THIS is the inportant value from this function
+
   return good_gen; 
 }
 
@@ -390,7 +394,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //   printf("mass generated\n");
 
       SetDecay(Wtg, npvert[i], val_mass[i]);
-      weight2 = Generate_event();
+      weight2 = Generate_event(model);
       good_weight = fRandom->Uniform(1.0);
       if (good_weight <= weight2) {
 	weight2 = 1.0;
@@ -521,7 +525,7 @@ Double_t EdPhysics::Calc_gamma(double t_gen){
   return calc_gamma_v;
 }
 
-Double_t EdPhysics::Generate_event(){
+Double_t EdPhysics::Generate_event(EdModel *model){
 
   Double_t calc_weight;
   if (ph_model == 5) {
@@ -544,12 +548,26 @@ Double_t EdPhysics::Generate_event(){
 
     TVector3 beta_Wtg = Wtg.BoostVector();
     TVector3 beta_Tg =  target.BoostVector();
+    TVector3 beta_tot;
+    double a_v, b_v, costheta_n; // costheta_n is the cos respect to the vector defined as beta_tot = a_v * beta_Wtg + beta_Tg
 
     double gamma_Wtg = Wtg.Gamma();
     double gamma_Tg = target.Gamma();
     double gamma_n = Calc_gamma(t_calc);
+
+    Gen_Mass_t(model,t_calc); // This will set mass_meson to the right generated value
+    double en_n = (Wtg.M2() - pow(mass_meson,2) + pow(part_pdg[1]->Mass(),2) )/ (2 *Wtg.M());  
+    double p_n = pow((Wtg.M2() - pow(mass_meson + part_pdg[1]->Mass() , 2) ) * (Wtg.M2() - pow(mass_meson - part_pdg[1]->Mass() , 2) ) , 0.5)/ (2 *Wtg.M());  
     
-    if (beta_TG.Mag()> 0.0) 
+    if (p_n > 0.0) {
+      
+      a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
+      b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg en_n;
+      beta_tot = a_v * beta_Wtg + beta_Tg;
+      costheta_n = b_v / p_n;
+    }
+
+
     double val_tmass[10];
     val_tmass[0] = val_mass[0][0];
     val_tmass[1] = val_mass[0][1];

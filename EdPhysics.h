@@ -24,7 +24,7 @@ class EdPhysics: public EdGenPhaseSpace{
 	~EdPhysics();
 
 	void MakeEvent(EdOutput * , EdModel *);
-	Double_t Generate_event();
+	Double_t Generate_event(EdModel *);
 
 	enum nucl {kProton, kNeutron};
     private:
@@ -73,6 +73,7 @@ class EdPhysics: public EdGenPhaseSpace{
 	double width[10][10];
 	int distr_mass[10][10];
 	double max_mass[10][10];
+	double mass_meson;
 	TRandom2 *fRandom;
 	TRandom2 *gRandom;
 	TLorentzVector Wtg;
@@ -93,7 +94,7 @@ class EdPhysics: public EdGenPhaseSpace{
 	double GetBeamProfile( double sigma = 1.);
 	int Gen_Phasespace(EdModel *model);
 	int Gen_Mass(int i,EdModel *model);
-	int Gen_Mass_t(EdModel *model);
+	int Gen_Mass_t(EdModel *model, double t_gen);
 	Double_t Calc_gamma(double t_gen);
 	void QFTarget(EdModel *model);  //calculate quasi free target with fermi momentum
 
