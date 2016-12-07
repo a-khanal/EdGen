@@ -525,7 +525,7 @@ void EdPhysics::QFTarget(EdModel *model){
 Double_t EdPhysics::Calc_gamma(double t_gen){
 
   Double_t calc_gamma_v = 0.;
-  calc_gamma_v =  ( target.M(),2) + pow(part_pdg[1]->Mass(),2) - t ) / ( 2 * target->M() *  part_pdg[1]->Mass()) ;
+  calc_gamma_v =  ( pow(target.M(),2) + pow(part_pdg[1]->Mass(),2) - t_gen ) / ( 2 * target.M() *  part_pdg[1]->Mass()) ;
 
   return calc_gamma_v;
 }
@@ -535,15 +535,15 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
   Double_t calc_weight;
   if (ph_model == 5 && i==0) {
     int good_tmass = 0;
-    double e_val = model->Get_evalue);
+    double e_val = model->Get_evalue();
     double q2_val = model->Get_qvalue();
     double t_calc = model->Get_tvalue();
     double costheta_e = 1.;
     double mom_e = 0.;
     if ( pow(e_val,2) - pow( part_pdg[n_part]->Mass(),2) > 0.)  mom_e = pow( pow(e_val,2) - pow( part_pdg[n_part]->Mass(),2) , 0.5);  
-    if (e_val > 0.0) costheta_e = 1. -  0.5 * ( q2_Val + pow(part_pdg[n_part]->Mass(),2) + pow(part_pdg[0]->Mass(),2) ) ;  
+    if (e_val > 0.0) costheta_e = 1. -  0.5 * ( q2_val + pow(part_pdg[n_part]->Mass(),2) + pow(part_pdg[0]->Mass(),2) ) ;  
     double sintheta_e = 0.;
-    if (cotheta_e >1. || costheta_e < 1.) costheta_e = 1.;
+    if (costheta_e >1. || costheta_e < 1.) costheta_e = 1.;
     else sintheta_e = pow(1-pow(costheta_e,2),0.5);
     double phi_e = fRandom->Uniform(2*TMath::Pi());    
     p4vector[0][1]->SetPxPyPzE(mom_e *sintheta_e *TMath::Cos(phi_e),mom_e *sintheta_e *TMath::Sin(phi_e),mom_e*costheta_e,e_val);  // Fix scattered electron. I can now calculate the gamma*
@@ -570,7 +570,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
 
     if (p_n > 0.0) {      
       a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
-      b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg en_n;
+      b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;
       beta_tot = a_v * beta_Wtg + beta_Tg;
       costheta_n = b_v / p_n;
     }
@@ -581,11 +581,11 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
       beta_tot_u = beta_tot.Unit(); // The p4vector of the nuclei is precessing around beta_tot with fixed theta and random phi, will need to be put back in the Center of Mass frame
       p4vector[0][2]->RotateUz(beta_tot_u);
     }
-    TVector3 *p3_meson = p4vector[0][2]->Vect();
-    p3_meson = -p3_meson; // Center of mass frame, the momentum is the opposite of the one of the recoiling nuclei
-    TLorentzVector *p4_meson = new TLorentzVector(p3_meson,pow(pow(p_n,2)+pow(mass_meson,2),0.5));
     if (npvert[0]==3) {
-      p4vector[0][3]->SetPxPyPzE(p3_meson->Px(),p3_meson->Py(),p3_meson->Pz(),pow(pow(val_mass_t1[1],2)+p3_meson->Mag2(),0.5));
+      TVector3 p3_meson = p4vector[0][2]->Vect();
+      p3_meson = -p3_meson; // Center of mass frame, the momentum is the opposite of the one of the recoiling nuclei
+
+      p4vector[0][3]->SetPxPyPzE(p3_meson.Px(),p3_meson.Py(),p3_meson.Pz(),pow(pow(val_mass_t1[1],2)+p3_meson.Mag2(),0.5));
       // Boost back in Lab frame
       p4vector[0][2]->Boost(beta_Wtg);
       p4vector[0][3]->Boost(beta_Wtg);

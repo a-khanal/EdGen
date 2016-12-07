@@ -55,60 +55,60 @@ EdModel::EdModel(EdInput *inp){
 	}
 	if (ph_model == 5) {
 	  Float_t Energy_1, Energy_2, E_counts;
-	  TTree *Input_spectrum = new TTree("Hin", "HG Monte Carlo input");
-	  Input_spectrum->Branch("Energy_1",&Energy_1,"Energy_1/F");
-	  Input_spectrum->Branch("Energy_2",&Energy_2,"Energy_2/F");
-	  Input_spectrum->Branch("E_counts",&E_counts,"E_counts/F");
+	  TTree *Input_spectrum2 = new TTree("Hin", "HG Monte Carlo input");
+	  Input_spectrum2->Branch("Energy_1",&Energy_1,"Energy_1/F");
+	  Input_spectrum2->Branch("Energy_2",&Energy_2,"Energy_2/F");
+	  Input_spectrum2->Branch("E_counts",&E_counts,"E_counts/F");
 	  printf("Reading input file for t distribution %s\n",tfile.Data());
-	  Input_spectrum->ReadFile(tfile.Data(), "Energy_1:Energy_2:E_counts");
-	  H1_tspec = new EdHisto("H1_tspec","H1_tspec",Input_spectrum->GetEntries(),Input_spectrum->GetMinimum("Energy_1"),Input_spectrum->GetMaximum("Energy_2"));
-	  Axis_t *new_bins = new Axis_t[Input_spectrum->GetEntries() + 1];	    
+	  Input_spectrum2->ReadFile(tfile.Data(), "Energy_1:Energy_2:E_counts");
+	  H1_tspec = new EdHisto("H1_tspec","H1_tspec",Input_spectrum2->GetEntries(),Input_spectrum2->GetMinimum("Energy_1"),Input_spectrum2->GetMaximum("Energy_2"));
+	  Axis_t *new_bins2 = new Axis_t[Input_spectrum2->GetEntries() + 1];	    
 	  TAxis *axis = H1_tspec->GetXaxis(); 
-	  for (int i=0; i< Input_spectrum->GetEntries(); i++) {
-	    Input_spectrum->GetEntry(i);
-	    new_bins[i] = Energy_1;
+	  for (int i=0; i< Input_spectrum2->GetEntries(); i++) {
+	    Input_spectrum2->GetEntry(i);
+	    new_bins2[i] = Energy_1;
 	    H1_tspec->SetBinContent(i+1,E_counts);
-	    if (i+1 == Input_spectrum->GetEntries()) new_bins[i+1] = Energy_2; 
+	    if (i+1 == Input_spectrum2->GetEntries()) new_bins2[i+1] = Energy_2; 
 	  }
-	  axis->Set(Input_spectrum->GetEntries(), new_bins); 
-	  delete new_bins; 
-	  delete Input_spectrum;
-	  TTree *Input_spectrum = new TTree("Hin", "HG Monte Carlo input");
-	  Input_spectrum->Branch("Energy_1",&Energy_1,"Energy_1/F");
-	  Input_spectrum->Branch("Energy_2",&Energy_2,"Energy_2/F");
-	  Input_spectrum->Branch("E_counts",&E_counts,"E_counts/F");
+	  axis->Set(Input_spectrum2->GetEntries(), new_bins2); 
+	  delete new_bins2; 
+	  delete Input_spectrum2;
+	  TTree *Input_spectrum3 = new TTree("Hin", "HG Monte Carlo input");
+	  Input_spectrum3->Branch("Energy_1",&Energy_1,"Energy_1/F");
+	  Input_spectrum3->Branch("Energy_2",&Energy_2,"Energy_2/F");
+	  Input_spectrum3->Branch("E_counts",&E_counts,"E_counts/F");
 	  printf("Reading input file for q distribution %s\n",qfile.Data());
-	  Input_spectrum->ReadFile(qfile.Data(), "Energy_1:Energy_2:E_counts");
-	  H1_qspec = new EdHisto("H1_qspec","H1_qspec",Input_spectrum->GetEntries(),Input_spectrum->GetMinimum("Energy_1"),Input_spectrum->GetMaximum("Energy_2"));
-	  Axis_t *new_bins = new Axis_t[Input_spectrum->GetEntries() + 1];	    
+	  Input_spectrum3->ReadFile(qfile.Data(), "Energy_1:Energy_2:E_counts");
+	  H1_qspec = new EdHisto("H1_qspec","H1_qspec",Input_spectrum3->GetEntries(),Input_spectrum3->GetMinimum("Energy_1"),Input_spectrum3->GetMaximum("Energy_2"));
+	  Axis_t *new_bins3 = new Axis_t[Input_spectrum3->GetEntries() + 1];	    
 	  TAxis *axisq = H1_tspec->GetXaxis(); 
-	  for (int i=0; i< Input_spectrum->GetEntries(); i++) {
-	    Input_spectrum->GetEntry(i);
-	    new_bins[i] = Energy_1;
+	  for (int i=0; i< Input_spectrum3->GetEntries(); i++) {
+	    Input_spectrum3->GetEntry(i);
+	    new_bins3[i] = Energy_1;
 	    H1_qspec->SetBinContent(i+1,E_counts);
-	    if (i+1 == Input_spectrum->GetEntries()) new_bins[i+1] = Energy_2; 
+	    if (i+1 == Input_spectrum3->GetEntries()) new_bins3[i+1] = Energy_2; 
 	  }
-	  axisq->Set(Input_spectrum->GetEntries(), new_bins); 
-	  delete new_bins; 
-	  delete Input_spectrum;
-	  TTree *Input_spectrum = new TTree("Hin", "HG Monte Carlo input");
-	  Input_spectrum->Branch("Energy_1",&Energy_1,"Energy_1/F");
-	  Input_spectrum->Branch("Energy_2",&Energy_2,"Energy_2/F");
-	  Input_spectrum->Branch("E_counts",&E_counts,"E_counts/F");
+	  axisq->Set(Input_spectrum3->GetEntries(), new_bins3); 
+	  delete new_bins3; 
+	  delete Input_spectrum3;
+	  TTree *Input_spectrum4 = new TTree("Hin", "HG Monte Carlo input");
+	  Input_spectrum4->Branch("Energy_1",&Energy_1,"Energy_1/F");
+	  Input_spectrum4->Branch("Energy_2",&Energy_2,"Energy_2/F");
+	  Input_spectrum4->Branch("E_counts",&E_counts,"E_counts/F");
 	  printf("Reading input file for Energy e' distribution %s\n",efile.Data());
-	  Input_spectrum->ReadFile(efile.Data(), "Energy_1:Energy_2:E_counts");
-	  H1_espec = new EdHisto("H1_espec","H1_espec",Input_spectrum->GetEntries(),Input_spectrum->GetMinimum("Energy_1"),Input_spectrum->GetMaximum("Energy_2"));
-	  Axis_t *new_bins = new Axis_t[Input_spectrum->GetEntries() + 1];	    
+	  Input_spectrum4->ReadFile(efile.Data(), "Energy_1:Energy_2:E_counts");
+	  H1_espec = new EdHisto("H1_espec","H1_espec",Input_spectrum4->GetEntries(),Input_spectrum4->GetMinimum("Energy_1"),Input_spectrum4->GetMaximum("Energy_2"));
+	  Axis_t *new_bins4 = new Axis_t[Input_spectrum4->GetEntries() + 1];	    
 	  TAxis *axise = H1_espec->GetXaxis(); 
-	  for (int i=0; i< Input_spectrum->GetEntries(); i++) {
-	    Input_spectrum->GetEntry(i);
-	    new_bins[i] = Energy_1;
+	  for (int i=0; i< Input_spectrum4->GetEntries(); i++) {
+	    Input_spectrum4->GetEntry(i);
+	    new_bins4[i] = Energy_1;
 	    H1_espec->SetBinContent(i+1,E_counts);
-	    if (i+1 == Input_spectrum->GetEntries()) new_bins[i+1] = Energy_2; 
+	    if (i+1 == Input_spectrum4->GetEntries()) new_bins4[i+1] = Energy_2; 
 	  }
-	  axisq->Set(Input_spectrum->GetEntries(), new_bins); 
-	  delete new_bins; 
-	  delete Input_spectrum;
+	  axisq->Set(Input_spectrum4->GetEntries(), new_bins4); 
+	  delete new_bins4; 
+	  delete Input_spectrum4;
 	}
 	tg_Z = inp->Get_tg_Z();
 	tg_N = inp->Get_tg_N();
