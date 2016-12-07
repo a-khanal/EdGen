@@ -195,49 +195,8 @@ Double_t EdGenPhaseSpace::Generate_t()
       wt *= pd[n];
    }
 
-   //
-   //-----> complete specification of event (Raubold-Lynch method)
-   //
-   fDecPro[0].SetPxPyPzE(0, pd[0], 0 , TMath::Sqrt(pd[0]*pd[0]+fMass[0]*fMass[0]) );
-
-   Int_t i=1;
-   Int_t j;
-   while (1) {
-      fDecPro[i].SetPxPyPzE(0, -pd[i-1], 0 , TMath::Sqrt(pd[i-1]*pd[i-1]+fMass[i]*fMass[i]) );
-
-      Double_t cZ   = 2*ps_Random->Rndm() - 1;
-      Double_t sZ   = TMath::Sqrt(1-cZ*cZ);
-      Double_t angY = 2*TMath::Pi() * ps_Random->Rndm();
-      Double_t cY   = TMath::Cos(angY);
-      Double_t sY   = TMath::Sin(angY);
-      for (j=0; j<=i; j++) {
-         TLorentzVector *v = fDecPro+j;
-         Double_t x = v->Px();
-         Double_t y = v->Py();
-         v->SetPx( cZ*x - sZ*y );
-         v->SetPy( sZ*x + cZ*y );   // rotation around Z
-         x = v->Px();
-         Double_t z = v->Pz();
-         v->SetPx( cY*x - sY*z );
-         v->SetPz( sY*x + cY*z );   // rotation around Y
-      }
-
-      if (i == (fNt-1)) break;
-
-      Double_t beta = pd[i] / sqrt(pd[i]*pd[i] + invMas[i]*invMas[i]);
-      for (j=0; j<=i; j++) fDecPro[j].Boost(0,beta,0);
-      i++;
-   }
- 
-   //
-   //---> final boost of all particles  
-   //
-   for (n=0;n<fNt;n++) fDecPro[n].Boost(fBeta[0],fBeta[1],fBeta[2]);
-
-   //
-   //---> return the weigth of event
-   //
-   return wt;
+   // return the momentum of the recoiled nuclei (will need to be multiplicated to the weight of the event
+   return pd[0];
 }
 
 

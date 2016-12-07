@@ -279,72 +279,77 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
       else good_gen = 0;
       total_gen = total_gen + val_mass[i][k] ; 
     }
+   
+
   }  // Take away from the mass the stable particle
   //  printf("good_gen = %d \n",good_gen);
   return good_gen; 
 }
 
-int EdPhysics::Gen_Mass_t(EdModel *model, double t_gen) {
+int EdPhysics::Gen_Mass_t(EdModel *model) {
   // need to put all values of val_mass[i][j]with this function. The return integer is in case the generation is correct (could be a loop with while ( output < npvert[i] ) In this way I can generate all masses according to the value here generated. Also the order of generation, considering the limit should be random.
   double prob[10];
-  fRandom->RndmArray(npvert[i],prob);
+  fRandom->RndmArray(npvert[0],prob);
   int good_gen = 1;
   int k;
   double total_gen = 0.;
   //  for (int j=0; j<MAX_PART; j++) {
     //  }
   //  printf("Energy = %f \n",e_lab);
-  if (overt[i] == 0) { // (Origin Beam + Tg)
+  if (overt[0] == 0) { // (Origin Beam + Tg)
     e_lab = model->GetEnergy();
     beam.SetPxPyPzE(0.0, 0.0,e_lab,pow(pow(e_lab,2)+pow(part_pdg[n_part]->Mass(),2),0.5));
     //    printf("Set energy from beam \n");
     if(!model->IsQF()) //standard target
-      Wtg = beam + target;
+      Wtg = gammastar + target;
     else{  //qf target
       QFTarget(model);
-      Wtg = beam + target;
+      Wtg = gammastar + target;
       //cout<<"W "<<Wtg.M()<<" "<<e_lab<<endl;
     }
   }
   else {
-    //    TLorentzVector *p4vector_calc = p4vector[i][0]; 
-    p4vector_c = new TLorentzVector(*p4vector[i][0]); 
+    //    TLorentzVector *p4vector_calc = p4vector[0][0]; 
+    p4vector_c = new TLorentzVector(*p4vector[0][0]); 
     
     Wtg = *p4vector_c;
-    // printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[i]-1,Wtg.M());
+    // printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[0]-1,Wtg.M());
   }
-  //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[i]-1,Wtg.M());
+  //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[0]-1,Wtg.M());
 
-  for (int j=0; j<npvert[i] ; j++) {
-    k = (int)TMath::LocMin(npvert[i],prob);
-    val_mass[i][k] = masses[i][k];
-    if (width[i][k] > 0.001) {
-      val_mass[i][k] = 0.;
+  for (int j=0; j<npvert[0] ; j++) {
+    k = (int)TMath::LocMin(npvert[0],prob);
+    val_mass[0][k] = masses[0][k];
+    if (width[0][k] > 0.001) {
+      val_mass[0][k] = 0.;
       prob[k] = prob[k] +1;
-      if (mass_model==1 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
-	while (val_mass[i][k] <= 0.001) val_mass[i][k] = fRandom->BreitWigner(masses[i][k],width[i][k]); // Sometimes the random value is outside the limits 
-	if ( val_mass[i][k] > (Wtg.M()+max_mass[i][k] - total_gen))  good_gen = 0;
+      if (mass_model==1 && (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen) > 0.001 ) {
+	while (val_mass[0][k] <= 0.001) val_mass[0][k] = fRandom->BreitWigner(masses[0][k],width[0][k]); // Sometimes the random value is outside the limits 
+	if ( val_mass[0][k] > (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen))  good_gen = 0;
       }
-      else if (mass_model==1 && (Wtg.M()+max_mass[i][k] - total_gen) < 0.001 ) good_gen = 0;
-      else if (mass_model==2 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
-	val_mass[i][k] = fRandom->Uniform(0.001,Wtg.M()+max_mass[i][k] - total_gen); // Sometimes the random val_massm is outside the limits ?!??!?!
+      else if (mass_model==1 && (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen) < 0.001 ) good_gen = 0;
+      else if (mass_model==2 && (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen) > 0.001 ) {
+	val_mass[0][k] = fRandom->Uniform(0.001,Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen); // Sometimes the random val_massm is outside the limits ?!??!?!
       }
-      else if (mass_model==2 && (Wtg.M()+max_mass[i][k] - total_gen) < 0.001 ) good_gen = 0; 
-      else if (mass_model==3 && (Wtg.M()+max_mass[i][k] - total_gen) > masses[i][k] ) val_mass[i][k] = masses[i][k] ;
-      else if (mass_model==3 && (Wtg.M()+max_mass[i][k] - total_gen) > masses[i][k] ) good_gen = 0;
-      else if (mass_model==4 && (Wtg.M()+max_mass[i][k] - total_gen) > 0.001 ) {
-	while (val_mass[i][k] <= 0.001 || val_mass[i][k] > (Wtg.M()+max_mass[i][k] - total_gen)) val_mass[i][k] = fRandom->BreitWigner(masses[i][k],width[i][k]); // Sometimes the random value is outside the limits 
+      else if (mass_model==2 && (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen) < 0.001 ) good_gen = 0; 
+      else if (mass_model==3 && (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen) > masses[0][k] ) val_mass[0][k] = masses[0][k] ;
+      else if (mass_model==3 && (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen) > masses[0][k] ) good_gen = 0;
+      else if (mass_model==4 && (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen) > 0.001 ) {
+	while (val_mass[0][k] <= 0.001 || val_mass[0][k] > (Wtg.M()+max_mass[0][k]+part_pdg[0]->Mass() - total_gen)) val_mass[0][k] = fRandom->BreitWigner(masses[0][k],width[0][k]); // Sometimes the random value is outside the limits 
 	       }
 
       else if (mass_model < 1 || mass_model > 3 ) printf("Mass model %i not allowed: Please check your input file \n",mass_model);
       else good_gen = 0;
-      total_gen = total_gen + val_mass[i][k] ; 
+      total_gen = total_gen + val_mass[0][k] ; 
     }
+   
+
   }  // Take away from the mass the stable particle
   //  printf("good_gen = %d \n",good_gen);
-
-
-  mass_meson = 0.7; // THIS is the inportant value from this function
+  for (int j=0; j<(npvert[0]-1) ; j++) {
+    val_mass_t1[j] = val_mass[0][j+1];
+    if (j>0) val_mass_t2[j-1] = val_mass[0][j+1];
+  }
 
   return good_gen; 
 }
@@ -394,7 +399,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //   printf("mass generated\n");
 
       SetDecay(Wtg, npvert[i], val_mass[i]);
-      weight2 = Generate_event(model);
+      weight2 = Generate_event(model,i);
       good_weight = fRandom->Uniform(1.0);
       if (good_weight <= weight2) {
 	weight2 = 1.0;
@@ -403,7 +408,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
       //      printf("weight= %.3e\n",weight2);
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
-	p4vector[i][j+1] = GetDecay(j);
+	//	p4vector[i][j+1] = GetDecay(j); // Now in the Generate_event function
 	//	cout << "Particle n." << atpart << " Mass=" << p4vector[atpart]->M() << endl; 
 	for (int k=i+1; k<nvertex; k++) {
 	  //	  printf ("i=%i k=%i \n",i,k);
@@ -525,10 +530,11 @@ Double_t EdPhysics::Calc_gamma(double t_gen){
   return calc_gamma_v;
 }
 
-Double_t EdPhysics::Generate_event(EdModel *model){
+Double_t EdPhysics::Generate_event(EdModel *model, int i){
 
   Double_t calc_weight;
-  if (ph_model == 5) {
+  if (ph_model == 5 && i==0) {
+    int good_tmass = 0;
     double e_val = model->Get_evalue);
     double q2_val = model->Get_qvalue();
     double t_calc = model->Get_tvalue();
@@ -539,48 +545,68 @@ Double_t EdPhysics::Generate_event(EdModel *model){
     double sintheta_e = 0.;
     if (cotheta_e >1. || costheta_e < 1.) costheta_e = 1.;
     else sintheta_e = pow(1-pow(costheta_e,2),0.5);
-    double phi_e = fRandom->Uniform(TMath::Pi());    
+    double phi_e = fRandom->Uniform(2*TMath::Pi());    
     p4vector[0][1]->SetPxPyPzE(mom_e *sintheta_e *TMath::Cos(phi_e),mom_e *sintheta_e *TMath::Sin(phi_e),mom_e*costheta_e,e_val);  // Fix scattered electron. I can now calculate the gamma*
     
-    TLorentzVector gammastar = *p4vector[0][1] - beam;
-    
-    Wtg = gammastar + target;
+    gammastar = *p4vector[0][1] - beam;
+    while (good_tmass == 0) good_tmass = Gen_Mass_t(model); 
+    // val_mass_t1: masses with rec_nuclei,rest
+    // val_mass_t2: masses with rest
 
-    TVector3 beta_Wtg = Wtg.BoostVector();
-    TVector3 beta_Tg =  target.BoostVector();
+    TVector3 beta_Wtg = Wtg.BoostVector(); // In order to boost from the Center of mass system
+    TVector3 beta_Tg =  -target.BoostVector(); // In order to boost to the target system (vector does not need to be changed, since I used analytic formulas at each step. In the target system the value of t is directly connected to the gamma of the recoiling nuclei with the function Calc_gamma(t_calc)
     TVector3 beta_tot;
-    double a_v, b_v, costheta_n; // costheta_n is the cos respect to the vector defined as beta_tot = a_v * beta_Wtg + beta_Tg
+    TVector3 beta_tot_u;
+    double a_v, b_v, costheta_n, sintheta_n; // costheta_n is the cos respect to the vector defined as beta_tot = a_v * beta_Wtg + beta_Tg
 
     double gamma_Wtg = Wtg.Gamma();
     double gamma_Tg = target.Gamma();
     double gamma_n = Calc_gamma(t_calc);
+    double phi_n, theta_n;
 
-    Gen_Mass_t(model,t_calc); // This will set mass_meson to the right generated value
-    double en_n = (Wtg.M2() - pow(mass_meson,2) + pow(part_pdg[1]->Mass(),2) )/ (2 *Wtg.M());  
-    double p_n = pow((Wtg.M2() - pow(mass_meson + part_pdg[1]->Mass() , 2) ) * (Wtg.M2() - pow(mass_meson - part_pdg[1]->Mass() , 2) ) , 0.5)/ (2 *Wtg.M());  
-    
-    if (p_n > 0.0) {
-      
+    SetDecay(Wtg, npvert[i]-1, val_mass_t1);
+    double p_n = Generate_t(); // Generate_t return the momentum of the recoiled nuclei
+    double en_n = pow(pow( part_pdg[1]->Mass() ,2 ) + pow(p_n,2) , 0.5);  
+
+    if (p_n > 0.0) {      
       a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg en_n;
       beta_tot = a_v * beta_Wtg + beta_Tg;
       costheta_n = b_v / p_n;
     }
-
-
-    double val_tmass[10];
-    val_tmass[0] = val_mass[0][0];
-    val_tmass[1] = val_mass[0][1];
-    val_tmass[2] = model->Get_tvalue();
-    val_tmass[3] = model->Get_qvalue();
-    SetDecay(Wtg,4, val_tmass);
-    calc_weight = Generate();
-    for 
-
+    if (costheta_n <=1. && costheta_n >= -1.) {  //  this will include the fact that the angle is defined and that p_n > 0.
+      phi_n = fRandom->Uniform(2*TMath::Pi());
+      sintheta_n = pow(1-pow(costheta_n,2),0.5);
+      p4vector[0][2]->SetPxPyPzE(p_n *sintheta_n *TMath::Cos(phi_n),p_n *sintheta_n *TMath::Sin(phi_n),p_n*costheta_n,en_n);  // Fix scattered nuclei.
+      beta_tot_u = beta_tot.Unit(); // The p4vector of the nuclei is precessing around beta_tot with fixed theta and random phi, will need to be put back in the Center of Mass frame
+      p4vector[0][2]->RotateUz(beta_tot_u);
+    }
+    TVector3 *p3_meson = p4vector[0][2]->Vect();
+    p3_meson = -p3_meson; // Center of mass frame, the momentum is the opposite of the one of the recoiling nuclei
+    TLorentzVector *p4_meson = new TLorentzVector(p3_meson,pow(pow(p_n,2)+pow(mass_meson,2),0.5));
+    if (npvert[0]==3) {
+      p4vector[0][3]->SetPxPyPzE(p3_meson->Px(),p3_meson->Py(),p3_meson->Pz(),pow(pow(val_mass_t1[1],2)+p3_meson->Mag2(),0.5));
+      // Boost back in Lab frame
+      p4vector[0][2]->Boost(beta_Wtg);
+      p4vector[0][3]->Boost(beta_Wtg);
+    }
+    else if (npvert[0] > 3) {
+     // Boost back in Lab frame
+      p4vector[0][2]->Boost(beta_Wtg);      
+      Wtg = Wtg-*p4vector[0][2]; // take away the recoiled nuclei and recalculate PhaseSpace with the rest
+      SetDecay(Wtg, npvert[i]-2, val_mass_t2); // Gen_mass_t fixed these values for this new array of masses
+      calc_weight = p_n*Generate(); // p_n is actually the weight of the first event
+      for (int j=2; j<npvert[0] ; j++)  p4vector[i][j+1] = GetDecay(j);
+    }
+    else {
+      printf("??????? First vertex particles are just 2 and you asked to modulate Q2, nu and t??????? \n");
+    }
+  
   } 
-  else calc_weight = Generate();
-
-
+ else {
+   calc_weight = Generate();
+   for (int j=0; j<npvert[i] ; j++)  p4vector[i][j+1] = GetDecay(j);
+ }
 }
 
 
