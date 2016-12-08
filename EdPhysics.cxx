@@ -564,7 +564,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     SetDecay(Wtg, npvert[i]-1, val_mass_t1);
     double p_n = Generate_t(); // Generate_t return the momentum of the recoiled nuclei
     double en_n = pow(pow( part_pdg[1]->Mass() ,2 ) + pow(p_n,2) , 0.5);  
-    printf("Generate_t() done pn=%.3e\n",p_n);
+    printf("Generate_t() done pn=%.5e\n",p_n);
     if (p_n > 0.0) {      
       a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;
