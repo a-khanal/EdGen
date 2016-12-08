@@ -21,6 +21,7 @@ EdModel::EdModel(EdInput *inp){
       ifile = inp->GetIfile();
       tfile = inp->GetTfile();
       qfile = inp->GetQfile();
+      efile = inp->GetEfile();
       length = inp->Get_length();
       len_x = inp->Get_lenx();
       len_y = inp->Get_leny();
@@ -171,7 +172,7 @@ EdModel::~EdModel(){
 
 double EdModel::GetEnergy(){
   double e_out = 0.;
-  if (ph_model == 1) { // PhaseSpace Single Energy
+  if (ph_model == 1 || ph_model==5) { // PhaseSpace Single Energy
     e_out = energy;
 
   }

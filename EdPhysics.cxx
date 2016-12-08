@@ -23,6 +23,7 @@ EdPhysics::EdPhysics(EdModel *model){
     //    if(model->GetInData().IsQF())spectator.SetXYZM(0,0,0,pdg->GetParticle(model->GetInData().qfspdg);
     mass_model = model->GetMassModel();
     ph_model = model->GetPhModel();
+    printf("In Physics ph_model=%i\n",ph_model);
     n_part = model->GetNpart();
     nvertex = model->GetNvertex();
     part_pdg[n_part] = pdg->GetParticle(model->GetBeamPID()); // Beam particle stored in part_pdg[n_part]
@@ -236,7 +237,7 @@ int EdPhysics::Gen_Mass(int i,EdModel *model) {
   if (overt[i] == 0) { // (Origin Beam + Tg)
     e_lab = model->GetEnergy();
     beam.SetPxPyPzE(0.0, 0.0,e_lab,pow(pow(e_lab,2)+pow(part_pdg[n_part]->Mass(),2),0.5));
-    //    printf("Set energy from beam \n");
+    //    printf("Set energy from beam=%.3e \n",e_lab);
     if(!model->IsQF()) //standard target
       Wtg = beam + target;
     else{  //qf target
@@ -296,25 +297,16 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
   //  for (int j=0; j<MAX_PART; j++) {
     //  }
   //  printf("Energy = %f \n",e_lab);
-  if (overt[0] == 0) { // (Origin Beam + Tg)
-    e_lab = model->GetEnergy();
-    beam.SetPxPyPzE(0.0, 0.0,e_lab,pow(pow(e_lab,2)+pow(part_pdg[n_part]->Mass(),2),0.5));
     //    printf("Set energy from beam \n");
-    if(!model->IsQF()) //standard target
-      Wtg = gammastar + target;
-    else{  //qf target
-      QFTarget(model);
-      Wtg = gammastar + target;
-      //cout<<"W "<<Wtg.M()<<" "<<e_lab<<endl;
-    }
-  }
-  else {
-    //    TLorentzVector *p4vector_calc = p4vector[0][0]; 
-    p4vector_c = new TLorentzVector(*p4vector[0][0]); 
-    
-    Wtg = *p4vector_c;
-    // printf("Vertex %i  particle n. %i mass%.3e \n",i,overt[0]-1,Wtg.M());
-  }
+  Wtg = gammastar + target;
+  printf("Wtg Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",Wtg.Px(),Wtg.Py(),Wtg.Pz(),Wtg.E());
+    // if(!model->IsQF()) //standard target  // target is already been done before
+    //   Wtg = gammastar + target;
+    // else{  //qf target
+    //   QFTarget(model);
+    //   Wtg = gammastar + target;
+    //   //cout<<"W "<<Wtg.M()<<" "<<e_lab<<endl;
+    // }
   //  printf("Mass at vertex %i part %i = %.3e \n",i,overt[0]-1,Wtg.M());
 
   for (int j=0; j<npvert[0] ; j++) {
@@ -396,10 +388,10 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
     // if (Wtg.M() < total_mass) good_mass = Gen_Mass(i);
     //    printf("mass generated Wtg=%.3e total=%.3e good_mass=%i \n",Wtg.M(),total_mass,good_mass);      
     if (Wtg.M() > total_mass) { // mass check at each vertex
-      //   printf("mass generated\n");
-
+ 
       SetDecay(Wtg, npvert[i], val_mass[i]);
       weight2 = Generate_event(model,i);
+      printf("weight=%.3e \n",weight2);
       good_weight = fRandom->Uniform(1.0);
       if (good_weight <= weight2) {
 	weight2 = 1.0;
@@ -479,7 +471,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   if ( (count_phase%100000) == 0) printf("Generated %d events without passing your angle cuts. Could be you want to check your limits\n",count_phase);
   // theta_v_min = TMath::Pi();
   // theta_v_max = 0.;
-
+  //  printf("Energy electron=%.3e angle electron %.3e\n",Ef[0],theta[0]);
   // For selecting which particle is going to be created first I will need to use creation time if the space of creation time corresponds to the size where there will still be interaction between the two packets 
 
   for (int i=0; i<n_part; i++) {
@@ -533,6 +525,7 @@ Double_t EdPhysics::Calc_gamma(double t_gen){
 Double_t EdPhysics::Generate_event(EdModel *model, int i){
 
   Double_t calc_weight;
+  //  printf("Model =%i ; vertex=%i \n",ph_model,i);
   if (ph_model == 5 && i==0) {
     int good_tmass = 0;
     double e_val = model->Get_evalue();
@@ -540,15 +533,19 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     double t_calc = model->Get_tvalue();
     double costheta_e = 1.;
     double mom_e = 0.;
-    if ( pow(e_val,2) - pow( part_pdg[n_part]->Mass(),2) > 0.)  mom_e = pow( pow(e_val,2) - pow( part_pdg[n_part]->Mass(),2) , 0.5);  
-    if (e_val > 0.0) costheta_e = 1. -  0.5 * ( q2_val + pow(part_pdg[n_part]->Mass(),2) + pow(part_pdg[0]->Mass(),2) ) ;  
+    if ( e_val > part_pdg[0]->Mass() )  mom_e = pow( pow(e_val,2) - pow( part_pdg[0]->Mass(),2) , 0.5);  
+    if (e_val > 0.0) costheta_e = ( 2*beam.E()*e_val - q2_val - pow(part_pdg[n_part]->Mass(),2) - pow(part_pdg[0]->Mass(),2) ) /  ( 2 * mom_e * pow( pow(beam.E(),2) - pow( part_pdg[n_part]->Mass(),2) , 0.5) ) ;  
     double sintheta_e = 0.;
-    if (costheta_e >1. || costheta_e < 1.) costheta_e = 1.;
+    printf("costheta_e=%.3e \n",costheta_e);
+    if (costheta_e >1. || costheta_e < -1.) costheta_e = 1.;
     else sintheta_e = pow(1-pow(costheta_e,2),0.5);
     double phi_e = fRandom->Uniform(2*TMath::Pi());    
     p4vector[0][1]->SetPxPyPzE(mom_e *sintheta_e *TMath::Cos(phi_e),mom_e *sintheta_e *TMath::Sin(phi_e),mom_e*costheta_e,e_val);  // Fix scattered electron. I can now calculate the gamma*
-    
-    gammastar = *p4vector[0][1] - beam;
+    printf("Energy electron=%.3e \n",e_val);
+    gammastar = beam - *p4vector[0][1];
+    printf("eprime costheta_e=%.3e , phi_e=%.3e , Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e, E_start=%.3e\n ",costheta_e,phi_e,p4vector[0][1]->Px(),p4vector[0][1]->Py(),p4vector[0][1]->Pz(),p4vector[0][1]->E(),e_val);
+    printf("beam Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",beam.Px(),beam.Py(),beam.Pz(),beam.E());
+    printf("Gammastar Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",gammastar.Px(),gammastar.Py(),gammastar.Pz(),gammastar.E());
     while (good_tmass == 0) good_tmass = Gen_Mass_t(model); 
     // val_mass_t1: masses with rec_nuclei,rest
     // val_mass_t2: masses with rest
@@ -567,12 +564,13 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     SetDecay(Wtg, npvert[i]-1, val_mass_t1);
     double p_n = Generate_t(); // Generate_t return the momentum of the recoiled nuclei
     double en_n = pow(pow( part_pdg[1]->Mass() ,2 ) + pow(p_n,2) , 0.5);  
-
+    printf("Generate_t() done pn=%.3e\n",p_n);
     if (p_n > 0.0) {      
       a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;
       beta_tot = a_v * beta_Wtg + beta_Tg;
       costheta_n = b_v / p_n;
+      printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e,en_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,en_n );
     }
     if (costheta_n <=1. && costheta_n >= -1.) {  //  this will include the fact that the angle is defined and that p_n > 0.
       phi_n = fRandom->Uniform(2*TMath::Pi());
@@ -603,10 +601,11 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     }
   
   } 
- else {
-   calc_weight = Generate();
-   for (int j=0; j<npvert[i] ; j++)  p4vector[i][j+1] = GetDecay(j);
- }
+  else {
+    calc_weight = Generate();
+    for (int j=0; j<npvert[i] ; j++)  p4vector[i][j+1] = GetDecay(j);
+  }
+  return calc_weight;
 }
 
 
