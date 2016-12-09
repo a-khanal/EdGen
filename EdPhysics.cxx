@@ -543,13 +543,16 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     p4vector[0][1]->SetPxPyPzE(mom_e *sintheta_e *TMath::Cos(phi_e),mom_e *sintheta_e *TMath::Sin(phi_e),mom_e*costheta_e,e_val);  // Fix scattered electron. I can now calculate the gamma*
     printf("Energy electron=%.3e \n",e_val);
     gammastar = beam - *p4vector[0][1];
-    printf("eprime costheta_e=%.3e , phi_e=%.3e , Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e, E_start=%.3e\n ",costheta_e,phi_e,p4vector[0][1]->Px(),p4vector[0][1]->Py(),p4vector[0][1]->Pz(),p4vector[0][1]->E(),e_val);
+    printf("gammastar q2 =%.3e , original q2=%.3e\n", -gammastar.M2(),q2_val);
+    printf("gammastar t =%.3e \n",t_calc);
+
+    printf("eprime costheta_e=%.3e , phi_e=%.3e , Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e, E_start=%.3e, mom_e=%.3e\n ",costheta_e,phi_e,p4vector[0][1]->Px(),p4vector[0][1]->Py(),p4vector[0][1]->Pz(),p4vector[0][1]->E(),e_val,mom_e);
     printf("beam Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",beam.Px(),beam.Py(),beam.Pz(),beam.E());
     printf("Gammastar Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",gammastar.Px(),gammastar.Py(),gammastar.Pz(),gammastar.E());
     while (good_tmass == 0) good_tmass = Gen_Mass_t(model); 
     // val_mass_t1: masses with rec_nuclei,rest
     // val_mass_t2: masses with rest
-
+    printf("Wtg mass=%.3e\n",Wtg.M());
     TVector3 beta_Wtg = Wtg.BoostVector(); // In order to boost from the Center of mass system
     TVector3 beta_Tg =  -target.BoostVector(); // In order to boost to the target system (vector does not need to be changed, since I used analytic formulas at each step. In the target system the value of t is directly connected to the gamma of the recoiling nuclei with the function Calc_gamma(t_calc)
     TVector3 beta_tot;
@@ -570,7 +573,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;
       beta_tot = a_v * beta_Wtg + beta_Tg;
       costheta_n = b_v / p_n;
-      printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e,en_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,en_n );
+      printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e, beta_Wtg=%.3e, en_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,beta_Wtg.Mag(),en_n );
     }
     if (costheta_n <=1. && costheta_n >= -1.) {  //  this will include the fact that the angle is defined and that p_n > 0.
       phi_n = fRandom->Uniform(2*TMath::Pi());
