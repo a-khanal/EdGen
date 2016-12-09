@@ -342,6 +342,14 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
     val_mass_t1[j] = val_mass[0][j+1];
     if (j>0) val_mass_t2[j-1] = val_mass[0][j+1];
   }
+  TVector3 beta_Wtg = Wtg.BoostVector(); // In order to boost from the Center of mass system
+  double p_n = (pow(Wtg.M(),2) - pow(val_mass_t1[1]+val_mass_t1[0],2)) * (pow(Wtg.M(),2) - pow(val_mass_t1[1]-val_mass_t1[0],2))/(2*Wtg.M());
+  double en_n = pow(pow( part_pdg[1]->Mass() ,2 ) + pow(p_n,2) , 0.5); 
+  TLorentzVector target2 = target;
+  target2.Boost(-beta_Wtg);
+  double t_min = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n - 2* p_n * target2.P();
+  double t_max = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n + 2* p_n * target2.P();
+  if (t_calc>t_max || t_calc < t_min) good_gen = 0; 
 
   return good_gen; 
 }
@@ -530,7 +538,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     int good_tmass = 0;
     double e_val = model->Get_evalue();
     double q2_val = model->Get_qvalue();
-    double t_calc = model->Get_tvalue();
+    t_calc = model->Get_tvalue();
     double costheta_e = 1.;
     double mom_e = 0.;
     if ( e_val > part_pdg[0]->Mass() )  mom_e = pow( pow(e_val,2) - pow( part_pdg[0]->Mass(),2) , 0.5);  
@@ -544,7 +552,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     printf("Energy electron=%.3e \n",e_val);
     gammastar = beam - *p4vector[0][1];
     printf("gammastar q2 =%.3e , original q2=%.3e\n", -gammastar.M2(),q2_val);
-    printf("gammastar t =%.3e \n",t_calc);
+    printf("q2=%.3e ,  t =%.3e , e'=%.3e \n",q2_val,t_calc,e_val);
 
     printf("eprime costheta_e=%.3e , phi_e=%.3e , Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e, E_start=%.3e, mom_e=%.3e\n ",costheta_e,phi_e,p4vector[0][1]->Px(),p4vector[0][1]->Py(),p4vector[0][1]->Pz(),p4vector[0][1]->E(),e_val,mom_e);
     printf("beam Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",beam.Px(),beam.Py(),beam.Pz(),beam.E());
@@ -565,9 +573,16 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     double phi_n, theta_n;
 
     SetDecay(Wtg, npvert[i]-1, val_mass_t1);
-    double p_n = Generate_t(); // Generate_t return the momentum of the recoiled nuclei
-    double en_n = pow(pow( part_pdg[1]->Mass() ,2 ) + pow(p_n,2) , 0.5);  
-    printf("Generate_t() done pn=%.5e\n",p_n);
+    //   double p_n = Generate_t(); // Generate_t return the momentum of the recoiled nuclei
+    double p_n = (pow(Wtg.M(),2) - pow(val_mass_t1[1]+val_mass_t1[0],2)) * (pow(Wtg.M(),2) - pow(val_mass_t1[1]-val_mass_t1[0],2))/(2*Wtg.M());
+    double en_n = pow(pow( part_pdg[1]->Mass() ,2 ) + pow(p_n,2) , 0.5); 
+    TLorentzVector target2 = target;
+    target2.Boost(-beta_Wtg);
+    double t_min = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n - 2* p_n * target2.P();
+    double t_max = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n + 2* p_n * target2.P();
+
+    printf("tvalue=%.3e ; t_min=%.3e  ; t_max=%.3e  ; mass_rho=%.3e\n",t_calc,t_min,t_max,val_mass_t1[1]);
+    // printf("Generate_t() done pn=%.5e , analytic = %.3e\n",p_n,p_n2);
     if (p_n > 0.0) {      
       a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;

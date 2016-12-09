@@ -76,6 +76,7 @@ class EdPhysics: public EdGenPhaseSpace{
 	int distr_mass[10][10];
 	double max_mass[10][10];
 	double mass_meson;
+	double t_calc;
 	TRandom2 *fRandom;
 	TRandom2 *gRandom;
 	TLorentzVector Wtg;

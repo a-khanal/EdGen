@@ -82,7 +82,7 @@ EdModel::EdModel(EdInput *inp){
 	  Input_spectrum3->ReadFile(qfile.Data(), "Energy_1:Energy_2:E_counts");
 	  H1_qspec = new EdHisto("H1_qspec","H1_qspec",Input_spectrum3->GetEntries(),Input_spectrum3->GetMinimum("Energy_1"),Input_spectrum3->GetMaximum("Energy_2"));
 	  Axis_t *new_bins3 = new Axis_t[Input_spectrum3->GetEntries() + 1];	    
-	  TAxis *axisq = H1_tspec->GetXaxis(); 
+	  TAxis *axisq = H1_qspec->GetXaxis(); 
 	  for (int i=0; i< Input_spectrum3->GetEntries(); i++) {
 	    Input_spectrum3->GetEntry(i);
 	    new_bins3[i] = Energy_1;
