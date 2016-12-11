@@ -590,30 +590,36 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;
       beta_tot = a_v * beta_Wtg + beta_Tg;
       costheta_n = (pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) - t_calc -2*target2.E()*en_n ) / (2 * p_n * target2.P());
-      printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e, beta_Wtg=%.3e, en_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,beta_Wtg.Mag(),en_n );
+      printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e, beta_Wtg=%.3e, en_n=%.3e, p_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,beta_Wtg.Mag(),en_n,p_n );
     }
     if (costheta_n <=1. && costheta_n >= -1.) {  //  this will include the fact that the angle is defined and that p_n > 0.
       phi_n = fRandom->Uniform(2*TMath::Pi());
       sintheta_n = pow(1-pow(costheta_n,2),0.5);
       p4vector[0][2]->SetPxPyPzE(p_n *sintheta_n *TMath::Cos(phi_n),p_n *sintheta_n *TMath::Sin(phi_n),p_n*costheta_n,en_n);  // Fix scattered nuclei.
       beta_tot_u = target2.Vect().Unit(); // The p4vector of the nuclei is precessing around beta_tot with fixed theta and random phi, will need to be put back in the Center of Mass frame
+      printf("costheta target Wtg frame=%.3e\n",beta_tot_u.CosTheta());
       p4vector[0][2]->RotateUz(beta_tot_u);
+      printf("costheta recoiled nuclei rotated Wtg frame=%.3e\n",p4vector[0][2]->Vect().CosTheta());
     }
     if (npvert[0]==3) {
       TVector3 p3_meson = p4vector[0][2]->Vect();
       p3_meson = -p3_meson; // Center of mass frame, the momentum is the opposite of the one of the recoiling nuclei
-
-      p4vector[0][3]->SetPxPyPzE(p3_meson.Px(),p3_meson.Py(),p3_meson.Pz(),pow(pow(val_mass_t1[1],2)+p3_meson.Mag2(),0.5));
+      double e_meson = pow(pow(val_mass_t1[1],2)+p3_meson.Mag2(),0.5);
+      printf("Defined Vector meson momentum with energy2 =%.3e and momentum2=%.3e and mass2=%.3e\n",pow(e_meson,2),p3_meson.Mag2(),pow(val_mass_t1[1],2));
+      p4vector[0][3]->SetPxPyPzE(-p_n *sintheta_n *TMath::Cos(phi_n),-p_n *sintheta_n *TMath::Sin(phi_n),-p_n*costheta_n,e_meson);
+      printf("Written Vector meson \n");
       // Boost back in Lab frame
       p4vector[0][2]->Boost(beta_Wtg);
       p4vector[0][3]->Boost(beta_Wtg);
+      printf("Boosted particle in lab frame \n");
+      calc_weight = 1.0;
     }
     else if (npvert[0] > 3) {
      // Boost back in Lab frame
       p4vector[0][2]->Boost(beta_Wtg);      
       Wtg = Wtg-*p4vector[0][2]; // take away the recoiled nuclei and recalculate PhaseSpace with the rest
       SetDecay(Wtg, npvert[i]-2, val_mass_t2); // Gen_mass_t fixed these values for this new array of masses
-      calc_weight = p_n*Generate(); // p_n is actually the weight of the first event
+      calc_weight = Generate(); // the weight of the first part where I define t is 1
       for (int j=2; j<npvert[0] ; j++)  p4vector[i][j+1] = GetDecay(j);
     }
     else {
