@@ -589,14 +589,14 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
       a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;
       beta_tot = a_v * beta_Wtg + beta_Tg;
-      costheta_n = b_v / p_n;
+      costheta_n = (pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) - t_calc -2*target2.E()*en_n ) / (2 * p_n * target2.P());
       printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e, beta_Wtg=%.3e, en_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,beta_Wtg.Mag(),en_n );
     }
     if (costheta_n <=1. && costheta_n >= -1.) {  //  this will include the fact that the angle is defined and that p_n > 0.
       phi_n = fRandom->Uniform(2*TMath::Pi());
       sintheta_n = pow(1-pow(costheta_n,2),0.5);
       p4vector[0][2]->SetPxPyPzE(p_n *sintheta_n *TMath::Cos(phi_n),p_n *sintheta_n *TMath::Sin(phi_n),p_n*costheta_n,en_n);  // Fix scattered nuclei.
-      beta_tot_u = beta_tot.Unit(); // The p4vector of the nuclei is precessing around beta_tot with fixed theta and random phi, will need to be put back in the Center of Mass frame
+      beta_tot_u = target2.Vect().Unit(); // The p4vector of the nuclei is precessing around beta_tot with fixed theta and random phi, will need to be put back in the Center of Mass frame
       p4vector[0][2]->RotateUz(beta_tot_u);
     }
     if (npvert[0]==3) {
