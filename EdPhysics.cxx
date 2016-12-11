@@ -299,7 +299,7 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
   //  printf("Energy = %f \n",e_lab);
     //    printf("Set energy from beam \n");
   Wtg = gammastar + target;
-  printf("Wtg Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",Wtg.Px(),Wtg.Py(),Wtg.Pz(),Wtg.E());
+  //  printf("Wtg Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",Wtg.Px(),Wtg.Py(),Wtg.Pz(),Wtg.E());
     // if(!model->IsQF()) //standard target  // target is already been done before
     //   Wtg = gammastar + target;
     // else{  //qf target
@@ -349,7 +349,9 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
   target2.Boost(-beta_Wtg);
   double t_min = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n - 2* p_n * target2.P();
   double t_max = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n + 2* p_n * target2.P();
-  if (t_calc>t_max || t_calc < t_min) good_gen = 0; 
+  if (t_calc<=t_max && t_calc >= t_min && good_gen==1) good_gen = 1; 
+  else good_gen = 0;
+  printf("tvalue=%.3e ; t_min=%.3e  ; t_max=%.3e  ; mass_rho=%.3e\n",t_calc,t_min,t_max,val_mass_t1[1]);
 
   return good_gen; 
 }
