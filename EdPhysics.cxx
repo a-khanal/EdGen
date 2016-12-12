@@ -590,7 +590,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
       a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;
       beta_tot = a_v * beta_Wtg + beta_Tg;
-      costheta_n = (pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) - t_calc -2*target2.E()*en_n ) / (2 * p_n * target2.P());
+      costheta_n = (-pow(target.M(),2)-pow(part_pdg[1]->Mass(),2) + t_calc +2*target2.E()*en_n ) / (2 * p_n * target2.P());
       //    printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e, beta_Wtg=%.3e, en_n=%.3e, p_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,beta_Wtg.Mag(),en_n,p_n );
     }
     if (costheta_n <=1. && costheta_n >= -1.) {  //  this will include the fact that the angle is defined and that p_n > 0.
@@ -600,7 +600,9 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
       beta_tot_u = target2.Vect().Unit(); // The p4vector of the nuclei is precessing around beta_tot with fixed theta and random phi, will need to be put back in the Center of Mass frame
       //    printf("costheta target Wtg frame=%.3e\n",beta_tot_u.CosTheta());
       p4vector[0][2]->RotateUz(beta_tot_u);
-      //      printf("costheta recoiled nuclei rotated Wtg frame=%.3e\n",p4vector[0][2]->Vect().CosTheta());
+      // double costheta_check = TMath::Cos(p4vector[0][2]->Vect().Angle(beta_tot_u));
+      // TLorentzVector test_t_p4 = target2 - *p4vector[0][2];
+      // printf("costheta recoiled nuclei rotated Wtg frame=%.3e , before rotation=%.3e , Costheta with target momentum=%.3e, t_gen=%.3e , t_calc=%.3e\n",p4vector[0][2]->Vect().CosTheta(),costheta_n,costheta_check,t_calc,test_t_p4.M2());
     }
     if (npvert[0]==3) {
       TVector3 p3_meson = p4vector[0][2]->Vect();
