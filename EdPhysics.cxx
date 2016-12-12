@@ -55,6 +55,7 @@ EdPhysics::EdPhysics(EdModel *model){
       if (overt[i] == 0) printf("Vertex n. %i, Origin (Beam + Tg) --> ",i+1);
       else printf("Vertex n. %i, Origin (pid=%i %.3e GeV,  Lifetime=%.3e) --> ",i+1,particle_id[overt[i]-1],part_pdg[overt[i]-1]->Mass(),part_pdg[overt[i]-1]->Lifetime());
       for(int j=0; j<npvert[i] ; j++) {
+	if (j==(npvert[i] -1)) p4vector[i][npvert[i]] = new TLorentzVector(); 
 	p4vector[i][j] = new TLorentzVector();
 	masses[i][j] = part_pdg[atpart]->Mass();
 	width[i][j] = part_pdg[atpart]->Width();
@@ -351,7 +352,7 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
   double t_max = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n + 2* p_n * target2.P();
   if (t_calc<=t_max && t_calc >= t_min && good_gen==1) good_gen = 1; 
   else good_gen = 0;
-  printf("tvalue=%.3e ; t_min=%.3e  ; t_max=%.3e  ; mass_rho=%.3e\n",t_calc,t_min,t_max,val_mass_t1[1]);
+  //  printf("tvalue=%.3e ; t_min=%.3e  ; t_max=%.3e  ; mass_rho=%.3e\n",t_calc,t_min,t_max,val_mass_t1[1]);
 
   return good_gen; 
 }
@@ -401,7 +402,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
  
       SetDecay(Wtg, npvert[i], val_mass[i]);
       weight2 = Generate_event(model,i);
-      printf("weight=%.3e \n",weight2);
+      //      printf("weight=%.3e \n",weight2);
       good_weight = fRandom->Uniform(1.0);
       if (good_weight <= weight2) {
 	weight2 = 1.0;
@@ -546,23 +547,23 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     if ( e_val > part_pdg[0]->Mass() )  mom_e = pow( pow(e_val,2) - pow( part_pdg[0]->Mass(),2) , 0.5);  
     if (e_val > 0.0) costheta_e = ( 2*beam.E()*e_val - q2_val - pow(part_pdg[n_part]->Mass(),2) - pow(part_pdg[0]->Mass(),2) ) /  ( 2 * mom_e * pow( pow(beam.E(),2) - pow( part_pdg[n_part]->Mass(),2) , 0.5) ) ;  
     double sintheta_e = 0.;
-    printf("costheta_e=%.3e \n",costheta_e);
+    //    printf("costheta_e=%.3e \n",costheta_e);
     if (costheta_e >1. || costheta_e < -1.) costheta_e = 1.;
     else sintheta_e = pow(1-pow(costheta_e,2),0.5);
     double phi_e = fRandom->Uniform(2*TMath::Pi());    
     p4vector[0][1]->SetPxPyPzE(mom_e *sintheta_e *TMath::Cos(phi_e),mom_e *sintheta_e *TMath::Sin(phi_e),mom_e*costheta_e,e_val);  // Fix scattered electron. I can now calculate the gamma*
-    printf("Energy electron=%.3e \n",e_val);
+    //    printf("Energy electron=%.3e \n",e_val);
     gammastar = beam - *p4vector[0][1];
-    printf("gammastar q2 =%.3e , original q2=%.3e\n", -gammastar.M2(),q2_val);
-    printf("q2=%.3e ,  t =%.3e , e'=%.3e \n",q2_val,t_calc,e_val);
+    //    printf("gammastar q2 =%.3e , original q2=%.3e\n", -gammastar.M2(),q2_val);
+    //   printf("q2=%.3e ,  t =%.3e , e'=%.3e \n",q2_val,t_calc,e_val);
 
-    printf("eprime costheta_e=%.3e , phi_e=%.3e , Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e, E_start=%.3e, mom_e=%.3e\n ",costheta_e,phi_e,p4vector[0][1]->Px(),p4vector[0][1]->Py(),p4vector[0][1]->Pz(),p4vector[0][1]->E(),e_val,mom_e);
-    printf("beam Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",beam.Px(),beam.Py(),beam.Pz(),beam.E());
-    printf("Gammastar Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",gammastar.Px(),gammastar.Py(),gammastar.Pz(),gammastar.E());
+    //    printf("eprime costheta_e=%.3e , phi_e=%.3e , Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e, E_start=%.3e, mom_e=%.3e\n ",costheta_e,phi_e,p4vector[0][1]->Px(),p4vector[0][1]->Py(),p4vector[0][1]->Pz(),p4vector[0][1]->E(),e_val,mom_e);
+    //   printf("beam Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",beam.Px(),beam.Py(),beam.Pz(),beam.E());
+    //   printf("Gammastar Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",gammastar.Px(),gammastar.Py(),gammastar.Pz(),gammastar.E());
     while (good_tmass == 0) good_tmass = Gen_Mass_t(model); 
     // val_mass_t1: masses with rec_nuclei,rest
     // val_mass_t2: masses with rest
-    printf("Wtg mass=%.3e\n",Wtg.M());
+    //    printf("Wtg mass=%.3e\n",Wtg.M());
     TVector3 beta_Wtg = Wtg.BoostVector(); // In order to boost from the Center of mass system
     TVector3 beta_Tg =  -target.BoostVector(); // In order to boost to the target system (vector does not need to be changed, since I used analytic formulas at each step. In the target system the value of t is directly connected to the gamma of the recoiling nuclei with the function Calc_gamma(t_calc)
     TVector3 beta_tot;
@@ -583,35 +584,35 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     double t_min = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n - 2* p_n * target2.P();
     double t_max = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n + 2* p_n * target2.P();
 
-    printf("tvalue=%.3e ; t_min=%.3e  ; t_max=%.3e  ; mass_rho=%.3e\n",t_calc,t_min,t_max,val_mass_t1[1]);
+    //    printf("tvalue=%.3e ; t_min=%.3e  ; t_max=%.3e  ; mass_rho=%.3e\n",t_calc,t_min,t_max,val_mass_t1[1]);
     // printf("Generate_t() done pn=%.5e , analytic = %.3e\n",p_n,p_n2);
     if (p_n > 0.0) {      
       a_v = gamma_Wtg + beta_Wtg.Dot(beta_Tg) * ( gamma_Wtg - 1 ) / beta_Wtg.Mag();
       b_v = gamma_n * part_pdg[1]->Mass() / gamma_Tg - gamma_Wtg * en_n + beta_Wtg.Dot(beta_Tg) * gamma_Wtg * en_n;
       beta_tot = a_v * beta_Wtg + beta_Tg;
       costheta_n = (pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) - t_calc -2*target2.E()*en_n ) / (2 * p_n * target2.P());
-      printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e, beta_Wtg=%.3e, en_n=%.3e, p_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,beta_Wtg.Mag(),en_n,p_n );
+      //    printf("costheta nuclei=%.3e; b_v=%.3e ; gamma_n=%.3e ; gamma_Tg=%.3e , mass_n=%.3e , gamma_Wtg=%.3e, beta_Wtg=%.3e, en_n=%.3e, p_n=%.3e \n",costheta_n,b_v,gamma_n,gamma_Tg,part_pdg[1]->Mass(),gamma_Wtg,beta_Wtg.Mag(),en_n,p_n );
     }
     if (costheta_n <=1. && costheta_n >= -1.) {  //  this will include the fact that the angle is defined and that p_n > 0.
       phi_n = fRandom->Uniform(2*TMath::Pi());
       sintheta_n = pow(1-pow(costheta_n,2),0.5);
       p4vector[0][2]->SetPxPyPzE(p_n *sintheta_n *TMath::Cos(phi_n),p_n *sintheta_n *TMath::Sin(phi_n),p_n*costheta_n,en_n);  // Fix scattered nuclei.
       beta_tot_u = target2.Vect().Unit(); // The p4vector of the nuclei is precessing around beta_tot with fixed theta and random phi, will need to be put back in the Center of Mass frame
-      printf("costheta target Wtg frame=%.3e\n",beta_tot_u.CosTheta());
+      //    printf("costheta target Wtg frame=%.3e\n",beta_tot_u.CosTheta());
       p4vector[0][2]->RotateUz(beta_tot_u);
-      printf("costheta recoiled nuclei rotated Wtg frame=%.3e\n",p4vector[0][2]->Vect().CosTheta());
+      //      printf("costheta recoiled nuclei rotated Wtg frame=%.3e\n",p4vector[0][2]->Vect().CosTheta());
     }
     if (npvert[0]==3) {
       TVector3 p3_meson = p4vector[0][2]->Vect();
       p3_meson = -p3_meson; // Center of mass frame, the momentum is the opposite of the one of the recoiling nuclei
       double e_meson = pow(pow(val_mass_t1[1],2)+p3_meson.Mag2(),0.5);
-      printf("Defined Vector meson momentum with energy2 =%.3e and momentum2=%.3e and mass2=%.3e\n",pow(e_meson,2),p3_meson.Mag2(),pow(val_mass_t1[1],2));
+      //     printf("Defined Vector meson momentum with energy2 =%.3e and momentum2=%.3e and mass2=%.3e\n",pow(e_meson,2),p3_meson.Mag2(),pow(val_mass_t1[1],2));
       p4vector[0][3]->SetPxPyPzE(-p_n *sintheta_n *TMath::Cos(phi_n),-p_n *sintheta_n *TMath::Sin(phi_n),-p_n*costheta_n,e_meson);
-      printf("Written Vector meson \n");
+      //      printf("Written Vector meson \n");
       // Boost back in Lab frame
       p4vector[0][2]->Boost(beta_Wtg);
       p4vector[0][3]->Boost(beta_Wtg);
-      printf("Boosted particle in lab frame \n");
+      //     printf("Boosted particle in lab frame \n");
       calc_weight = 1.0;
     }
     else if (npvert[0] > 3) {
