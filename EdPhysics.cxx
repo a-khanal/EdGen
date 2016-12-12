@@ -340,8 +340,15 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
   }  // Take away from the mass the stable particle
   //  printf("good_gen = %d \n",good_gen);
   for (int j=0; j<(npvert[0]-1) ; j++) {
-    val_mass_t1[j] = val_mass[0][j+1];
-    if (j>0) val_mass_t2[j-1] = val_mass[0][j+1];
+    if (j>0) {
+      val_mass_t2[j-1] = val_mass[0][j+1];
+      val_mass_t1[1] = val_mass_t1[1] + val_mass[0][j+1];
+    }
+    else {
+      val_mass_t1[0] = val_mass[0][1];
+      val_mass_t1[1] = 0.0;
+    }
+
   }
   TVector3 beta_Wtg = Wtg.BoostVector(); // In order to boost from the Center of mass system
   double p_n = (pow(Wtg.M(),2) - pow(val_mass_t1[1]+val_mass_t1[0],2)) * (pow(Wtg.M(),2) - pow(val_mass_t1[1]-val_mass_t1[0],2))/(2*Wtg.M());
@@ -620,10 +627,15 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     else if (npvert[0] > 3) {
      // Boost back in Lab frame
       p4vector[0][2]->Boost(beta_Wtg);      
+      // printf("Boosted the nuclei in SL frame \n");
       Wtg = Wtg-*p4vector[0][2]; // take away the recoiled nuclei and recalculate PhaseSpace with the rest
+      // printf("Set new Wtg , where Wtg mass =%.3e and mass of the rest is=%.3e \n",Wtg.M(),val_mass_t1[1]);
       SetDecay(Wtg, npvert[i]-2, val_mass_t2); // Gen_mass_t fixed these values for this new array of masses
+      // printf("Set the decay of other particles for phasespace with the rest \n");
       calc_weight = Generate(); // the weight of the first part where I define t is 1
-      for (int j=2; j<npvert[0] ; j++)  p4vector[i][j+1] = GetDecay(j);
+      // printf("Generated event \n");
+      for (int j=2; j<npvert[0] ; j++)  p4vector[i][j+1] = GetDecay(j-2);
+      // printf("Done Get decay product \n");
     }
     else {
       printf("??????? First vertex particles are just 2 and you asked to modulate Q2, nu and t??????? \n");

@@ -78,7 +78,7 @@ EdModel::EdModel(EdInput *inp){
 	  Input_spectrum3->Branch("Energy_1",&Energy_1,"Energy_1/F");
 	  Input_spectrum3->Branch("Energy_2",&Energy_2,"Energy_2/F");
 	  Input_spectrum3->Branch("E_counts",&E_counts,"E_counts/F");
-	  printf("Reading input file for q distribution %s\n",qfile.Data());
+	  printf("Reading input file for q2 distribution %s\n",qfile.Data());
 	  Input_spectrum3->ReadFile(qfile.Data(), "Energy_1:Energy_2:E_counts");
 	  H1_qspec = new EdHisto("H1_qspec","H1_qspec",Input_spectrum3->GetEntries(),Input_spectrum3->GetMinimum("Energy_1"),Input_spectrum3->GetMaximum("Energy_2"));
 	  Axis_t *new_bins3 = new Axis_t[Input_spectrum3->GetEntries() + 1];	    
@@ -107,7 +107,7 @@ EdModel::EdModel(EdInput *inp){
 	    H1_espec->SetBinContent(i+1,E_counts);
 	    if (i+1 == Input_spectrum4->GetEntries()) new_bins4[i+1] = Energy_2; 
 	  }
-	  axisq->Set(Input_spectrum4->GetEntries(), new_bins4); 
+	  axise->Set(Input_spectrum4->GetEntries(), new_bins4); 
 	  delete new_bins4; 
 	  delete Input_spectrum4;
 	}
