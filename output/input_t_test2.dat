@@ -1,0 +1,56 @@
+nevt:    100000;
+nprint:  10000;
+model:   5;
+M_mode:  1;
+qfile:   q2profile.txt;
+tfile:   tprofile.txt;
+efile:   eprofile.txt;
+ifile:	 energy.txt; 
+beam:    11;
+en:	 11.0    GeV;
+tg_Z:    1;
+tg_N:    1;
+tg_mass: 9.38272e-01 GeV;
+length:	 40	cm;
+ras_x:	 0.2	cm;
+ras_y:	 0.2	cm;	
+offset:  0.0,0.0,0.0 cm;
+npart:   9;
+pid:     11,2212,115,223,211,-211,111,211,-211;
+theta_min: 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 deg;
+theta_max: 180.0,180.0,180.0,180.0,180.0,180.0,180.0,180.0,180.0 deg;
+energy_min: 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 GeV;
+energy_max: 11.0,11.0,11.0,11.0,11.0,11.0,11.0,11.0,11.0 GeV;
+nvertex: 3;
+vertex:  0,3;
+v_type:  1,1.0;
+vertex:  3,3;
+v_type:  1,1.0;
+vertex:  4,3;
+v_type:  1,1.0;
+output:  1;
+#comment here 
+END
+# Models
+# 1 Phase Space Single Energy (for example e-)
+# 2 Phase Space Energy Spectrum (for example gamma)
+# 3 Phase Space Energy Spectrum (for example gamma) flat energy
+# 4 Cross Section (sorry, not yet)
+# 5 t,q2,nu distribution from spectrum
+# 6 Amplitudes (sorry, not yet) 
+# 7 Data Points (sorry, not yet)
+#
+# M_model (Mass model: if width of particle>1MeV, one can
+#   generate the mass according to different distributions)
+# 1 Breit-Wigner (Mass and Width are automatically read from  
+#   output/eg_pdg_table.txt)
+# 2 Flat (Generated flat in mass in the allowed range)
+# 3 Just the mass at the center of the distribution
+# 4 Breit-Wigner2 (Mass and Width are automatically read from
+#   output/eg_pdg_table.txt) mass will still be generated fast also if outside the energy peak.
+# 5 Gaussian and more to come
+#
+# output
+# 1  ROOT only
+# 2  ROOT + LUND
+# 3  ROOT + BOS
