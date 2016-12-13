@@ -47,6 +47,9 @@ Input file
 * model:   2;      		 MODELS AVAILABLE (SEE BOTTOM FOR DIFFERENT OPTIONS)
 * M_mode:  1;          MASS MODELS AVAILABLE (SEE BOTTOM FOR DIFFERENT OPTIONS) 
 * ifile:	 energy.txt; 		 INPUT FILE SPECTRUM FOR BEAM (NEEDED FOR OPTION MODEL = 2) 
+* qfile:      q2profile.txt;             INPUT FILE SPECTRUM FOR Q2 (NEEDED FOR OPTION MODEL = 5)
+* tfile:       tprofile.txt;             INPUT FILE SPECTRUM FOR t (NEEDED FOR OPTION MODEL = 5)
+* efile:       eprofile.txt;             INPUT FILE SPECTRUM FOR E' (energy scattered beam) (NEEDED FOR OPTION MODEL = 5)
 * beam:    22;			 BEAM PARTICLE ID
 * en:	 11.0    GeV;		 BEAM ENERGY (NEEDED FOR OPTION MODEL = 1)
 * Erange:  2.0,5.0 GeV;          ENERGY RANGE FOR BEAM FLAT BETWEEN THESE 2 VALUES (NEEDED FOR OPTION MODEL = 3)
@@ -65,6 +68,8 @@ Input file
 * pid:     11,2212,113,211,-211;	 PARTICLE ID OF THE PARTICLE SPECIFIED WITH npart
 * theta_min:   2.5,4.0,5.0,4.0,5.0 deg;		 THETA CUT FOR SINGLE PARTICLE (FROM 'pid:' flag) (AT NOW IS AN HARD CUT ON THE SIMULATED DATA)
 * theta_max:   180.0,180.0,180.0,180.0,180.0 deg;		 THETA CUT FOR SINGLE PARTICLE (FROM 'pid:' flag) (AT NOW IS AN HARD CUT ON THE SIMULATED DATA)
+* energy_min:   0.0,0.0,0.0,0.0,0.0 GeV;            ENERGY CUT FOR SINGLE PARTICLE (FROM 'pid:' flag) (AT NOW IS AN HARD CUT ON THE SIMULATED DATA)             
+* energy_max:   1.0,11.0,11.0,11.0,11.0 GeV;        ENERGY CUT FOR SINGLE PARTICLE (FROM 'pid:' flag) (AT NOW IS AN HARD CUT ON THE SIMULATED DATA)
 * nvertex: 2;			 NUMBER OF VERTEXES IN THE INTERACTION
 * vertex:  0,3;			 ORIGIN OF THE VERTEX (0 STANDS FOR BEAM+TARGET; IN THIS EXAMPLE: 1 STANDS FOR 11, 2-->2212, 3-->113, 4-->211, 4-->-211), NUMBER OF PARTICLES GOING OUT OF VERTEX (READ IN SEQUENCE FROM THE pid ENTRY)
 * v_type:  1,1.0;		 TYPE OF VERTEX (AT NOW JUST OPTION 1, IN THE FUTURE DIFFERENT CROSS SECTION CAN BE APPLIED AT EACH VERTEX)
@@ -79,8 +84,9 @@ Models
 * 2 Phase Space Energy Spectrum (for example gamma)
 * 3 Phase Space Energy Spectrum (for example gamma) flat energy spectrum
 * 4 Cross Section (sorry, not yet)
-* 5 Amplitudes (sorry, not yet) 
-* 6 Data Points (sorry, not yet)
+* 5 t,q2,nu distribution from spectrum
+* 6 Amplitudes (sorry, not yet) 
+* 7 Data Points (sorry, not yet)
 
 Mass Models
 -------
@@ -116,3 +122,15 @@ Examples
 * Photon production phasespace (flat energy range)  Omega + pi+ + pi- <br />
 ** Create generated output file: ./EdGen -i input_test_7.dat <br />
 ** Analyze the output (with TProof) of the generated file (files analysis_7.C , analysis_7.h, run_analysis_7.C analysis_7_output.root): root run_analysis_7.C <br />
+* Electron Production of rho with t,q2,nu as input <br />
+** Create generated output file: ./EdGen -i input_t_test1.dat <br />
+** Analyze the output (with TProof) of the generated file (files analysis_t_test1.C analysis_t_test1.h run_analysis_t_test1.C analysis_t_test1_output.root): root run_analysis_t_test1.C <br />
+* Electron Production of  a2->Omega + pi+ + pi- with t,q2,nu as input <br />
+** Create generated output file: ./EdGen -i input_t_test2.dat <br />
+** Analyze the output (with TProof) of the generated file (files analysis_t_test2.C analysis_t_test2.h run_analysis_t_test2.C analysis_t_test2_output.root): root run_analysis_t_test2.C <br />
+* Electron Production of  f'2->K_s0 +K_s0 (then each K_s0-> pi+ + pi-)  with t,q2,nu as input <br />
+** Create generated output file: ./EdGen -i input_t_test3.dat <br />
+** Analyze the output (with TProof) of the generated file (files analysis_t_test3.C analysis_t_test3.h run_analysis_t_test3.C analysis_t_test3_output.root): root run_analysis_t_test3.C <br />
+* Electron Production of  f'2->K_s0 +K_s0 (then each K_s0-> pi+ + pi-)  with t,q2,nu as input <br />
+** Create generated output file: ./EdGen -i input_t_test3.dat <br />
+** Analyze the output (with TProof) of the generated file (files analysis_t_test3.C analysis_t_test3.h run_analysis_t_test3.C analysis_t_test3_output.root): root run_analysis_t_test3.C <br />
