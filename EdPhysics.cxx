@@ -295,6 +295,7 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
   int good_gen = 1;
   int k;
   double total_gen = 0.;
+  total_t = 0.;
   //  for (int j=0; j<MAX_PART; j++) {
     //  }
   //  printf("Energy = %f \n",e_lab);
@@ -342,6 +343,7 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
   for (int j=0; j<(npvert[0]-1) ; j++) {
     if (j>0) {
       val_mass_t2[j-1] = val_mass[0][j+1];
+      total_t = total_t + pow(val_mass_t2[j-1],2);
       val_mass_t1[1] = val_mass_t1[1] + val_mass[0][j+1];
     }
     else {
@@ -376,7 +378,6 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   int good_mass = 0; 
   int failed_event = 0;
   double good_weight = 0.;
-  valid_event = 0;
   double tglx = model->GetLx();
   double tgly = model->GetLy();
   double tglength = model->GetLength();
@@ -632,7 +633,14 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
       // printf("Set new Wtg , where Wtg mass =%.3e and mass of the rest is=%.3e \n",Wtg.M(),val_mass_t1[1]);
       SetDecay(Wtg, npvert[i]-2, val_mass_t2); // Gen_mass_t fixed these values for this new array of masses
       // printf("Set the decay of other particles for phasespace with the rest \n");
-      calc_weight = Generate(); // the weight of the first part where I define t is 1
+      double good_weight = fRandom->Uniform(1.0); 
+      calc_weight = 0.0;
+ 
+      while (good_weight > calc_weight) {	
+	calc_weight = Generate(); // the weight of the first part where I define t is 1
+	printf ("good weight=%.3e calc_weight=%.3e max weight=%.3e\n",good_weight,calc_weight,pow(( Wtg.M2() - total_t)/(npvert[i]-2),(npvert[i]-2)/2));
+      }
+      calc_weight = 1;
       // printf("Generated event \n");
       for (int j=2; j<npvert[0] ; j++)  p4vector[i][j+1] = GetDecay(j-2);
       // printf("Done Get decay product \n");
@@ -646,6 +654,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     calc_weight = Generate();
     for (int j=0; j<npvert[i] ; j++)  p4vector[i][j+1] = GetDecay(j);
   }
+ 
   return calc_weight;
 }
 

@@ -93,6 +93,7 @@ class EdPhysics: public EdGenPhaseSpace{
 	double energy_min[MAX_PART];
 	double energy_max[MAX_PART];
 	int count_phase;
+	double total_t;
 
 	TVector3 Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert);
 	double GetBeamProfile( double sigma = 1.);
