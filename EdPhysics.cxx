@@ -628,8 +628,10 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     else if (npvert[0] > 3) {
      // Boost back in Lab frame
       p4vector[0][2]->Boost(beta_Wtg);      
-      // printf("Boosted the nuclei in SL frame \n");
-      Wtg = Wtg-*p4vector[0][2]; // take away the recoiled nuclei and recalculate PhaseSpace with the rest
+      printf("Boosted the nuclei in SL frame Wtg.M()=%.3e  Wtg.E()=%.3e Wtg.Px()=%.3e Wtg.Py()=%.3e Wtg.Pz()=%.3e\n",Wtg.M(),Wtg.E(),Wtg.Px(),Wtg.Py(),Wtg.Pz());
+      printf("Recoiled Nuclei in SL frame N'.E()=%.3e N'.Px()=%.3e N'.Py()=%.3e N'.Pz()=%.3e\n",p4vector[0][2]->E(),p4vector[0][2]->Px(),p4vector[0][2]->Py(),p4vector[0][2]->Pz());
+      Wtg = Wtg - *p4vector[0][2]; // take away the recoiled nuclei and recalculate PhaseSpace with the rest
+      printf("Wtg= Wtg - nuclei  Wtg.M()=%.3e  Wtg.E()=%.3e Wtg.Px()=%.3e Wtg.Py()=%.3e Wtg.Pz()=%.3e\n",Wtg.M(),Wtg.E(),Wtg.Px(),Wtg.Py(),Wtg.Pz());
       // printf("Set new Wtg , where Wtg mass =%.3e and mass of the rest is=%.3e \n",Wtg.M(),val_mass_t1[1]);
       SetDecay(Wtg, npvert[i]-2, val_mass_t2); // Gen_mass_t fixed these values for this new array of masses
       // printf("Set the decay of other particles for phasespace with the rest \n");
@@ -638,7 +640,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
  
       while (good_weight > calc_weight) {	
 	calc_weight = Generate(); // the weight of the first part where I define t is 1
-	printf ("good weight=%.3e calc_weight=%.3e max weight=%.3e\n",good_weight,calc_weight,pow(( Wtg.M2() - total_t)/(npvert[i]-2),(npvert[i]-2)/2));
+	printf ("good weight=%.3e calc_weight=%.3e max weight=%.3e Wtg.M2()=%.3e total_t=%.3e\n",good_weight,calc_weight,pow(( Wtg.M2() - total_t)/(npvert[i]-2),((npvert[i]-2)/2)),Wtg.M(),total_t);
       }
       calc_weight = 1;
       // printf("Generated event \n");
