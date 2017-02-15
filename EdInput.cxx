@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdlib>
 #include "TString.h"
+using namespace std;
 
 EdInput::EdInput(const char *file){
     printf("Reading %s for input\n", file);

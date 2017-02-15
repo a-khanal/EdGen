@@ -6,6 +6,7 @@ project(EdGen)
 set(CMAKE_BUILD_TYPE Debug)
 set(useROOT true)        # use true or false
 include(FindROOT.cmake)
+set(CMAKE_CXX_FLAGS "-std=c++11")
 
 message(STATUS "CLAS6LIB " $ENV{CLAS6LIB})
 set(WITHBOS $ENV{CLAS6LIB})
