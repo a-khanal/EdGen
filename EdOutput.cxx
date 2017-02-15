@@ -78,90 +78,90 @@ void EdOutput::InitTree(){
 
 void EdOutput::SetTheta( double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) theta[i] = 0; 
+    if (std::isnan(val[i])) theta[i] = 0; 
     else theta[i] = val[i];
   }
   n_part = tot;
 }
 void EdOutput::SetPhi(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) phi[i] = 0; 
+    if (std::isnan(val[i])) phi[i] = 0; 
     else phi[i] = val[i];
   }
 }
 void EdOutput::SetEf(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) Ef[i] = 0; 
+    if (std::isnan(val[i])) Ef[i] = 0; 
     else Ef[i] = val[i];
   }
 
 }
 void EdOutput::Setpf(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) pf[i] = 0; 
+    if (std::isnan(val[i])) pf[i] = 0; 
     else pf[i] = val[i];
   }
 
 }
 void EdOutput::Setpx(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) px[i] = 0; 
+    if (std::isnan(val[i])) px[i] = 0; 
     else px[i] = val[i];
   }
 
 }
 void EdOutput::Setpy(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) py[i] = 0; 
+    if (std::isnan(val[i])) py[i] = 0; 
     else py[i] = val[i];
   }
 
 }
 void EdOutput::Setpz(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) pz[i] = 0; 
+    if (std::isnan(val[i])) pz[i] = 0; 
     else pz[i] = val[i];
   }
 
 }
 void EdOutput::Setparticle_id(int *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) particle_id[i] = 0; 
+    if (std::isnan(val[i])) particle_id[i] = 0; 
     else particle_id[i] = val[i];
   }
 
 }
 void EdOutput::Setcharge(int *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) charge[i] = 0; 
+    if (std::isnan(val[i])) charge[i] = 0; 
     else charge[i] = val[i];
   }
 
 }
 void EdOutput::Setvx(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) vx[i] = 0; 
+    if (std::isnan(val[i])) vx[i] = 0; 
     else vx[i] = val[i];
   }
 
 }
 void EdOutput::Setvy(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) vy[i] = 0; 
+    if (std::isnan(val[i])) vy[i] = 0; 
     else vy[i] = val[i];
   }
 
 }
 void EdOutput::Setvz(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) vz[i] = 0; 
+    if (std::isnan(val[i])) vz[i] = 0; 
     else vz[i] = val[i];
   }
 
 }
 void EdOutput::Setweight(double *val, int tot){
   for (int i =0; i<tot; i++) {
-    if (TMath::IsNaN(val[i])) weight[i] = 0; 
+    if (std::isnan(val[i])) weight[i] = 0; 
     else weight[i] = val[i];
   }
 
