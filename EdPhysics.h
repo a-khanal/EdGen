@@ -16,7 +16,6 @@
 
 
 
-using namespace std;
 
 class EdPhysics: public EdGenPhaseSpace{
     public:

@@ -76,7 +76,7 @@ EdPhysics::EdPhysics(EdModel *model){
 
     }
     if(model->IsQF()){//Also want to write out spectator for quasifree (add at end =npart)
-      cout<<"Quasi free so store specator information "<<endl;
+      printf("Quasi free so store specator information \n");
       towrite[n_part] = 1;
       particle_id[n_part] = model->GetInput()->GetInData().qfspdg;
       theta_min[n_part] = model->GetTheta_min(0);

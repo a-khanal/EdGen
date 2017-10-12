@@ -4,15 +4,14 @@
 #include <fstream>
 #include <cstdlib>
 #include "TString.h"
-using namespace std;
 
 EdInput::EdInput(const char *file){
     printf("Reading %s for input\n", file);
 
     std::string command;//dglazier, changed to string as char[] was screwing up 
     std::string tmp;
-    ifstream inputfile;
-    inputfile.open(file, ifstream::in);
+    std::ifstream inputfile;
+    inputfile.open(file, std::ifstream::in);
     if( !inputfile ) {
       printf("%s cannot be opened\n", file); 
       exit(1);

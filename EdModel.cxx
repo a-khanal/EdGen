@@ -2,7 +2,6 @@
 #include "TFile.h"
 #include "TDirectory.h"
 #include <iostream>
-using namespace std;
 
 EdModel::EdModel(EdInput *inp){
   fInp=inp;
@@ -187,7 +186,7 @@ double EdModel::GetEnergy(){
       // printf("here 3 \n");
     
     }
-    while (isnan(e_out) || e_out ==0) e_out = H1_spec->GetEdRandom();
+    while (std::isnan(e_out) || e_out ==0) e_out = H1_spec->GetEdRandom();
   }
   else if (ph_model == 3) { // PhaseSpace Flat multiple Energy
     e_out = fRandom->Uniform(e_out_min,e_out_max);
@@ -206,7 +205,7 @@ double EdModel::Get_tvalue(){
       // printf("here 3 \n");
     
     }
-    while (isnan(e_out) || e_out ==0) e_out = H1_tspec->GetEdRandom();
+    while (std::isnan(e_out) || e_out ==0) e_out = H1_tspec->GetEdRandom();
   }
   return e_out;
 }
@@ -222,7 +221,7 @@ double EdModel::Get_qvalue(){
       // printf("here 3 \n");
     
     }
-    while (isnan(e_out) || e_out ==0) e_out = H1_qspec->GetEdRandom();
+    while (std::isnan(e_out) || e_out ==0) e_out = H1_qspec->GetEdRandom();
   }
   return e_out;
 }
@@ -238,7 +237,7 @@ double EdModel::Get_evalue(){
       // printf("here 3 \n");
     
     }
-    while (isnan(e_out) || e_out ==0) e_out = H1_espec->GetEdRandom();
+    while (std::isnan(e_out) || e_out ==0) e_out = H1_espec->GetEdRandom();
   }
   return e_out;
 }
