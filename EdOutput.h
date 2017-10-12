@@ -32,7 +32,7 @@ extern "C" {
 
 
 
-#define MAX_PART 10
+#define MAX_PART 15
 using namespace std; 
 
 #ifdef CLAS6LIB

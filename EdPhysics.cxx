@@ -23,6 +23,7 @@ EdPhysics::EdPhysics(EdModel *model){
     //    if(model->GetInData().IsQF())spectator.SetXYZM(0,0,0,pdg->GetParticle(model->GetInData().qfspdg);
     mass_model = model->GetMassModel();
     ph_model = model->GetPhModel();
+    w_model = model->GetWeightModel();
     printf("In Physics ph_model=%i\n",ph_model);
     n_part = model->GetNpart();
     nvertex = model->GetNvertex();
@@ -359,7 +360,7 @@ int EdPhysics::Gen_Mass_t(EdModel *model) {
   double t_max = pow(target.M(),2)+pow(part_pdg[1]->Mass(),2) -2*target2.E()*en_n + 2* p_n * target2.P();
   if (t_calc<=t_max && t_calc >= t_min && good_gen==1) good_gen = 1; 
   else good_gen = 0;
-  //  printf("tvalue=%.3e ; t_min=%.3e  ; t_max=%.3e  ; mass_rho=%.3e\n",t_calc,t_min,t_max,val_mass_t1[1]);
+  //  printf("tvalue=%.3e ; t_min=%.3e  ; t_max=%.3e  ; mass_rho=%.3e ; good_gen=%d\n",t_calc,t_min,t_max,val_mass_t1[1],good_gen);
 
   return good_gen; 
 }
@@ -409,12 +410,18 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
  
       SetDecay(Wtg, npvert[i], val_mass[i]);
       weight2 = Generate_event(model,i);
-      //      printf("weight=%.3e \n",weight2);
-      good_weight = fRandom->Uniform(1.0);
-      if (good_weight <= weight2) {
-	weight2 = 1.0;
-	valid_event++;
+      if (w_model == 0) { // Run a second generator to have all the weight to 1
+	// printf("vertex = %i weight=%.3e ",i,weight2);
+	good_weight = fRandom->Uniform(1.0);
+	if (good_weight <= weight2) {
+	  weight2 = 1.0;
+	  valid_event++;
+	  //	  printf("Valid event "); 
+	}
+	//      printf("\n");
       }
+      else valid_event++;
+      
       //      printf("weight= %.3e\n",weight2);
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
@@ -567,7 +574,13 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
     //    printf("eprime costheta_e=%.3e , phi_e=%.3e , Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e, E_start=%.3e, mom_e=%.3e\n ",costheta_e,phi_e,p4vector[0][1]->Px(),p4vector[0][1]->Py(),p4vector[0][1]->Pz(),p4vector[0][1]->E(),e_val,mom_e);
     //   printf("beam Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",beam.Px(),beam.Py(),beam.Pz(),beam.E());
     //   printf("Gammastar Px= %.3e , Py= %.3e , Pz= %.3e, E= %.3e\n",gammastar.Px(),gammastar.Py(),gammastar.Pz(),gammastar.E());
+
+
+
     while (good_tmass == 0) good_tmass = Gen_Mass_t(model); 
+
+
+
     // val_mass_t1: masses with rec_nuclei,rest
     // val_mass_t2: masses with rest
     //    printf("Wtg mass=%.3e\n",Wtg.M());
@@ -629,7 +642,7 @@ Double_t EdPhysics::Generate_event(EdModel *model, int i){
       p4vector[0][2]->Boost(beta_Wtg);      
       // printf("Boosted the nuclei in SL frame \n");
       Wtg = Wtg-*p4vector[0][2]; // take away the recoiled nuclei and recalculate PhaseSpace with the rest
-      // printf("Set new Wtg , where Wtg mass =%.3e and mass of the rest is=%.3e \n",Wtg.M(),val_mass_t1[1]);
+      //      printf("Set new Wtg , where Wtg mass =%.3e and mass of the rest is=%.3e \n",Wtg.M(),val_mass_t1[1]);
       SetDecay(Wtg, npvert[i]-2, val_mass_t2); // Gen_mass_t fixed these values for this new array of masses
       // printf("Set the decay of other particles for phasespace with the rest \n");
       calc_weight = Generate(); // the weight of the first part where I define t is 1

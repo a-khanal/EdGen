@@ -9,6 +9,7 @@ struct inputdata {
     int    nprnt;
     int    model;
     int    mass_model;
+    int    weight;
   TString ifile;  //input spectrum for beam
   TString tfile;  //input spectrum for t
   TString qfile;  //input spectrum for q2
@@ -61,6 +62,7 @@ class EdInput{
 	int    GetNpart(){ return fData.npart; }
 	int    GetModel(){ return fData.model; }
 	int    GetMassModel(){ return fData.mass_model; }
+	int    GetWeightModel(){ return fData.weight; }
       TString  GetIfile(){ return fData.ifile; }
       TString  GetTfile(){ return fData.tfile; }
       TString  GetQfile(){ return fData.qfile; }

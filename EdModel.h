@@ -32,6 +32,7 @@ class EdModel{
 	//	char* GetInFileName() {return ifile.data()};
 	int    GetNpart() {return npart;}
 	int    GetPhModel() {return ph_model;}
+	int    GetWeightModel() {return w_model;}
 	int    GetMassModel() {return m_model;}
 	TVector3 GetTgtOffset(){ return offset; }
 	int    GetPid(int i){ return pid[i]; }
@@ -60,6 +61,7 @@ class EdModel{
 	double tg_mass;
 	int    ph_model;
 	int    m_model;
+	int    w_model;
 	TString ifile;
 	TString tfile;
 	TString qfile;

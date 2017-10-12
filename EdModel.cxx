@@ -27,6 +27,7 @@ EdModel::EdModel(EdInput *inp){
       len_y = inp->Get_leny();
       ph_model = inp->GetModel();
       m_model = inp->GetMassModel();
+      w_model = inp->GetWeightModel();
       beam_pid = inp->GetBeamPID();
 	if (ph_model == 2) {
 	  Float_t Energy_1, Energy_2, E_counts;

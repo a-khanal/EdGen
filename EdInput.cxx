@@ -25,7 +25,7 @@ EdInput::EdInput(const char *file){
     int atvertex = 0;
     
     fData.isqf=0;//default not a quasi free target
-
+    fData.weight=0; //default weight will be generated and set to one (slower)
     while( !inputfile.eof() ){      //      c1 = inputfile.peek(); // read the first character , if it is a #, skip the line
       //      inputfile.getline(command,100,delim);
       std::getline(inputfile,command); //dglazier, use string version instead
@@ -62,6 +62,14 @@ EdInput::EdInput(const char *file){
 	  fData.mass_model = valcommand.Atoi();
 	  printf("Mass Model for the decaying particle %d\n",fData.mass_model);
 	}
+	if (valcommand.Contains("wmod:")) {
+	  valcommand.ReplaceAll("wmod:","");
+	  valcommand.ReplaceAll(";","");
+	  valcommand.ReplaceAll(" ","");
+	  fData.weight = valcommand.Atoi();
+	  printf("Model for weight of the generator %d\n",fData.weight);
+	}
+
 	if (valcommand.Contains("ifile:")) {
 	  valcommand.ReplaceAll("ifile:","");
 	  valcommand.ReplaceAll(";","");
