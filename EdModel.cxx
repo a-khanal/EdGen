@@ -2,6 +2,7 @@
 #include "TFile.h"
 #include "TDirectory.h"
 #include <iostream>
+using namespace std;
 
 EdModel::EdModel(EdInput *inp){
   fInp=inp;

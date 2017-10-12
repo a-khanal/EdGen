@@ -3,6 +3,7 @@
 #
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(EdGen)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_BUILD_TYPE Debug)
 set(useROOT true)        # use true or false
 include(FindROOT.cmake)
@@ -80,7 +81,7 @@ if(WITHBOS)
 )
 else()
 	set(LINK_LIBRARIES
-  ${ROOT_LIBRARIES} -lThread -lHtml -lGed -lEG -lGeom
+  ${ROOT_LIBRARIES} -lThread -lHtml -lGed -lEG -lGeom 
 )
 endif()
 target_link_libraries(EdGen ${LINK_LIBRARIES})

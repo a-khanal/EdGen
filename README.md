@@ -8,7 +8,7 @@ This version respect to the common version it supports the BOS output format (fo
 
 Prerequisites
 -------------
-* CERN ROOT  (tested at now with version ROOT 5.34.34 (seems there are problem with earlier version of root)
+* CERN ROOT  (tested at now with version ROOT 5.34.36 and 6.10.00 (seems there are problem with earlier version of root)
 * git 
 * cmake
 * Tested on ifarm.jlab.org on June 5 2014. Needs CLAS software (and OLD CERN LIBS) 
