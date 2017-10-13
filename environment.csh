@@ -5,12 +5,12 @@
 ########################################################################
 
 ### prefix area
-setenv PREFIX /group/clas/builds
+setenv PREFIX /group/clas/builds/centos7/trunk
 
 ### non-system builds of programs and libraries
-#setenv GCC /apps/gcc/4.8.0
-#setenv ROOT /apps/root/5.34.05
-setenv CERN /apps/cernlib/x86_64_rhel6_4.7.2/2005
+#setenv GCC /apps/gcc/5.3.0
+#setenv ROOT /apps/root/5.34.36
+setenv CERN /apps/cernlib/x86_64_rhel7/2005
 setenv PYTHON /apps/python
 setenv SCONS /apps/scons
 setenv BOOST /group/clas/boost/boost-1.53.0
@@ -19,33 +19,36 @@ setenv BOOST /group/clas/boost/boost-1.53.0
 # PATH
 ########################################################################
 
-setenv PATH .:${PREFIX}/bin
-setenv PATH ${PATH}:${PREFIX}/scripts
+#setenv PATH .:${PREFIX}/build/bin
+#setenv PATH ${PATH}:${PREFIX}/scripts
 
 #setenv PATH ${PATH}:${GCC}/bin
 #setenv PATH ${PATH}:${ROOT}/root/bin
-setenv PATH ${PATH}:${PYTHON}/bin
-setenv PATH ${PATH}:${SCONS}/bin
+#setenv PATH ${PATH}:${PYTHON}/bin
+#setenv PATH ${PATH}:${SCONS}/bin
 
 ### standard system paths
-setenv PATH ${PATH}:/site/bin:/apps/bin
-setenv PATH ${PATH}:/usr/bin:/bin:/usr/sbin:/sbin
+#setenv PATH ${PATH}:/site/bin:/apps/bin
+#setenv PATH ${PATH}:/usr/bin:/bin:/usr/sbin:/sbin
 
-setenv PATH ${PATH}:./bin:./build/bin
+#setenv PATH ${PATH}:./bin:./build/bin
 
 ########################################################################
 # LD_LIBRARY_PATH
 ########################################################################
 
 ### run-time library loading path
-setenv LD_LIBRARY_PATH .:${PREFIX}/lib
+#setenv LD_LIBRARY_PATH .:${PREFIX}/build/lib
 
 #setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GCC}/lib64
 #setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ROOT}/root/lib
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PYTHON}/lib
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SCONS}/lib
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PYTHON}/lib
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SCONS}/lib
 
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${BOOST}/lib
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${BOOST}/lib
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CERN}/lib
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib
 
 ########################################################################
 # PYTHONPATH
@@ -53,7 +56,7 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${BOOST}/lib
 
 ### python modules search path
 
-setenv PYTHONPATH ${PREFIX}/lib/python
+setenv PYTHONPATH ${PREFIX}
 
 ########################################################################
 # sources for build directories
@@ -67,8 +70,9 @@ setenv BOOSTLIB ${BOOST}/lib
 
 setenv CERNLIB ${CERN}/lib
 
-setenv CLAS6INC ${PREFIX}/include
-setenv CLAS6LIB ${PREFIX}/lib
+setenv CLAS6INC ${PREFIX}/build/include
+setenv CLAS6LIB ${PREFIX}/build/lib
+setenv CLAS6BIN ${PREFIX}/build/bin
 
 ########################################################################
 # misc
@@ -76,7 +80,7 @@ setenv CLAS6LIB ${PREFIX}/lib
 
 setenv CLAS_PARMS /group/clas/parms
 setenv JLAB_ROOT /site/12gev_phys
-setenv JLAB_VERSION 1.3
+setenv JLAB_VERSION 2.1
 source $JLAB_ROOT/$JLAB_VERSION/ce/jlab.csh
 
 rehash
