@@ -33,6 +33,7 @@ class EdPhysics: public EdGenPhaseSpace{
 	int ph_model;
 	int w_model;
 	int nvertex; // total number of vertexes
+	int atpart;
 	int npvert[10]; // total number of particle at one vertex
 	int overt[10];  // particle at origin of one vertex (need to be already existing)
 	int    v_type[10]; // vertex type (1= ratio  of probability , 2= cross section
@@ -68,6 +69,8 @@ class EdPhysics: public EdGenPhaseSpace{
 	double vz[MAX_PART];
 	
 	int towrite[MAX_PART];
+	TF1 *f_decay[MAX_PART];
+	double toptime[MAX_PART];
 	double masses[10][10];
 	double val_mass[10][10];
 	double val_mass_t1[10];

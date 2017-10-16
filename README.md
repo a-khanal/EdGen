@@ -29,14 +29,16 @@ Install
 * if you want to install BOS output support you will need to have correctly setup in your environment variables CLAS6LIB CLAS6INC and CERNLIB (the environment show before has been tested)
 * if you don't want BOS support, just unset those environment variables (CLAS6LIB CLAS6INC and CERNLIB). If you will request a BOS output the code will not create any bos file (strangely enough)
 * cmake ../ 
-* make 
+* make
+
 
 Running
 -------
 * cd EdGen/output (go to the output directory)
 * A table with particle properties is in this directory (from PDG) eg_pdg_table.txt :Modify it if you need it. An example of how to add particles to this table are written at the end of the file. At now the information used are just the mass, the charge of the particle and the lifetime (if the particle has vertex in your reaction diagram for this MonteCarlo. 
 * A template is in input.dat (input_test.dat it is just for my developments at now), and modify the file to fit your reaction
-* In input.dat one can specify the input spetrum (for example for CLAS photon beam). The input spectrum file is written in a txt files format with raw that represent for each bin E_min, E_max, Counts (Does not need to be normalize, the code is going to normalize it if need it). The bin size do not need to be the same for each bin.  An example is written in the output directory as energy.txt 
+* In input.dat one can specify the input spetrum (for example for CLAS photon beam). The input spectrum file is written in a txt files format with raw that represent for each bin E_min, E_max, Counts (Does not need to be normalize, the code is going to normalize it if need it). The bin size do not need to be the same for each bin.  An example is written in the output directory as energy.txt. In the same way one can write the spectrum from Q2, nu, t (option model = 5).
+* If you see a strong memory consumption, or you just need to speed up this generator (for example you have a strong angle cut on the electron or you have many particles (>4) from a single vertex) , try to run it with option wmod: 1 . NB you will need to carry the weight if some of your vertex has more than 2 particles generated from it (In the LUND or BOS file, the weight will be a single number as the multiplication of the weight of each single vertex of each event)
 * ./EdGen -h will give you the options
 * <b>./EdGen -i input.dat -o output.root        (Change input.dat or output.root (need to be a *.root) to your desired input and output file name) </b> 
   

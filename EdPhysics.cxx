@@ -30,6 +30,7 @@ EdPhysics::EdPhysics(EdModel *model){
     part_pdg[n_part] = pdg->GetParticle(model->GetBeamPID()); // Beam particle stored in part_pdg[n_part]
     double masses2[n_part];
     double width2[n_part];
+    char name_f1[11];
     for (int i=0; i<n_part; i++) {
       towrite[i] = 1;
       particle_id[i] = model->GetPid(i);
@@ -41,12 +42,21 @@ EdPhysics::EdPhysics(EdModel *model){
       charge[i] = part_pdg[i]->Charge()/3; // Charge is in unit of |e|/3
       masses2[i] = part_pdg[i]->Mass();
       width2[i] = part_pdg[i]->Width();
-      if (width2[i] > 0.001) printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e Stable(0/1)=%i: Mass will be generated as %s ; theta_min=%.3e theta_max=%.3e ; E_min=%.3e E_max=%.3e\n",i+1,particle_id[i],masses2[i],width2[i],part_pdg[i]->Stable(),model->GetMassModelString(),theta_min[i],theta_max[i],energy_min[i],energy_max[i]);
+      if (part_pdg[i]->Lifetime() > 0.0) {
+	toptime[i] = part_pdg[i]->Lifetime() * 20;
+	sprintf(name_f1,"f_decay%d",i);
+	printf("toptime %i %.3e \n",i,toptime[i]);
+	f_decay[i] = new TF1(name_f1,"exp(-x/([0]))",0,toptime[i]) ;
+	f_decay[i]->SetParameter(0,toptime[i]/20); // Set to lifetime
+      }
+      if (width2[i] > 0.001) {
+	printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e Stable(0/1)=%i: Mass will be generated as %s ; theta_min=%.3e theta_max=%.3e ; E_min=%.3e E_max=%.3e\n",i+1,particle_id[i],masses2[i],width2[i],part_pdg[i]->Stable(),model->GetMassModelString(),theta_min[i],theta_max[i],energy_min[i],energy_max[i]);
+      }
       else printf("Particle n.%i \t pid=%i \t mass=%.3e GeV width=%.3e Stable(0/1)=%i; theta_min=%.3e theta_max=%.3e ; E_min=%.3e E_max=%.3e \n",i+1,particle_id[i],masses2[i],width2[i],part_pdg[i]->Stable(),theta_min[i],theta_max[i],energy_min[i],energy_max[i]);
       
     }
     nvertex = model->GetNvertex();
-    int atpart = 0;
+    atpart = 0;
     for (int i=0; i<nvertex; i++) {
       overt[i] = model->GetOvert(i);
       if (overt[i] > 0) towrite[overt[i]-1] = 0; // Setting not to write particle already decayed in the LUND or BOS file
@@ -204,21 +214,23 @@ TVector3 EdPhysics::Decay_vertex(TLorentzVector *Vp_4, int i, TVector3 vert) {
   double lifetime = part_pdg[i]->Lifetime();
   TLorentzVector test(0.,0.,0.,TMath::C()*lifetime);
   TVector3 result;
-
+  //  printf("I am here %i\n",i);
   test.Boost(b_3);
   if (test.Rho() < 0.0001) result = vert;  // Delta vertex for t=lifetime different less than 0.1mm
   else {
-    double toptime = lifetime * 20; // exp(-20) = 2.0e-9
-    //define vertex of the decayed particles...
-    TF1 *fr = new TF1("fr","exp(-x/([0]))",0,toptime) ; // 8.4e-17 is the mean lifetime of the pi0
-    fr->SetParameter(0,lifetime);
-    double time = fr->GetRandom(0.,toptime);
+    //    printf("toptime %i %.3e \n",i,toptime[i]);
+    // double toptime = lifetime * 20; // exp(-20) = 2.0e-9
+    // //define vertex of the decayed particles...
+    // TF1 *fr = new TF1("fr","exp(-x/([0]))",0,toptime) ; // 8.4e-17 is the mean lifetime of the pi0
+    // fr->SetParameter(0,lifetime);
+    // double time = fr->GetRandom(0.,toptime);
+    double time = f_decay[i]->GetRandom(0.,toptime[i]);
     TLorentzVector move(0.,0.,0.,TMath::C()*time); // displacement for the creation of the two gammas in the pi0 rest frame (ready to boost (c*t) )
     move.Boost(b_3); // displacement for the creation of the two gammas in the LAB frame
     result.SetX( vert.X() + move.X() );
     result.SetY( vert.Y() + move.Y() );
     result.SetZ( vert.Z() + move.Z() );
-    delete fr;
+    // delete fr;
   }
   return result;
 
@@ -372,7 +384,7 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
   // TLorentzVector *p4vector[n_part+1];
   double weight2;
   double total_mass;
-  int atpart = 0;
+  atpart = 0;
   int valid_event = 0;
   int good_mass = 0; 
   int failed_event = 0;
