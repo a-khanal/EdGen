@@ -432,8 +432,14 @@ int EdPhysics::Gen_Phasespace(EdModel *model){
 	}
 	//      printf("\n");
       }
-      else valid_event++;
-      
+      else if (w_model == 1) valid_event++;
+      else if (w_model == 2) {
+	good_weight = fRandom->Uniform(0.,v_ratio[i]);
+	if (good_weight <= weight2) {
+	  weight2 = 1.0;
+	  valid_event++;
+	}
+      }
       //      printf("weight= %.3e\n",weight2);
       //   printf("event generated\n");
       for (int j=0; j<npvert[i]; j++) {
