@@ -213,7 +213,9 @@ void  EdOutput::MakeFileLUND(){
 
   double vxcm,vycm,vzcm;
   double fweight;
-
+  int daughter;
+  int at_daughter;
+  
   std::ofstream OUT (file.Data());
   for (int i=0; i<nentries ; i++) {
     fTree->GetEntry(i);
@@ -223,6 +225,7 @@ void  EdOutput::MakeFileLUND(){
     sprintf(outstring,"%i %i %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e",n_part,(Z_ion+N_ion),Z_ion,x,y,W,Q2,nu);
     OUT << outstring << endl;
     fweight = 1.0;
+    at_daughter = 0;
     for (int j=0; j<fnvertex; j++) {
       fweight = weight[f1part[j]] * fweight;
     }
@@ -233,8 +236,12 @@ void  EdOutput::MakeFileLUND(){
       vxcm = vx[j]*100.0;
       vycm = vy[j]*100.0;
       vzcm = vz[j]*100.0;
-
-      sprintf(outstring,"  %i %i %i %i %i 0 %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e",j+1,charge[j],active,particle_id[j],overt[j],px[j],py[j],pz[j],Ef[j],fweight,vxcm,vycm,vzcm); 
+      daughter = 0;
+      if (active == 0) {
+	at_daughter++;
+	daughter = f1part[at_daughter] + 1;
+      }
+      sprintf(outstring,"  %i %i %i %i %i %i %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e",j+1,charge[j],active,particle_id[j],overt[j],daughter,px[j],py[j],pz[j],Ef[j],fweight,vxcm,vycm,vzcm); 
       OUT << outstring << endl;
 	//	OUT << " \t " << "1" << " \t " << charge[j] << " \t " << "1" << " \t " << particle_id[j] << " \t " << "0" << " \t " << "0" << " \t " << px[j] << " \t " << py[j] << " \t " << pz[j] << " \t " << Ef[j] << " \t " << "0" << " \t " << vxcm  << " \t " << vycm << " \t " << vzcm << endl;
     }
