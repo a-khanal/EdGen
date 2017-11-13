@@ -107,7 +107,7 @@ class EdOutput {
 	double vy[MAX_PART];
 	double vz[MAX_PART];
 	double weight[MAX_PART];
-
+	int overt[MAX_PART];
 	time_t secs;
 
 };

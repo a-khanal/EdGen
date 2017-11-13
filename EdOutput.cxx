@@ -27,7 +27,13 @@ EdOutput::EdOutput(EdInput *inp, const char *fileout){
       printf("w[%i]",f1part[i]);
     }
     printf("\n");
-
+    int k=0;
+    for (int i=0; i< fnvertex;i++) {
+      for (int j=0; j<inp->GetNpvert(i) ; j++) {
+	overt[k] = inp->GetOvert(i);
+	k++;
+      }
+    }
     InitTree();
 
     return;
@@ -228,7 +234,7 @@ void  EdOutput::MakeFileLUND(){
       vycm = vy[j]*100.0;
       vzcm = vz[j]*100.0;
 
-      sprintf(outstring,"  %i %i %i %i 0 0 %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e",j+1,charge[j],active,particle_id[j],px[j],py[j],pz[j],Ef[j],fweight,vxcm,vycm,vzcm); 
+      sprintf(outstring,"  %i %i %i %i %i 0 %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e %1.4e",j+1,charge[j],active,particle_id[j],overt[j],px[j],py[j],pz[j],Ef[j],fweight,vxcm,vycm,vzcm); 
       OUT << outstring << endl;
 	//	OUT << " \t " << "1" << " \t " << charge[j] << " \t " << "1" << " \t " << particle_id[j] << " \t " << "0" << " \t " << "0" << " \t " << px[j] << " \t " << py[j] << " \t " << pz[j] << " \t " << Ef[j] << " \t " << "0" << " \t " << vxcm  << " \t " << vycm << " \t " << vzcm << endl;
     }
